@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">RxHttp Sample</string>
+
+    <string name="permission_dialog_title">权限申请</string>
+    <string name="permission_dialog_ok">确定</string>
+    <string name="permission_dialog_cancel">取消</string>
+    <string name="permission_dialog_message">%1$s需要%2$s权限,去设置?</string>
+</resources>
