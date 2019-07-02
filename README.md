@@ -2,6 +2,18 @@
 
 基于Retrofit和RxJava2封装的Http类库，实现了get,post,post表单请求,文件下载及进度监听,文件上传及进度监听功能。
 
+# 功能特点
+```
+支持上传及进度监听，支持上传多个文件，支持文本和文件混合上传
+
+支持下载及进度监听，支持大文件下载
+
+支持自定义OkHttpClient
+
+链式调用，支持每一个请求动态添加Header
+
+```
+
 # get请求
 ```
       RxHttp.getInstance()
@@ -140,7 +152,7 @@ Map<String, Object> map = new HashMap<>();
             }
 
             @Override
-            public void onProgress(UploadInfo uploadInfo) {
+            public void onProgress(final long totalBytes, final long readBytes) {
                 //updateProgress(uploadInfo);
             }
 
