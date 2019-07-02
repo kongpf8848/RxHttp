@@ -23,7 +23,7 @@ dependencies {
     implementation    rootProject.ext.dependencies["appcompat-v7"]
     api rootProject.ext.dependencies["butterknife"]
     annotationProcessor rootProject.ext.dependencies["butterknife-compiler"]
-
+    implementation 'com.kongpf.commonhelper:common-helper:1.0.7'
 
 
 }

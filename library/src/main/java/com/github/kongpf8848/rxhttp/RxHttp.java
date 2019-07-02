@@ -1,11 +1,8 @@
 package com.github.kongpf8848.rxhttp;
 
 import com.github.kongpf8848.rxhttp.bean.DownloadInfo;
-import com.github.kongpf8848.rxhttp.bean.UploadInfo;
 import com.github.kongpf8848.rxhttp.callback.DownloadCallback;
 import com.github.kongpf8848.rxhttp.callback.HttpCallback;
-import com.github.kongpf8848.rxhttp.callback.ProgressCallback;
-import com.github.kongpf8848.rxhttp.callback.UploadCallback;
 import com.github.kongpf8848.rxhttp.converter.DownloadConverter;
 import com.github.kongpf8848.rxhttp.converter.GsonConverter;
 import com.github.kongpf8848.rxhttp.request.DownloadRequest;
@@ -15,8 +12,6 @@ import com.github.kongpf8848.rxhttp.request.PostFormRequest;
 import com.github.kongpf8848.rxhttp.request.PostRequest;
 import com.github.kongpf8848.rxhttp.request.UploadRequest;
 import com.github.kongpf8848.rxhttp.util.LogUtil;
-
-import java.io.IOException;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -107,33 +102,7 @@ public class RxHttp {
             observable = httpService.postForm(request.getUrl(), request.getParams());
         } else if (request instanceof UploadRequest) {
             final UploadRequest uploadRequest = (UploadRequest) request;
-            final UploadInfo uploadInfo = new UploadInfo(uploadRequest.getUrl());
-            final ProgressRequestBody requestBody = new ProgressRequestBody(uploadRequest.buildRequestBody(), new ProgressCallback() {
-                @Override
-                public void onProgress(long totalBytes, long readBytes) {
-                    uploadInfo.setProgress(readBytes);
-                    Platform.get().defaultCallbackExecutor().execute(new Runnable() {
-                        @Override
-                        public void run() {
-                            ((UploadCallback) callback).onProgress(uploadInfo);
-                        }
-                    });
-                }
-            });
-
-            try {
-                uploadInfo.setTotal(requestBody.contentLength());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Platform.get().defaultCallbackExecutor().execute(new Runnable() {
-                @Override
-                public void run() {
-                    ((UploadCallback) callback).onProgress(uploadInfo);
-                }
-            });
-
-            observable = httpService.post(uploadRequest.getUrl(), requestBody);
+            observable = httpService.post(uploadRequest.getUrl(), uploadRequest.buildRequestBody());
         } else if (request instanceof DownloadRequest) {
             observable = httpService.download(request.getUrl());
         }

@@ -9,12 +9,13 @@ import java.util.Map;
 
 import okhttp3.RequestBody;
 
-public abstract class AbsRequest {
+public abstract class AbsRequest<T> {
 
     protected String url;
     protected Object tag;
     protected Map<String,String> headers=new HashMap<>();
     protected Map<String,Object> params=new HashMap<>();
+    protected HttpCallback<T> callback;
 
     protected abstract RequestBody buildRequestBody();
 
@@ -63,8 +64,9 @@ public abstract class AbsRequest {
         return params;
     }
 
-    public <T> void enqueue(HttpCallback<T> callback)
+    public void enqueue(HttpCallback<T> callback)
     {
+        this.callback=callback;
         RxHttp.getInstance().enqueue(this,callback);
     }
 }

@@ -44,6 +44,7 @@ public class ProgressRequestBody extends RequestBody {
         if (progressSink == null) {
             progressSink = Okio.buffer(sink(sink));
         }
+        callback.onProgress(contentLength(),0);
         requestBody.writeTo(progressSink);
         progressSink.flush();
         progressSink.close();

@@ -2,6 +2,10 @@ package com.github.kongpf8848.rxhttp.request;
 
 
 import com.github.kongpf8848.rxhttp.HttpConstants;
+import com.github.kongpf8848.rxhttp.Platform;
+import com.github.kongpf8848.rxhttp.ProgressRequestBody;
+import com.github.kongpf8848.rxhttp.callback.ProgressCallback;
+import com.github.kongpf8848.rxhttp.callback.UploadCallback;
 
 import java.io.File;
 import java.util.Iterator;
@@ -11,8 +15,7 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
-public class UploadRequest extends AbsRequest {
-
+public class UploadRequest extends PostRequest {
     public UploadRequest(String url) {
         super(url);
     }
@@ -32,7 +35,19 @@ public class UploadRequest extends AbsRequest {
                 builder.addFormDataPart(key, String.valueOf(value));
             }
         }
-        return builder.build();
+        return new ProgressRequestBody(builder.build(), new ProgressCallback() {
+            @Override
+            public void onProgress(final long totalBytes, final long readBytes) {
+                Platform.get().defaultCallbackExecutor().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(callback instanceof UploadCallback) {
+                            ((UploadCallback) callback).onProgress(totalBytes,readBytes);
+                        }
+                    }
+                });
+            }
+        });
 
     }
 }
