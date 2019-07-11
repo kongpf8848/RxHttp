@@ -31,6 +31,8 @@ import com.github.kongpf8848.rxhttp.sample.permission.PermissionHelper;
 import com.github.kongpf8848.rxhttp.sample.util.ImageUtil;
 import com.kongpf.commonhelper.ApkHelper;
 
+
+
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
@@ -52,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
     }
 
     @OnClick(R.id.button1)
