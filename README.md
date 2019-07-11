@@ -13,7 +13,10 @@
 链式调用，支持每一个请求动态添加Header
 
 ```
-
+# 添加依赖
+```
+implementation 'com.github.kongpf8848:RxHttp:1.0.0'
+```
 # get请求
 ```
       RxHttp.getInstance()
