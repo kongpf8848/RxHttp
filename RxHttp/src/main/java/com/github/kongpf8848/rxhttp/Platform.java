@@ -3,8 +3,6 @@ package com.github.kongpf8848.rxhttp;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
-
-
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 

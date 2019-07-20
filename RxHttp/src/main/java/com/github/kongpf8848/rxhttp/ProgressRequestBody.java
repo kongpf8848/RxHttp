@@ -1,10 +1,7 @@
 package com.github.kongpf8848.rxhttp;
 
 import com.github.kongpf8848.rxhttp.callback.ProgressCallback;
-
-
 import java.io.IOException;
-
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import okio.Buffer;

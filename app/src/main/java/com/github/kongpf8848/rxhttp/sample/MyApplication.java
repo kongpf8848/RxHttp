@@ -1,11 +1,8 @@
 package com.github.kongpf8848.rxhttp.sample;
 
 import android.app.Application;
-
 import com.github.kongpf8848.rxhttp.HttpConfig;
-
 import java.util.concurrent.TimeUnit;
-
 import okhttp3.OkHttpClient;
 
 

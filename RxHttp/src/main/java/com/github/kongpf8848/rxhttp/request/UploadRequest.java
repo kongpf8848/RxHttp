@@ -1,6 +1,10 @@
 package com.github.kongpf8848.rxhttp.request;
 
 
+import android.app.Activity;
+import android.content.Context;
+import android.support.v4.app.Fragment;
+
 import com.github.kongpf8848.rxhttp.HttpConstants;
 import com.github.kongpf8848.rxhttp.Platform;
 import com.github.kongpf8848.rxhttp.ProgressRequestBody;
@@ -16,8 +20,15 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
 public class UploadRequest extends PostRequest {
-    public UploadRequest(String url) {
-        super(url);
+    public UploadRequest(Context context) {
+        super(context);
+    }
+
+    public UploadRequest(Activity activity) {
+        super(activity);
+    }
+    public UploadRequest(Fragment fragment) {
+        super(fragment);
     }
 
     @Override

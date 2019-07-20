@@ -1,8 +1,5 @@
 package com.github.kongpf8848.rxhttp.sample.activity;
 
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -18,28 +15,30 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.github.kongpf8848.permissionhelper.PermissionHelper;
+import com.github.kongpf8848.permissionhelper.PermissionInfomation;
 import com.github.kongpf8848.rxhttp.RxHttp;
 import com.github.kongpf8848.rxhttp.bean.DownloadInfo;
-import com.github.kongpf8848.rxhttp.bean.ProgressInfo;
 import com.github.kongpf8848.rxhttp.callback.DownloadCallback;
 import com.github.kongpf8848.rxhttp.callback.HttpCallback;
 import com.github.kongpf8848.rxhttp.callback.UploadCallback;
 import com.github.kongpf8848.rxhttp.sample.Constants;
 import com.github.kongpf8848.rxhttp.sample.R;
 import com.github.kongpf8848.rxhttp.sample.bean.Feed;
-import com.github.kongpf8848.rxhttp.sample.permission.PermissionHelper;
-import com.github.kongpf8848.rxhttp.sample.util.ImageUtil;
 import com.kongpf.commonhelper.ApkHelper;
-
-
+import com.kongpf.commonhelper.ImageHelper;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG = "RxHttp Sample";
+    private static final String TAG = "RxHttp";
     private ProgressDialog progressDialog;
     private PermissionHelper permissionHelper;
 
@@ -55,13 +54,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+
     }
 
     @OnClick(R.id.button1)
     public void onButton1() {
 
         RxHttp.getInstance()
-                .get(Constants.URL_GET)
+                .get(this)
+                .url(Constants.URL_GET)
                 .enqueue(new HttpCallback<Feed>() {
                     @Override
                     public void onStart() {
@@ -90,8 +91,9 @@ public class MainActivity extends AppCompatActivity {
     public void onButton2() {
         String content = "this is post content";
         RxHttp.getInstance()
-                .post(Constants.URL_POST)
+                .post(this)
                 .content(content)
+                .url(Constants.URL_POST)
                 .enqueue(new HttpCallback<String>() {
 
                     @Override
@@ -123,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
         map.put("model", Build.MODEL);
         map.put("manufacturer", Build.MANUFACTURER);
         map.put("os", Build.VERSION.SDK_INT);
-        RxHttp.getInstance().postForm(Constants.URL_POST_FORM).params(map).enqueue(new HttpCallback<String>() {
+        RxHttp.getInstance().postForm(this).url(Constants.URL_POST_FORM).params(map).enqueue(new HttpCallback<String>() {
 
             @Override
             public void onStart() {
@@ -157,9 +159,15 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onPermissionFailed() {
-                Log.d(TAG, "onPermissionFailed");
+            public void onPermissionMissing(List<String> permissions) {
+
             }
+
+            @Override
+            public void onPermissionFailed(List<PermissionInfomation> failList) {
+
+            }
+
         });
         permissionHelper.requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE_STORAGE);
     }
@@ -186,7 +194,7 @@ public class MainActivity extends AppCompatActivity {
         path=Constants.EXTERNAL_PATH+"Download/gradle-4.4-all.zip";
         map.put("image", new File(path));
 
-        RxHttp.getInstance().upload(Constants.URL_UPLOAD).params(map).enqueue(new UploadCallback<String>() {
+        RxHttp.getInstance().upload(this).url(Constants.URL_UPLOAD).params(map).enqueue(new UploadCallback<String>() {
             @Override
             public void onStart() {
                 showProgressDialog("正在上传,请稍等...");
@@ -221,7 +229,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void download() {
-        RxHttp.getInstance().download(Constants.URL_DOWNLOAD).dir(PATH)
+        RxHttp.getInstance().download(this).dir(PATH)
+                .url(Constants.URL_DOWNLOAD)
                 .enqueue(new DownloadCallback() {
 
                     @Override
@@ -238,6 +247,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onResponse(DownloadInfo downloadInfo) {
+                        Log.d(TAG, "onResponse");
                         closeProgressDialog();
                         MainActivity.this.downloadInfo = downloadInfo;
                         install();
@@ -245,6 +255,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(Throwable e) {
+                        Log.d(TAG, "onError:"+e.getMessage());
                         closeProgressDialog();
 
                     }
@@ -263,13 +274,15 @@ public class MainActivity extends AppCompatActivity {
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(title);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(true);
+        progressDialog.setCancelable(true);
         progressDialog.show();
     }
 
     private void updateProgress(final long totalBytes, final long readBytes) {
-        if (progressDialog != null) {
+        Log.d(TAG,"updateProgress,readBytes:"+readBytes);
+        if (progressDialog != null && progressDialog.isShowing()) {
+            Log.d(TAG,"progressDialog");
             progressDialog.setProgress((int)readBytes);
             progressDialog.setMax((int)totalBytes);
             float all = totalBytes * 1.0f / 1024 / 1024;
@@ -334,7 +347,7 @@ public class MainActivity extends AppCompatActivity {
                     filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + urlString.substring(pre.length());
                 }
                 if (TextUtils.isEmpty(filePath)) {
-                    filePath = ImageUtil.getAbsoluteImagePath(this, uri);
+                    filePath = ImageHelper.getAbsoluteImagePath(this, uri);
                 }
                 Log.d(TAG, "filePath:" + filePath);
                 if (!TextUtils.isEmpty(filePath)) {

@@ -1,12 +1,10 @@
 package com.github.kongpf8848.rxhttp.bean;
 
-
 public class ProgressInfo
 {
     private String url;
     private long total;
     private long progress;
-
 
     public ProgressInfo(String url) {
         this.url = url;

@@ -1,17 +1,24 @@
 package com.github.kongpf8848.rxhttp;
 
+import android.app.Activity;
+import android.arch.lifecycle.LifecycleOwner;
+import android.content.Context;
+import android.support.v4.app.Fragment;
+
 import com.github.kongpf8848.rxhttp.bean.DownloadInfo;
 import com.github.kongpf8848.rxhttp.callback.DownloadCallback;
 import com.github.kongpf8848.rxhttp.callback.HttpCallback;
 import com.github.kongpf8848.rxhttp.converter.DownloadConverter;
 import com.github.kongpf8848.rxhttp.converter.GsonConverter;
+import com.github.kongpf8848.rxhttp.request.AbsRequest;
 import com.github.kongpf8848.rxhttp.request.DownloadRequest;
 import com.github.kongpf8848.rxhttp.request.GetRequest;
-import com.github.kongpf8848.rxhttp.request.AbsRequest;
 import com.github.kongpf8848.rxhttp.request.PostFormRequest;
 import com.github.kongpf8848.rxhttp.request.PostRequest;
 import com.github.kongpf8848.rxhttp.request.UploadRequest;
 import com.github.kongpf8848.rxhttp.util.LogUtil;
+import com.uber.autodispose.AutoDispose;
+import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -45,7 +52,7 @@ public class RxHttp {
 
 
     private RxHttp() {
-        HttpConfig config=HttpConfig.getInstance();
+        HttpConfig config = HttpConfig.getInstance();
 
         LogUtil.setDebug(config.isDebug());
 
@@ -65,28 +72,68 @@ public class RxHttp {
 
 
     //get请求
-    public GetRequest get(final String url) {
-        return new GetRequest(url);
+    public GetRequest get(Context context) {
+        return new GetRequest(context);
+    }
+
+    public GetRequest get(Activity activity) {
+        return new GetRequest(activity);
+    }
+
+    public GetRequest get(Fragment fragment) {
+        return new GetRequest(fragment);
     }
 
     //post请求
-    public PostRequest post(final String url) {
-        return new PostRequest(url);
+    public PostRequest post(Context context) {
+        return new PostRequest(context);
+    }
+
+    public PostRequest post(Activity activity) {
+        return new PostRequest(activity);
+    }
+
+    public PostRequest post(Fragment fragment) {
+        return new PostRequest(fragment);
     }
 
     //post表单请求
-    public PostFormRequest postForm(final String url) {
-        return new PostFormRequest(url);
+    public PostFormRequest postForm(Context context) {
+        return new PostFormRequest(context);
+    }
+
+    public PostFormRequest postForm(Activity activity) {
+        return new PostFormRequest(activity);
+    }
+
+    public PostFormRequest postForm(Fragment fragment) {
+        return new PostFormRequest(fragment);
     }
 
     //upload请求
-    public UploadRequest upload(final String url) {
-        return new UploadRequest(url);
+    public UploadRequest upload(Context context) {
+        return new UploadRequest(context);
+    }
+
+    public UploadRequest upload(Activity activity) {
+        return new UploadRequest(activity);
+    }
+
+    public UploadRequest upload(Fragment fragment) {
+        return new UploadRequest(fragment);
     }
 
     //download请求
-    public DownloadRequest download(final String url) {
-        return new DownloadRequest(url);
+    public DownloadRequest download(Context context) {
+        return new DownloadRequest(context);
+    }
+
+    public DownloadRequest download(Activity activity) {
+        return new DownloadRequest(activity);
+    }
+
+    public DownloadRequest download(Fragment fragment) {
+        return new DownloadRequest(fragment);
     }
 
 
@@ -106,8 +153,10 @@ public class RxHttp {
         } else if (request instanceof DownloadRequest) {
             observable = httpService.download(request.getUrl());
         }
+
+
         if (observable != null) {
-            observable.map(new Function<ResponseBody, T>() {
+            Observable<T> observableFinal = observable.map(new Function<ResponseBody, T>() {
                 @Override
                 public T apply(ResponseBody body) throws Exception {
                     if (request instanceof DownloadRequest) {
@@ -121,8 +170,16 @@ public class RxHttp {
                     }
                 }
             }).subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new HttpObserver<T>(callback));
+                    .observeOn(AndroidSchedulers.mainThread());
+            if (request.getContext() instanceof LifecycleOwner) {
+                LifecycleOwner lifecycleOwner = (LifecycleOwner) request.getContext();
+                observableFinal.as(AutoDispose.<T>autoDisposable(AndroidLifecycleScopeProvider.from(lifecycleOwner.getLifecycle())))
+                        .subscribeWith(new HttpObserver<T>(callback));
+            } else {
+                observableFinal.subscribeWith(new HttpObserver<T>(callback));
+            }
+
+
         }
 
     }

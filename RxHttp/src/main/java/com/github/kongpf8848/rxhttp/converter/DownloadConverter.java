@@ -1,6 +1,5 @@
 package com.github.kongpf8848.rxhttp.converter;
 
-
 import com.github.kongpf8848.rxhttp.Platform;
 import com.github.kongpf8848.rxhttp.ProgressResponseBody;
 import com.github.kongpf8848.rxhttp.bean.DownloadInfo;
@@ -54,6 +53,7 @@ public class DownloadConverter<T> implements IConverter<T> {
             Platform.get().defaultCallbackExecutor().execute(new Runnable() {
                 @Override
                 public void run() {
+                    LogUtil.d("onProgress");
                     callback.onProgress(downloadInfo);
                 }
             });

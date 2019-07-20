@@ -1,13 +1,24 @@
 package com.github.kongpf8848.rxhttp.request;
 
+import android.app.Activity;
+import android.content.Context;
+import android.support.v4.app.Fragment;
+
 import okhttp3.RequestBody;
 
 public class DownloadRequest extends AbsRequest {
 
     private String dir;
 
-    public DownloadRequest(String url) {
-        super(url);
+    public DownloadRequest(Context context) {
+        super(context);
+    }
+
+    public DownloadRequest(Activity activity) {
+        super(activity);
+    }
+    public DownloadRequest(Fragment fragment) {
+        super(fragment);
     }
 
     public DownloadRequest dir(String dir) {

@@ -1,7 +1,6 @@
 package com.github.kongpf8848.rxhttp.converter;
 
 import android.text.TextUtils;
-
 import com.github.kongpf8848.rxhttp.exception.HttpError;
 import com.github.kongpf8848.rxhttp.util.LogUtil;
 import com.google.gson.Gson;

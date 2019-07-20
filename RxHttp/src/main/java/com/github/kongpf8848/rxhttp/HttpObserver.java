@@ -4,24 +4,24 @@ import com.github.kongpf8848.rxhttp.callback.HttpCallback;
 
 
 import io.reactivex.Observer;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableObserver;
 
-public class HttpObserver<T> implements Observer<T> {
+public class HttpObserver<T> extends DisposableObserver<T> {
 
-    private Disposable disposable;
     private HttpCallback callback;
 
     public HttpObserver(HttpCallback callback) {
         this.callback = callback;
     }
 
+
     @Override
-    public void onSubscribe(Disposable d) {
-        this.disposable = d;
+    protected void onStart() {
         if (this.callback != null) {
             callback.onStart();
         }
-
     }
 
     @Override
@@ -33,25 +33,19 @@ public class HttpObserver<T> implements Observer<T> {
 
     @Override
     public void onError(Throwable e) {
-        onDispose();
         if (this.callback != null) {
             callback.onError(e);
         }
+        dispose();
     }
 
     @Override
     public void onComplete() {
-        onDispose();
         if (this.callback != null) {
             callback.onComplete();
         }
+        dispose();
     }
 
-    private void onDispose(){
-        if(disposable!=null){
-            if(!disposable.isDisposed()){
-                disposable.dispose();
-            }
-        }
-    }
+
 }

@@ -1,5 +1,8 @@
 package com.github.kongpf8848.rxhttp.request;
 
+import android.app.Activity;
+import android.content.Context;
+import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 
 import com.github.kongpf8848.rxhttp.HttpConstants;
@@ -11,9 +14,16 @@ import okhttp3.RequestBody;
 public class PostRequest extends AbsRequest {
     private String content;
     private String type;
-    public PostRequest(String url) {
-        super(url);
+    public PostRequest(Context context) {
+        super(context);
     }
+    public PostRequest(Activity activity) {
+        super(activity);
+    }
+    public PostRequest(Fragment fragment) {
+        super(fragment);
+    }
+
 
     public PostRequest content(String content){
         this.content=content;

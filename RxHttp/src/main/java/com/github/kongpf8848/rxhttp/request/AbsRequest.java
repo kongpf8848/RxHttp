@@ -1,5 +1,9 @@
 package com.github.kongpf8848.rxhttp.request;
 
+import android.app.Activity;
+import android.content.Context;
+import android.support.v4.app.Fragment;
+
 import com.github.kongpf8848.rxhttp.RxHttp;
 import com.github.kongpf8848.rxhttp.callback.HttpCallback;
 
@@ -11,6 +15,7 @@ import okhttp3.RequestBody;
 
 public abstract class AbsRequest<T> {
 
+    protected Object context;
     protected String url;
     protected Object tag;
     protected Map<String,String> headers=new HashMap<>();
@@ -19,10 +24,20 @@ public abstract class AbsRequest<T> {
 
     protected abstract RequestBody buildRequestBody();
 
-    AbsRequest(String url){
-        this.url=url;
+    AbsRequest(Context context){
+        this.context=context;
+    }
+    AbsRequest(Fragment fragment){
+        this.context=fragment;
+    }
+    AbsRequest(Activity activity){
+        this.context=activity;
     }
 
+    public AbsRequest url(String url){
+        this.url=url;
+        return this;
+    }
     public AbsRequest tag(Object tag){
         this.tag=tag;
         return this;
@@ -48,7 +63,9 @@ public abstract class AbsRequest<T> {
         return this;
     }
 
-
+    public Object getContext() {
+        return context;
+    }
     public String getUrl() {
         return url;
     }
