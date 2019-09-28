@@ -17,6 +17,7 @@ import com.github.kongpf8848.rxhttp.request.PostFormRequest;
 import com.github.kongpf8848.rxhttp.request.PostRequest;
 import com.github.kongpf8848.rxhttp.request.UploadRequest;
 import com.github.kongpf8848.rxhttp.util.LogUtil;
+import com.trello.rxlifecycle2.LifecycleTransformer;
 import com.uber.autodispose.AutoDispose;
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider;
 
@@ -83,6 +84,9 @@ public class RxHttp {
     public GetRequest get(Fragment fragment) {
         return new GetRequest(fragment);
     }
+    public GetRequest get(LifecycleTransformer transformer) {
+        return new GetRequest(transformer);
+    }
 
     //post请求
     public PostRequest post(Context context) {
@@ -95,6 +99,9 @@ public class RxHttp {
 
     public PostRequest post(Fragment fragment) {
         return new PostRequest(fragment);
+    }
+    public PostRequest post(LifecycleTransformer transformer) {
+        return new PostRequest(transformer);
     }
 
     //post表单请求
@@ -110,6 +117,10 @@ public class RxHttp {
         return new PostFormRequest(fragment);
     }
 
+    public PostFormRequest postForm(LifecycleTransformer transformer) {
+        return new PostFormRequest(transformer);
+    }
+
     //upload请求
     public UploadRequest upload(Context context) {
         return new UploadRequest(context);
@@ -121,6 +132,10 @@ public class RxHttp {
 
     public UploadRequest upload(Fragment fragment) {
         return new UploadRequest(fragment);
+    }
+
+    public UploadRequest upload(LifecycleTransformer transformer) {
+        return new UploadRequest(transformer);
     }
 
     //download请求
@@ -135,7 +150,9 @@ public class RxHttp {
     public DownloadRequest download(Fragment fragment) {
         return new DownloadRequest(fragment);
     }
-
+    public DownloadRequest download(LifecycleTransformer transformer) {
+        return new DownloadRequest(transformer);
+    }
 
     public <T> void enqueue(final AbsRequest request, final HttpCallback<T> callback) {
         interceptor.setRequest(request);
@@ -175,7 +192,11 @@ public class RxHttp {
                 LifecycleOwner lifecycleOwner = (LifecycleOwner) request.getContext();
                 observableFinal.as(AutoDispose.<T>autoDisposable(AndroidLifecycleScopeProvider.from(lifecycleOwner.getLifecycle())))
                         .subscribeWith(new HttpObserver<T>(callback));
-            } else {
+            } else if(request.getContext() instanceof LifecycleTransformer) {
+                observableFinal.compose((LifecycleTransformer)request.getContext())
+                        .subscribeWith(new HttpObserver<T>(callback));
+            }
+            else{
                 observableFinal.subscribeWith(new HttpObserver<T>(callback));
             }
 

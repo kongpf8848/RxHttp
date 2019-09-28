@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 
+import com.trello.rxlifecycle2.LifecycleTransformer;
+
 import okhttp3.RequestBody;
 
 public class GetRequest extends AbsRequest {
@@ -17,7 +19,9 @@ public class GetRequest extends AbsRequest {
     public GetRequest(Fragment fragment) {
         super(fragment);
     }
-
+    public GetRequest(LifecycleTransformer transformer) {
+        super(transformer);
+    }
     @Override
     public RequestBody buildRequestBody() {
         return null;

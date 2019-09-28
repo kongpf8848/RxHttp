@@ -10,6 +10,7 @@ import com.github.kongpf8848.rxhttp.Platform;
 import com.github.kongpf8848.rxhttp.ProgressRequestBody;
 import com.github.kongpf8848.rxhttp.callback.ProgressCallback;
 import com.github.kongpf8848.rxhttp.callback.UploadCallback;
+import com.trello.rxlifecycle2.LifecycleTransformer;
 
 import java.io.File;
 import java.util.Iterator;
@@ -30,7 +31,9 @@ public class UploadRequest extends PostRequest {
     public UploadRequest(Fragment fragment) {
         super(fragment);
     }
-
+    public UploadRequest(LifecycleTransformer transformer) {
+        super(transformer);
+    }
     @Override
     public RequestBody buildRequestBody() {
         MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);

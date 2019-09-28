@@ -1,6 +1,7 @@
 package com.github.kongpf8848.rxhttp.sample.activity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -8,11 +9,13 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.github.kongpf8848.permissionhelper.PermissionHelper;
@@ -33,20 +36,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG = "RxHttp";
+    private  final String TAG = "RxHttp";
     private ProgressDialog progressDialog;
     private PermissionHelper permissionHelper;
 
-    private static final String PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator;
-    private static final int REQUEST_CODE_STORAGE = 88;
-    private static final int REQUEST_CODE_INSTALL = 99;
-    private static final int REQUEST_CODE_PICK = 100;
+    private  final String PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator;
+    private  final int REQUEST_CODE_STORAGE = 88;
+    private  final int REQUEST_CODE_INSTALL = 99;
+    private  final int REQUEST_CODE_PICK = 100;
     private DownloadInfo downloadInfo;
+
+    @BindView(R.id.button1)
+    Button button1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -247,9 +254,11 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onResponse(DownloadInfo downloadInfo) {
-                        Log.d(TAG, "onResponse");
+                        Log.d(TAG, "onResponse:,isDestroyed:"+isDestroyed());
+                        boolean b=isDestroyed();
                         closeProgressDialog();
                         MainActivity.this.downloadInfo = downloadInfo;
+                        MainActivity.this.button1.setText("ok");
                         install();
                     }
 
@@ -358,5 +367,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 }
