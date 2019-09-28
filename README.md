@@ -12,15 +12,18 @@
 
 链式调用，支持每一个请求动态添加Header
 
+支持网络请求和Activity,Fragment生命周期绑定，界面销毁时自动取消订阅
+
 ```
 # 添加依赖
 ```
-implementation 'com.github.kongpf8848:RxHttp:1.0.0'
+implementation 'com.github.kongpf8848:RxHttp:1.0.1'
 ```
 # get请求
 ```
-      RxHttp.getInstance()
-                .get("your_url")
+       RxHttp.getInstance()
+                .get(this)
+                .url(Constants.URL_GET)
                 .enqueue(new HttpCallback<Feed>() {
                     @Override
                     public void onStart() {
@@ -46,9 +49,11 @@ implementation 'com.github.kongpf8848:RxHttp:1.0.0'
 ```
 # post请求
 ```
-  RxHttp.getInstance()
-                .post("your_url")
-                .content("this is post content")
+        String content = "this is post content";
+        RxHttp.getInstance()
+                .post(this)
+                .content(content)
+                .url(Constants.URL_POST)
                 .enqueue(new HttpCallback<String>() {
 
                     @Override
@@ -75,11 +80,11 @@ implementation 'com.github.kongpf8848:RxHttp:1.0.0'
 ```
 # post表单请求
 ```
-Map<String, Object> map = new HashMap<>();
+ Map<String, Object> map = new HashMap<>();
         map.put("model", Build.MODEL);
         map.put("manufacturer", Build.MANUFACTURER);
         map.put("os", Build.VERSION.SDK_INT);
-        RxHttp.getInstance().postForm("your_url").params(map).enqueue(new HttpCallback<String>() {
+        RxHttp.getInstance().postForm(this).url(Constants.URL_POST_FORM).params(map).enqueue(new HttpCallback<String>() {
 
             @Override
             public void onStart() {
@@ -105,31 +110,34 @@ Map<String, Object> map = new HashMap<>();
 ```
 # 下载请求
 ```
-RxHttp.getInstance().download(Constants.URL_DOWNLOAD).dir(PATH)
+  RxHttp.getInstance().download(this).dir(PATH)
+                .url(Constants.URL_DOWNLOAD)
                 .enqueue(new DownloadCallback() {
 
                     @Override
                     public void onStart() {
-                        //showProgressDialog("正在下载新版本,请稍等...");
+                        showProgressDialog("正在下载新版本,请稍等...");
                     }
 
                     @Override
                     public void onProgress(DownloadInfo downloadInfo) {
-                       // if (downloadInfo != null) {
-                       //     updateProgress(downloadInfo);
-                       // }
+                        if (downloadInfo != null) {
+                            updateProgress(downloadInfo.getTotal(),downloadInfo.getProgress());
+                        }
                     }
 
                     @Override
                     public void onResponse(DownloadInfo downloadInfo) {
-                       // closeProgressDialog();
-                       // MainActivity.this.downloadInfo = downloadInfo;
-                       // install();
+                        Log.d(TAG, "onResponse");
+                        closeProgressDialog();
+                        MainActivity.this.downloadInfo = downloadInfo;
+                        install();
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                       // closeProgressDialog();
+                        Log.d(TAG, "onError:"+e.getMessage());
+                        closeProgressDialog();
 
                     }
 
@@ -143,43 +151,47 @@ RxHttp.getInstance().download(Constants.URL_DOWNLOAD).dir(PATH)
 ```
 # 上传请求
 ```
-Map<String, Object> map = new HashMap<>();
+ Map<String, Object> map = new HashMap<>();
         map.put("model", Build.MODEL);
         map.put("manufacturer", Build.MANUFACTURER);
         map.put("os", Build.VERSION.SDK_INT);
         map.put("image", new File(path));
-        RxHttp.getInstance().upload("your_url").params(map).enqueue(new UploadCallback<String>() {
+
+        RxHttp.getInstance().upload(this).url(Constants.URL_UPLOAD).params(map).enqueue(new UploadCallback<String>() {
             @Override
             public void onStart() {
-                //showProgressDialog("正在上传,请稍等...");
+                showProgressDialog("正在上传,请稍等...");
             }
 
             @Override
             public void onProgress(final long totalBytes, final long readBytes) {
-                //updateProgress(uploadInfo);
+                updateProgress(totalBytes,readBytes);
             }
 
             @Override
             public void onResponse(String response) {
-                //Log.d(TAG, "response:" + response);
-                //Toast.makeText(MainActivity.this, "response:" + response, Toast.LENGTH_SHORT).show();
-                //closeProgressDialog();
+                Log.d(TAG, "response:" + response);
+                Toast.makeText(MainActivity.this, "response:" + response, Toast.LENGTH_SHORT).show();
+                closeProgressDialog();
             }
 
             @Override
             public void onError(Throwable e) {
-                //Log.d(TAG, "onError:" + e.getMessage());
-                //Toast.makeText(MainActivity.this, "error:" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                //closeProgressDialog();
+                Log.d(TAG, "onError:" + e.getMessage());
+                Toast.makeText(MainActivity.this, "error:" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                closeProgressDialog();
 
             }
 
             @Override
             public void onComplete() {
                 Log.d(TAG, "onComplete");
+                closeProgressDialog();
             }
         });
 ```
+具体使用可参考Demo
+
 # License
 ```
 Copyright (C) 2019 kongpf8848
