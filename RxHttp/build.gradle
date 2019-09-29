@@ -2,14 +2,14 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
-version = "1.0.3"
+version = "1.0.4"
 android {
     compileSdkVersion rootProject.ext.android.compileSdkVersion
 
     defaultConfig {
         minSdkVersion rootProject.ext.android.minSdkVersion
         targetSdkVersion rootProject.ext.android.targetSdkVersion
-        versionCode 3
+        versionCode 4
         versionName version
     }
 
@@ -32,7 +32,7 @@ dependencies {
     api rootProject.ext.dependencies["appcompat-v7"]
     api rootProject.ext.dependencies["rxjava2"]
     api rootProject.ext.dependencies["rxandroid"]
-    implementation rootProject.ext.dependencies["retrofit"]
+    api rootProject.ext.dependencies["retrofit"]
     api rootProject.ext.dependencies["converter-scalars"]
     api rootProject.ext.dependencies["converter-gson"]
     api rootProject.ext.dependencies["adapter-rxjava2"]
