@@ -17,7 +17,7 @@
 ```
 # 添加依赖
 ```
-implementation 'com.github.kongpf8848:RxHttp:1.0.1'
+implementation 'com.github.kongpf8848:RxHttp:1.0.4'
 ```
 # get请求
 ```
