@@ -2,10 +2,11 @@ package com.github.kongpf8848.rxhttp.exception;
 
 public class HttpError extends Exception {
 
-    public static final int CODE_DATA_EXCEPTION = 6;
-    public static final int CODE_DATE_EMPTY = 7;
-    public static final int CODE_PARSE_EXCEPTION = 8;
-    public static final int CODE_DOWNLOAD_EXCEPTION = 801;
+    public static final int RXHTTP_CODE_OK =800;
+    public static final int RXHTTP_CODE_ERROR = RXHTTP_CODE_OK+1;
+    public static final int RXHTTP_CODE_RESPONSE_DATA_EMPTY_EXCEPTION = RXHTTP_CODE_ERROR+2;
+    public static final int RXHTTP_CODE_JSON_PARSE_EXCEPTION =RXHTTP_CODE_ERROR+3;
+    public static final int RXHTTP_CODE_RESPONSE_NULL_EXCEPTION =RXHTTP_CODE_ERROR+4;
 
     private int code;
     private String message;

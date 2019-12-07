@@ -24,14 +24,20 @@ import com.github.kongpf8848.rxhttp.RxHttp;
 import com.github.kongpf8848.rxhttp.bean.DownloadInfo;
 import com.github.kongpf8848.rxhttp.callback.DownloadCallback;
 import com.github.kongpf8848.rxhttp.callback.HttpCallback;
+import com.github.kongpf8848.rxhttp.callback.SimpleHttpCallback;
 import com.github.kongpf8848.rxhttp.callback.UploadCallback;
 import com.github.kongpf8848.rxhttp.sample.Constants;
 import com.github.kongpf8848.rxhttp.sample.R;
+import com.github.kongpf8848.rxhttp.sample.bean.BaseResponse;
 import com.github.kongpf8848.rxhttp.sample.bean.Feed;
+import com.github.kongpf8848.rxhttp.sample.bean.User;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.kongpf.commonhelper.ApkHelper;
 import com.kongpf.commonhelper.ImageHelper;
 
 import java.io.File;
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,17 +45,18 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
-    private  final String TAG = "RxHttp";
+    private final String TAG = "RxHttp";
     private ProgressDialog progressDialog;
     private PermissionHelper permissionHelper;
 
-    private  final String PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator;
-    private  final int REQUEST_CODE_STORAGE = 88;
-    private  final int REQUEST_CODE_INSTALL = 99;
-    private  final int REQUEST_CODE_PICK = 100;
+    private final String PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator;
+    private final int REQUEST_CODE_STORAGE = 88;
+    private final int REQUEST_CODE_INSTALL = 99;
+    private final int REQUEST_CODE_PICK = 100;
     private DownloadInfo downloadInfo;
 
     @BindView(R.id.button1)
@@ -64,21 +71,54 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @OnClick(R.id.button1)
-    public void onButton1() {
+    public void getWalletInfo(long userId, UUHttpCallback<BaseResponse<User>> callback) {
+        post(callback);
+    }
 
+    private <T> void post(final UUHttpCallback<T> callback) {
         RxHttp.getInstance()
                 .get(this)
                 .url(Constants.URL_GET)
-                .enqueue(new HttpCallback<Feed>() {
+                .enqueue(new SimpleHttpCallback<T>(callback.getType()) {
                     @Override
                     public void onStart() {
                         Log.d(TAG, "onStart");
                     }
 
                     @Override
-                    public void onResponse(Feed response) {
-                        Toast.makeText(MainActivity.this, response.getDate(), Toast.LENGTH_SHORT).show();
+                    public void onResponse(T response) {
+                        Toast.makeText(MainActivity.this, response.toString(), Toast.LENGTH_SHORT).show();
+                        callback.onResponse(null);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d(TAG, "onError:" + e.getMessage());
+                        Toast.makeText(MainActivity.this, "error:" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Log.d(TAG, "onComplete");
+                    }
+                });
+    }
+
+    @OnClick(R.id.button1)
+    public void onButton1() {
+
+        RxHttp.getInstance()
+                .get(this)
+                .url(Constants.URL_GET)
+                .enqueue(new HttpCallback<BaseResponse<Feed>>() {
+                    @Override
+                    public void onStart() {
+                        Log.d(TAG, "onStart");
+                    }
+
+                    @Override
+                    public void onResponse(BaseResponse<Feed> response) {
+                        Toast.makeText(MainActivity.this, response.toString(), Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -193,12 +233,24 @@ public class MainActivity extends AppCompatActivity {
         upload("");
     }
 
+    @OnClick(R.id.btn_test)
+    public void onTest(){
+        getWalletInfo(11, new UUHttpCallback<BaseResponse<User>>() {
+
+                    @Override
+                    public void onResponse(BaseResponse<User> result) {
+
+                    }
+                }
+        );
+    }
+
     private void upload(String path) {
         Map<String, Object> map = new HashMap<>();
         map.put("model", Build.MODEL);
         map.put("manufacturer", Build.MANUFACTURER);
         map.put("os", Build.VERSION.SDK_INT);
-        path=Constants.EXTERNAL_PATH+"Download/gradle-4.4-all.zip";
+        path = Constants.EXTERNAL_PATH + "Download/gradle-4.4-all.zip";
         map.put("image", new File(path));
 
         RxHttp.getInstance().upload(this).url(Constants.URL_UPLOAD).params(map).enqueue(new UploadCallback<String>() {
@@ -209,7 +261,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onProgress(final long totalBytes, final long readBytes) {
-                updateProgress(totalBytes,readBytes);
+                updateProgress(totalBytes, readBytes);
             }
 
             @Override
@@ -248,14 +300,14 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onProgress(DownloadInfo downloadInfo) {
                         if (downloadInfo != null) {
-                            updateProgress(downloadInfo.getTotal(),downloadInfo.getProgress());
+                            updateProgress(downloadInfo.getTotal(), downloadInfo.getProgress());
                         }
                     }
 
                     @Override
                     public void onResponse(DownloadInfo downloadInfo) {
-                        Log.d(TAG, "onResponse:,isDestroyed:"+isDestroyed());
-                        boolean b=isDestroyed();
+                        Log.d(TAG, "onResponse:,isDestroyed:" + isDestroyed());
+                        boolean b = isDestroyed();
                         closeProgressDialog();
                         MainActivity.this.downloadInfo = downloadInfo;
                         MainActivity.this.button1.setText("ok");
@@ -264,7 +316,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.d(TAG, "onError:"+e.getMessage());
+                        Log.d(TAG, "onError:" + e.getMessage());
                         closeProgressDialog();
 
                     }
@@ -289,11 +341,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateProgress(final long totalBytes, final long readBytes) {
-        Log.d(TAG,"updateProgress,readBytes:"+readBytes);
+        Log.d(TAG, "updateProgress,readBytes:" + readBytes);
         if (progressDialog != null && progressDialog.isShowing()) {
-            Log.d(TAG,"progressDialog");
-            progressDialog.setProgress((int)readBytes);
-            progressDialog.setMax((int)totalBytes);
+            Log.d(TAG, "progressDialog");
+            progressDialog.setProgress((int) readBytes);
+            progressDialog.setMax((int) totalBytes);
             float all = totalBytes * 1.0f / 1024 / 1024;
             float percent = readBytes * 1.0f / 1024 / 1024;
             progressDialog.setProgressNumberFormat(String.format("%.2fM/%.2fM", percent, all));

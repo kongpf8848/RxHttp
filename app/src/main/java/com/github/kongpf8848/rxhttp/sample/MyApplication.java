@@ -17,7 +17,9 @@ public class MyApplication extends Application {
         //初始化RxHttp
         OkHttpClient.Builder builder= new OkHttpClient.Builder();
         builder.connectTimeout(30, TimeUnit.SECONDS);
-        HttpConfig.getInstance().builder(builder).debug(BuildConfig.DEBUG);
+        HttpConfig.getInstance().builder(builder)
+                .logEnable(BuildConfig.DEBUG)
+                .logTag("UULOG");
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
             @Override
             public void uncaughtException(Thread t, Throwable e) {

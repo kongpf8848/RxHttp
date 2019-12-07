@@ -66,7 +66,7 @@ public class DownloadConverter<T> implements IConverter<T> {
 
         } catch (Exception e) {
             LogUtil.e(e.getMessage());
-            throw new HttpError(HttpError.CODE_DOWNLOAD_EXCEPTION, e.getMessage());
+            throw e;
         }
         return (T)downloadInfo;
 

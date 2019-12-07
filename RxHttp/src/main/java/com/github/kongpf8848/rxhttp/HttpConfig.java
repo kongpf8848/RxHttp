@@ -9,7 +9,8 @@ public class HttpConfig {
     private static HttpConfig instance;
 
     private OkHttpClient.Builder builder;
-    private boolean debug;
+    private boolean logEnable;
+    private String logTag;
 
     public static HttpConfig getInstance() {
         if (instance == null) {
@@ -40,8 +41,13 @@ public class HttpConfig {
         return this;
     }
 
-    public HttpConfig debug(boolean debug) {
-        this.debug = debug;
+    public HttpConfig logEnable(boolean enable) {
+        this.logEnable = enable;
+        return this;
+    }
+
+    public HttpConfig logTag(String tag) {
+        this.logTag = tag;
         return this;
     }
 
@@ -54,8 +60,10 @@ public class HttpConfig {
     }
 
 
-    public boolean isDebug() {
-        return debug;
+    public boolean isLogEnable() {
+        return logEnable;
     }
-
+    public String getLogTag() {
+        return logTag;
+    }
 }

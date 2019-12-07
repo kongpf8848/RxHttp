@@ -6,17 +6,25 @@ import android.util.Log;
 public class LogUtil {
 
     public static final int MAX_LINE_COUNT = 4000;
-    public static final String LOG_TAG = "RxHttp";
+    public static final String DEFAULT_TAG = "RxHttp";
 
-    public static boolean debug = false;
+    public static boolean enable = false;
+    public static String TAG = DEFAULT_TAG;
 
 
-    public static void setDebug(boolean debug) {
-        LogUtil.debug = debug;
+    public static void setEnable(boolean enable) {
+        LogUtil.enable = enable;
+    }
+
+    public static void setTag(String tag) {
+        if(!TextUtils.isEmpty(tag)){
+            LogUtil.TAG = tag;
+        }
+
     }
 
     public static void v(String msg) {
-        print(Log.VERBOSE, LOG_TAG, msg);
+        print(Log.VERBOSE, TAG, msg);
     }
 
     public static void v(String tag, String msg) {
@@ -24,7 +32,7 @@ public class LogUtil {
     }
 
     public static void d(String msg) {
-        print(Log.DEBUG, LOG_TAG, msg);
+        print(Log.DEBUG, TAG, msg);
     }
 
     public static void d(String tag, String msg) {
@@ -32,7 +40,7 @@ public class LogUtil {
     }
 
     public static void i(String msg) {
-        print(Log.INFO, LOG_TAG, msg);
+        print(Log.INFO, TAG, msg);
     }
 
     public static void i(String tag, String msg) {
@@ -40,7 +48,7 @@ public class LogUtil {
     }
 
     public static void w(String msg) {
-        print(Log.WARN, LOG_TAG, msg);
+        print(Log.WARN, TAG, msg);
     }
 
     public static void w(String tag, String msg) {
@@ -48,7 +56,7 @@ public class LogUtil {
     }
 
     public static void e(String msg) {
-        print(Log.ERROR, LOG_TAG, msg);
+        print(Log.ERROR, TAG, msg);
     }
 
     public static void e(String tag, String msg) {
@@ -56,7 +64,7 @@ public class LogUtil {
     }
 
     private static void print(int priority, String tag, String msg) {
-        if (!debug) return;
+        if (!enable) return;
         if (TextUtils.isEmpty(msg)) return;
 
         String name = getFunctionName();

@@ -55,7 +55,8 @@ public class RxHttp {
     private RxHttp() {
         HttpConfig config = HttpConfig.getInstance();
 
-        LogUtil.setDebug(config.isDebug());
+        LogUtil.setEnable(config.isLogEnable());
+        LogUtil.setTag(config.getLogTag());
 
         OkHttpClient.Builder builder = config.getBuilder();
         interceptor = new HttpInterceptor();

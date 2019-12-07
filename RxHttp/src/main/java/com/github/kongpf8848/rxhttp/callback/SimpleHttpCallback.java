@@ -1,6 +1,17 @@
 package com.github.kongpf8848.rxhttp.callback;
 
+import java.lang.reflect.Type;
+
 public class SimpleHttpCallback<T> extends HttpCallback<T> {
+
+    public SimpleHttpCallback() {
+        super();
+    }
+
+    public SimpleHttpCallback(Type type) {
+        super(type);
+    }
+
     @Override
     public void onStart() {
 

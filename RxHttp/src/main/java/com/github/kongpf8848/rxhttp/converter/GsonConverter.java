@@ -18,7 +18,7 @@ public class GsonConverter<T> implements IConverter<T> {
         LogUtil.d("+++++++++++++response:"+result);
         body.close();
         if (TextUtils.isEmpty(result)) {
-            throw new HttpError(HttpError.CODE_DATE_EMPTY, "response is empty");
+            throw new HttpError(HttpError.RXHTTP_CODE_RESPONSE_DATA_EMPTY_EXCEPTION, "response data is empty");
         }
         if (type == String.class) {
             response = (T) result;
@@ -27,11 +27,11 @@ public class GsonConverter<T> implements IConverter<T> {
                 response = new Gson().fromJson(result,type);
             } catch (JsonSyntaxException e) {
                 e.printStackTrace();
-                throw new HttpError(HttpError.CODE_PARSE_EXCEPTION, e.getMessage());
+                throw new HttpError(HttpError.RXHTTP_CODE_JSON_PARSE_EXCEPTION, e.getMessage());
             }
         }
         if (response == null) {
-            throw new HttpError(HttpError.CODE_PARSE_EXCEPTION, "parse response==null");
+            throw new HttpError(HttpError.RXHTTP_CODE_RESPONSE_NULL_EXCEPTION, "response bean is null");
         }
         return response;
     }

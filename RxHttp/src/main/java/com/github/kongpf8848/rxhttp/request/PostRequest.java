@@ -40,7 +40,7 @@ public class PostRequest extends AbsRequest {
     @Override
     public RequestBody buildRequestBody() {
         if(TextUtils.isEmpty(type)) {
-            return RequestBody.create(MediaType.parse(HttpConstants.MIME_TYPE_TEXT), content);
+            return RequestBody.create(MediaType.parse(HttpConstants.MIME_TYPE_JSON), content);
         }
         else{
             return RequestBody.create(MediaType.parse(type), content);
