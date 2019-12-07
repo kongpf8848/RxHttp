@@ -5,7 +5,6 @@ import com.github.kongpf8848.rxhttp.ProgressResponseBody;
 import com.github.kongpf8848.rxhttp.bean.DownloadInfo;
 import com.github.kongpf8848.rxhttp.callback.DownloadCallback;
 import com.github.kongpf8848.rxhttp.callback.ProgressCallback;
-import com.github.kongpf8848.rxhttp.exception.HttpError;
 import com.github.kongpf8848.rxhttp.util.LogUtil;
 
 import java.io.File;

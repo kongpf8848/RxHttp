@@ -1,7 +1,7 @@
 package com.github.kongpf8848.rxhttp.converter;
 
 import android.text.TextUtils;
-import com.github.kongpf8848.rxhttp.exception.HttpError;
+import com.github.kongpf8848.rxhttp.exception.RxHttpException;
 import com.github.kongpf8848.rxhttp.util.LogUtil;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -18,7 +18,7 @@ public class GsonConverter<T> implements IConverter<T> {
         LogUtil.d("+++++++++++++response:"+result);
         body.close();
         if (TextUtils.isEmpty(result)) {
-            throw new HttpError(HttpError.RXHTTP_CODE_RESPONSE_DATA_EMPTY_EXCEPTION, "response data is empty");
+            throw new RxHttpException(RxHttpException.RXHTTP_CODE_RESPONSE_DATA_EMPTY_EXCEPTION, "response data is empty");
         }
         if (type == String.class) {
             response = (T) result;
@@ -27,11 +27,11 @@ public class GsonConverter<T> implements IConverter<T> {
                 response = new Gson().fromJson(result,type);
             } catch (JsonSyntaxException e) {
                 e.printStackTrace();
-                throw new HttpError(HttpError.RXHTTP_CODE_JSON_PARSE_EXCEPTION, e.getMessage());
+                throw new RxHttpException(RxHttpException.RXHTTP_CODE_JSON_PARSE_EXCEPTION, e.getMessage());
             }
         }
         if (response == null) {
-            throw new HttpError(HttpError.RXHTTP_CODE_RESPONSE_NULL_EXCEPTION, "response bean is null");
+            throw new RxHttpException(RxHttpException.RXHTTP_CODE_RESPONSE_NULL_EXCEPTION, "response bean is null");
         }
         return response;
     }
