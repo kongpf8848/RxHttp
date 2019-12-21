@@ -216,8 +216,7 @@ public class RxHttp {
                 }).flatMap(new Function<Long, ObservableSource<ResponseBody>>() {
                     @Override
                     public ObservableSource<ResponseBody> apply(Long start) throws Exception {
-                        String range=String.format("bytes=%d-",start.longValue());
-                        return httpService.download(downloadRequest.getUrl(),range);
+                        return httpService.download(downloadRequest.getUrl(),String.format("bytes=%d-",start));
                     }
                 }).subscribeOn(Schedulers.io());
 
