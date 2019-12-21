@@ -23,7 +23,7 @@ public class MyApplication extends Application {
         builder.connectTimeout(30, TimeUnit.SECONDS);
         HttpConfig.getInstance().builder(builder)
                 .logEnable(BuildConfig.DEBUG)
-                .logTag("RxHttp");
+                .logTag(Constants.LOG_TAG);
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
             @Override
             public void uncaughtException(Thread t, Throwable e) {

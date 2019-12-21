@@ -6,6 +6,7 @@ import java.io.File;
 
 public class Constants {
 
+    public static final String LOG_TAG = "UULOG";
     public static final String BASE_URL_DAILY = "http://news-at.zhihu.com/api/4/";
     public static final String BASE_URL_LOCAL = "http://192.168.0.101:8080/webtest/";
     public static final String URL_GET = BASE_URL_DAILY+"stories/latest";

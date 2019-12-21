@@ -25,7 +25,6 @@ import com.github.kongpf8848.rxhttp.callback.HttpCallback;
 import com.github.kongpf8848.rxhttp.callback.UploadCallback;
 import com.github.kongpf8848.rxhttp.sample.Constants;
 import com.github.kongpf8848.rxhttp.sample.R;
-import com.github.kongpf8848.rxhttp.sample.bean.BaseResponse;
 import com.github.kongpf8848.rxhttp.sample.bean.Feed;
 import com.kongpf.commonhelper.ApkHelper;
 import com.kongpf.commonhelper.ImageHelper;
@@ -42,7 +41,7 @@ import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity {
 
-    private final String TAG = "RxHttp";
+
     private ProgressDialog progressDialog;
     private PermissionHelper permissionHelper;
 
@@ -61,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-
     }
 
 
@@ -71,26 +69,26 @@ public class MainActivity extends AppCompatActivity {
         RxHttp.getInstance()
                 .get(this)
                 .url(Constants.URL_GET)
-                .enqueue(new HttpCallback<BaseResponse<Feed>>() {
+                .enqueue(new HttpCallback<Feed>() {
                     @Override
                     public void onStart() {
-                        Log.d(TAG, "onStart");
+                        Log.d(Constants.LOG_TAG, "onStart");
                     }
 
                     @Override
-                    public void onNext(BaseResponse<Feed> response) {
+                    public void onNext(Feed response) {
                         Toast.makeText(MainActivity.this, response.toString(), Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.d(TAG, "onError:" + e.getMessage());
+                        Log.d(Constants.LOG_TAG, "onError:" + e.getMessage());
                         Toast.makeText(MainActivity.this, "error:" + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onComplete() {
-                        Log.d(TAG, "onComplete");
+                        Log.d(Constants.LOG_TAG, "onComplete");
                     }
                 });
     }
@@ -106,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onStart() {
-                        Log.d(TAG, "onStart");
+                        Log.d(Constants.LOG_TAG, "onStart");
                     }
 
                     @Override
@@ -116,13 +114,13 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.d(TAG, "onError:" + e.getMessage());
+                        Log.d(Constants.LOG_TAG, "onError:" + e.getMessage());
                         Toast.makeText(MainActivity.this, "error:" + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onComplete() {
-                        Log.d(TAG, "onComplete");
+                        Log.d(Constants.LOG_TAG, "onComplete");
                     }
                 });
     }
@@ -137,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onStart() {
-                Log.d(TAG, "onStart");
+                Log.d(Constants.LOG_TAG, "onStart");
             }
 
             @Override
@@ -147,13 +145,13 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onError(Throwable e) {
-                Log.d(TAG, "onError:" + e.getMessage());
+                Log.d(Constants.LOG_TAG, "onError:" + e.getMessage());
                 Toast.makeText(MainActivity.this, "error:" + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onComplete() {
-                Log.d(TAG, "onComplete");
+                Log.d(Constants.LOG_TAG, "onComplete");
             }
         });
     }
@@ -220,14 +218,14 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onNext(String response) {
-                Log.d(TAG, "response:" + response);
+                Log.d(Constants.LOG_TAG, "response:" + response);
                 Toast.makeText(MainActivity.this, "response:" + response, Toast.LENGTH_SHORT).show();
                 closeProgressDialog();
             }
 
             @Override
             public void onError(Throwable e) {
-                Log.d(TAG, "onError:" + e.getMessage());
+                Log.d(Constants.LOG_TAG, "onError:" + e.getMessage());
                 Toast.makeText(MainActivity.this, "error:" + e.getMessage(), Toast.LENGTH_SHORT).show();
                 closeProgressDialog();
 
@@ -235,7 +233,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onComplete() {
-                Log.d(TAG, "onComplete");
+                Log.d(Constants.LOG_TAG, "onComplete");
                 closeProgressDialog();
             }
         });
@@ -274,7 +272,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.d(TAG, "onError:" + e.getMessage());
+                        Log.d(Constants.LOG_TAG, "onError:" + e.getMessage());
                         ToastHelper.toast(e.getMessage());
                         closeProgressDialog();
 
@@ -282,7 +280,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onComplete() {
-                        Log.d(TAG, "onComplete:");
+                        Log.d(Constants.LOG_TAG, "onComplete:");
                     }
 
                 });
@@ -300,9 +298,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateProgress(final long totalBytes, final long readBytes) {
-        Log.d(TAG, "updateProgress,readBytes:" + readBytes + ",totalBytes:" + totalBytes);
+        Log.d(Constants.LOG_TAG, "updateProgress,readBytes:" + readBytes + ",totalBytes:" + totalBytes);
         if (progressDialog != null && progressDialog.isShowing()) {
-            Log.d(TAG, "progressDialog");
+            Log.d(Constants.LOG_TAG, "progressDialog");
             progressDialog.setProgress((int) readBytes);
             progressDialog.setMax((int) totalBytes);
             float all = totalBytes * 1.0f / 1024 / 1024;
@@ -369,7 +367,7 @@ public class MainActivity extends AppCompatActivity {
                 if (TextUtils.isEmpty(filePath)) {
                     filePath = ImageHelper.getAbsoluteImagePath(this, uri);
                 }
-                Log.d(TAG, "filePath:" + filePath);
+                Log.d(Constants.LOG_TAG, "filePath:" + filePath);
                 if (!TextUtils.isEmpty(filePath)) {
                     upload(filePath);
                 }
@@ -378,8 +376,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
 }
