@@ -18,7 +18,7 @@ public class SimpleHttpCallback<T> extends HttpCallback<T> {
     }
 
     @Override
-    public void onResponse(T response) {
+    public void onNext(T response) {
 
     }
 

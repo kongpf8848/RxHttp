@@ -1,7 +1,6 @@
 package com.github.kongpf8848.rxhttp.sample.activity;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -9,7 +8,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
@@ -24,20 +22,16 @@ import com.github.kongpf8848.rxhttp.RxHttp;
 import com.github.kongpf8848.rxhttp.bean.DownloadInfo;
 import com.github.kongpf8848.rxhttp.callback.DownloadCallback;
 import com.github.kongpf8848.rxhttp.callback.HttpCallback;
-import com.github.kongpf8848.rxhttp.callback.SimpleHttpCallback;
 import com.github.kongpf8848.rxhttp.callback.UploadCallback;
 import com.github.kongpf8848.rxhttp.sample.Constants;
 import com.github.kongpf8848.rxhttp.sample.R;
 import com.github.kongpf8848.rxhttp.sample.bean.BaseResponse;
 import com.github.kongpf8848.rxhttp.sample.bean.Feed;
-import com.github.kongpf8848.rxhttp.sample.bean.User;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.kongpf.commonhelper.ApkHelper;
 import com.kongpf.commonhelper.ImageHelper;
+import com.kongpf.commonhelper.ToastHelper;
 
 import java.io.File;
-import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,7 +39,6 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -71,38 +64,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void getWalletInfo(long userId, UUHttpCallback<BaseResponse<User>> callback) {
-        post(callback);
-    }
-
-    private <T> void post(final UUHttpCallback<T> callback) {
-        RxHttp.getInstance()
-                .get(this)
-                .url(Constants.URL_GET)
-                .enqueue(new SimpleHttpCallback<T>(callback.getType()) {
-                    @Override
-                    public void onStart() {
-                        Log.d(TAG, "onStart");
-                    }
-
-                    @Override
-                    public void onResponse(T response) {
-                        Toast.makeText(MainActivity.this, response.toString(), Toast.LENGTH_SHORT).show();
-                        callback.onResponse(null);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.d(TAG, "onError:" + e.getMessage());
-                        Toast.makeText(MainActivity.this, "error:" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        Log.d(TAG, "onComplete");
-                    }
-                });
-    }
 
     @OnClick(R.id.button1)
     public void onButton1() {
@@ -117,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onResponse(BaseResponse<Feed> response) {
+                    public void onNext(BaseResponse<Feed> response) {
                         Toast.makeText(MainActivity.this, response.toString(), Toast.LENGTH_SHORT).show();
                     }
 
@@ -149,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onResponse(String response) {
+                    public void onNext(String response) {
                         Toast.makeText(MainActivity.this, "response:" + response, Toast.LENGTH_SHORT).show();
                     }
 
@@ -180,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onResponse(String response) {
+            public void onNext(String response) {
                 Toast.makeText(MainActivity.this, "response:" + response, Toast.LENGTH_SHORT).show();
             }
 
@@ -234,15 +195,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.btn_test)
-    public void onTest(){
-        getWalletInfo(11, new UUHttpCallback<BaseResponse<User>>() {
+    public void onTest() {
 
-                    @Override
-                    public void onResponse(BaseResponse<User> result) {
-
-                    }
-                }
-        );
     }
 
     private void upload(String path) {
@@ -265,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onResponse(String response) {
+            public void onNext(String response) {
                 Log.d(TAG, "response:" + response);
                 Toast.makeText(MainActivity.this, "response:" + response, Toast.LENGTH_SHORT).show();
                 closeProgressDialog();
@@ -287,8 +241,15 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
     private void download() {
-        RxHttp.getInstance().download(this).dir(PATH)
+
+        String fileName = Constants.URL_DOWNLOAD.substring(Constants.URL_DOWNLOAD.lastIndexOf("/") + 1);
+        RxHttp.getInstance().download(this)
+                .dir(PATH)
+                .filename(fileName)
+                .md5("0C7B39AC67E163F0B6119D5FB31AF2D5")
+                .breakpoint(true)
                 .url(Constants.URL_DOWNLOAD)
                 .enqueue(new DownloadCallback() {
 
@@ -305,18 +266,16 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onResponse(DownloadInfo downloadInfo) {
-                        Log.d(TAG, "onResponse:,isDestroyed:" + isDestroyed());
-                        boolean b = isDestroyed();
+                    public void onNext(DownloadInfo downloadInfo) {
                         closeProgressDialog();
                         MainActivity.this.downloadInfo = downloadInfo;
-                        MainActivity.this.button1.setText("ok");
                         install();
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         Log.d(TAG, "onError:" + e.getMessage());
+                        ToastHelper.toast(e.getMessage());
                         closeProgressDialog();
 
                     }
@@ -341,7 +300,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateProgress(final long totalBytes, final long readBytes) {
-        Log.d(TAG, "updateProgress,readBytes:" + readBytes);
+        Log.d(TAG, "updateProgress,readBytes:" + readBytes + ",totalBytes:" + totalBytes);
         if (progressDialog != null && progressDialog.isShowing()) {
             Log.d(TAG, "progressDialog");
             progressDialog.setProgress((int) readBytes);

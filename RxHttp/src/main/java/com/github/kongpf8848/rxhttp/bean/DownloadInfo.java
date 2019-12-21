@@ -5,10 +5,10 @@ public class DownloadInfo extends ProgressInfo {
     private String destDir;
     private String fileName;
 
-    public DownloadInfo(String url, String dir) {
+    public DownloadInfo(String url, String dir,String filename) {
         super(url);
         this.destDir=dir;
-        this.fileName=getUrl().substring(getUrl().lastIndexOf("/")+1);
+        this.fileName=filename;
     }
 
     public String getDestDir() {

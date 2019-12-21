@@ -2,10 +2,6 @@ package com.github.kongpf8848.rxhttp;
 
 import com.github.kongpf8848.rxhttp.callback.HttpCallback;
 
-
-import io.reactivex.Observer;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 
 public class HttpObserver<T> extends DisposableObserver<T> {
@@ -27,7 +23,7 @@ public class HttpObserver<T> extends DisposableObserver<T> {
     @Override
     public void onNext(T response) {
         if (this.callback != null) {
-            callback.onResponse(response);
+            callback.onNext(response);
         }
     }
 

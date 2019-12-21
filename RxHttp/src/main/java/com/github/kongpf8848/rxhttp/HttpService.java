@@ -9,6 +9,7 @@ import retrofit2.http.Body;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Streaming;
 import retrofit2.http.Url;
@@ -51,7 +52,14 @@ public interface HttpService {
     @Streaming
     Observable<ResponseBody> download(@Url String url);
 
-
-
+    /**
+     * 下载请求
+     * @param url
+     * @param range
+     * @return
+     */
+    @GET
+    @Streaming
+    Observable<ResponseBody> download(@Url String url, @Header("RANGE") String range);
 
 }

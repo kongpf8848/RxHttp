@@ -35,6 +35,7 @@ ext {
                     "autodispose"           : "com.uber.autodispose:autodispose-android-archcomponents:1.0.0-RC2",
                     "butterknife"           : "com.jakewharton:butterknife:$butterknife_version",
                     "butterknife-compiler"  : "com.jakewharton:butterknife-compiler:$butterknife_version",
+                    "common-helper"         : "com.kongpf.commonhelper:common-helper:1.0.16"
 
 
     ]

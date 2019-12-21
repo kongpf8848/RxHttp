@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.arch.lifecycle.LifecycleOwner;
 import android.content.Context;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 
 import com.github.kongpf8848.rxhttp.bean.DownloadInfo;
 import com.github.kongpf8848.rxhttp.callback.DownloadCallback;
@@ -17,15 +18,22 @@ import com.github.kongpf8848.rxhttp.request.PostFormRequest;
 import com.github.kongpf8848.rxhttp.request.PostRequest;
 import com.github.kongpf8848.rxhttp.request.UploadRequest;
 import com.github.kongpf8848.rxhttp.util.LogUtil;
+import com.kongpf.commonhelper.AlgorithmHelper;
 import com.trello.rxlifecycle2.LifecycleTransformer;
 import com.uber.autodispose.AutoDispose;
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider;
 
+import java.io.File;
+import java.io.IOException;
+
 import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import okhttp3.ResponseBody;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -85,6 +93,7 @@ public class RxHttp {
     public GetRequest get(Fragment fragment) {
         return new GetRequest(fragment);
     }
+
     public GetRequest get(LifecycleTransformer transformer) {
         return new GetRequest(transformer);
     }
@@ -101,6 +110,7 @@ public class RxHttp {
     public PostRequest post(Fragment fragment) {
         return new PostRequest(fragment);
     }
+
     public PostRequest post(LifecycleTransformer transformer) {
         return new PostRequest(transformer);
     }
@@ -151,6 +161,7 @@ public class RxHttp {
     public DownloadRequest download(Fragment fragment) {
         return new DownloadRequest(fragment);
     }
+
     public DownloadRequest download(LifecycleTransformer transformer) {
         return new DownloadRequest(transformer);
     }
@@ -169,7 +180,50 @@ public class RxHttp {
             final UploadRequest uploadRequest = (UploadRequest) request;
             observable = httpService.post(uploadRequest.getUrl(), uploadRequest.buildRequestBody());
         } else if (request instanceof DownloadRequest) {
-            observable = httpService.download(request.getUrl());
+            final DownloadRequest downloadRequest = ((DownloadRequest) request);
+            final File file=new File(downloadRequest.getDir(),downloadRequest.getFilename());
+            DownloadInfo downloadInfo=new DownloadInfo(downloadRequest.getUrl(),downloadRequest.getDir(),downloadRequest.getFilename());
+            if(!TextUtils.isEmpty(downloadRequest.getMd5())){
+                if(file.exists()){
+                    String fileMd5= AlgorithmHelper.getMD5(file);
+                    if(downloadRequest.getMd5().equalsIgnoreCase(fileMd5)){
+                        downloadInfo.setTotal(file.length());
+                        downloadInfo.setProgress(file.length());
+                        callback.onNext((T)downloadInfo);
+                        LogUtil.d("check md5 ok,return");
+                        return;
+                    }
+                }
+            }
+            if (downloadRequest.isBreakpoint()) {
+                observable=Observable.just(downloadRequest.getUrl())
+                        .flatMap(new Function<String, ObservableSource<Long>>() {
+                    @Override
+                    public ObservableSource<Long> apply(String url) throws Exception {
+                        long contentLength = getContentLength(url);
+                        long start=0;
+                        if(file.exists()){
+                            if(contentLength==-1 || file.length()>=contentLength){
+                                file.delete();
+                                LogUtil.d("delete file");
+                            }
+                            else{
+                                start=file.length();
+                            }
+                        }
+                        return Observable.just(start);
+                    }
+                }).flatMap(new Function<Long, ObservableSource<ResponseBody>>() {
+                    @Override
+                    public ObservableSource<ResponseBody> apply(Long start) throws Exception {
+                        String range=String.format("bytes=%d-",start.longValue());
+                        return httpService.download(downloadRequest.getUrl(),range);
+                    }
+                }).subscribeOn(Schedulers.io());
+
+            } else {
+                observable = httpService.download(request.getUrl());
+            }
         }
 
 
@@ -178,9 +232,7 @@ public class RxHttp {
                 @Override
                 public T apply(ResponseBody body) throws Exception {
                     if (request instanceof DownloadRequest) {
-                        DownloadRequest downloadRequest = (DownloadRequest) request;
-                        DownloadInfo downloadInfo = new DownloadInfo(downloadRequest.getUrl(), downloadRequest.getDir());
-                        DownloadConverter<T> downloadConverter = new DownloadConverter(downloadInfo, (DownloadCallback) callback);
+                        DownloadConverter<T> downloadConverter = new DownloadConverter((DownloadRequest) request, (DownloadCallback) callback);
                         return downloadConverter.convert(body, callback.getType());
                     } else {
                         return new GsonConverter<T>().convert(body, callback.getType());
@@ -193,17 +245,30 @@ public class RxHttp {
                 LifecycleOwner lifecycleOwner = (LifecycleOwner) request.getContext();
                 observableFinal.as(AutoDispose.<T>autoDisposable(AndroidLifecycleScopeProvider.from(lifecycleOwner.getLifecycle())))
                         .subscribeWith(new HttpObserver<T>(callback));
-            } else if(request.getContext() instanceof LifecycleTransformer) {
-                observableFinal.compose((LifecycleTransformer)request.getContext())
+            } else if (request.getContext() instanceof LifecycleTransformer) {
+                observableFinal.compose((LifecycleTransformer) request.getContext())
                         .subscribeWith(new HttpObserver<T>(callback));
-            }
-            else{
+            } else {
                 observableFinal.subscribeWith(new HttpObserver<T>(callback));
             }
 
 
         }
 
+    }
+
+
+    private long getContentLength(String url) throws IOException {
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+        Response response = new OkHttpClient.Builder().build().newCall(request).execute();
+        if (response.isSuccessful()) {
+            long contentLength = response.body().contentLength();
+            response.close();
+            return contentLength;
+        }
+        return -1;
     }
 
 

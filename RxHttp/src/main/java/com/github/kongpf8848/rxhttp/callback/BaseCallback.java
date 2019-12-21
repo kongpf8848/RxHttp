@@ -8,7 +8,7 @@ package com.github.kongpf8848.rxhttp.callback;
     /**
      * http请求成功时回调
      */
-    void onResponse(T response);
+    void onNext(T response);
     /**
      * http请求失败时回调
      */
