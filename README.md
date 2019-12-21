@@ -6,7 +6,7 @@
 ```
 支持上传及进度监听，支持上传多个文件，支持文本和文件混合上传
 
-支持下载及进度监听，支持大文件下载
+支持下载及进度监听，支持大文件下载，支持断点下载，支持文件MD5校验
 
 支持自定义OkHttpClient
 
@@ -17,7 +17,7 @@
 ```
 # 添加依赖
 ```
-implementation 'com.github.kongpf8848:RxHttp:1.0.4'
+implementation 'com.github.kongpf8848:RxHttp:1.0.6'
 ```
 # get请求
 ```
@@ -31,7 +31,7 @@ implementation 'com.github.kongpf8848:RxHttp:1.0.4'
                     }
 
                     @Override
-                    public void onResponse(Feed response) {
+                    public void onNext(Feed response) {
                         Toast.makeText(MainActivity.this, response.getDate(), Toast.LENGTH_SHORT).show();
                     }
 
@@ -62,7 +62,7 @@ implementation 'com.github.kongpf8848:RxHttp:1.0.4'
                     }
 
                     @Override
-                    public void onResponse(String response) {
+                    public void onNext(String response) {
                         Toast.makeText(MainActivity.this, "response:" + response, Toast.LENGTH_SHORT).show();
                     }
 
@@ -92,7 +92,7 @@ implementation 'com.github.kongpf8848:RxHttp:1.0.4'
             }
 
             @Override
-            public void onResponse(String response) {
+            public void onNext(String response) {
                 Toast.makeText(MainActivity.this, "response:" + response, Toast.LENGTH_SHORT).show();
             }
 
@@ -127,7 +127,7 @@ implementation 'com.github.kongpf8848:RxHttp:1.0.4'
                     }
 
                     @Override
-                    public void onResponse(DownloadInfo downloadInfo) {
+                    public void onNext(DownloadInfo downloadInfo) {
                         Log.d(TAG, "onResponse");
                         closeProgressDialog();
                         MainActivity.this.downloadInfo = downloadInfo;
@@ -169,7 +169,7 @@ implementation 'com.github.kongpf8848:RxHttp:1.0.4'
             }
 
             @Override
-            public void onResponse(String response) {
+            public void onNext(String response) {
                 Log.d(TAG, "response:" + response);
                 Toast.makeText(MainActivity.this, "response:" + response, Toast.LENGTH_SHORT).show();
                 closeProgressDialog();
