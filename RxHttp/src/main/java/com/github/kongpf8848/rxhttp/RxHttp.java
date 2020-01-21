@@ -238,7 +238,8 @@ public class RxHttp {
 
                     }
                 }
-            }).subscribeOn(Schedulers.io())
+            }).retryWhen(new RetryWithDelay(HttpConfig.getInstance().getMaxRetries(), HttpConfig.getInstance().getRetryDelayMillis()))
+                    .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread());
             if (request.getContext() instanceof LifecycleOwner) {
                 LifecycleOwner lifecycleOwner = (LifecycleOwner) request.getContext();

@@ -11,6 +11,8 @@ public class HttpConfig {
     private OkHttpClient.Builder builder;
     private boolean logEnable;
     private String logTag;
+    private int maxRetries;
+    private long retryDelayMillis;
 
     public static HttpConfig getInstance() {
         if (instance == null) {
@@ -51,6 +53,15 @@ public class HttpConfig {
         return this;
     }
 
+    public HttpConfig retryDelayMillis(long retryDelayMillis){
+        this.retryDelayMillis=retryDelayMillis;
+        return this;
+    }
+
+    public HttpConfig maxRetries(int maxRetries){
+        this.maxRetries=maxRetries;
+        return this;
+    }
 
     public OkHttpClient.Builder getBuilder() {
         if (builder == null) {
@@ -65,5 +76,13 @@ public class HttpConfig {
     }
     public String getLogTag() {
         return logTag;
+    }
+
+    public int getMaxRetries() {
+        return maxRetries;
+    }
+
+    public long getRetryDelayMillis() {
+        return retryDelayMillis;
     }
 }

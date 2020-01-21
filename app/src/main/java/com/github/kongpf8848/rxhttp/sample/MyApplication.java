@@ -23,7 +23,9 @@ public class MyApplication extends Application {
         builder.connectTimeout(30, TimeUnit.SECONDS);
         HttpConfig.getInstance().builder(builder)
                 .logEnable(BuildConfig.DEBUG)
-                .logTag(Constants.LOG_TAG);
+                .logTag(Constants.LOG_TAG)
+                .retryDelayMillis(3000)
+                .maxRetries(3);
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
             @Override
             public void uncaughtException(Thread t, Throwable e) {
