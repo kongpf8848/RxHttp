@@ -2,12 +2,12 @@ package com.github.kongpf8848.rxhttp.request;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+
+import androidx.fragment.app.Fragment;
 
 import com.github.kongpf8848.rxhttp.HttpConstants;
 import com.trello.rxlifecycle2.LifecycleTransformer;
-
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;

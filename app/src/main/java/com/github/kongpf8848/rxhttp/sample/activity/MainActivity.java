@@ -10,11 +10,12 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.kongpf8848.permissionhelper.PermissionHelper;
 import com.github.kongpf8848.permissionhelper.PermissionInfomation;
@@ -59,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
     }
 
 
@@ -192,10 +192,6 @@ public class MainActivity extends AppCompatActivity {
         upload("");
     }
 
-    @OnClick(R.id.btn_test)
-    public void onTest() {
-
-    }
 
     private void upload(String path) {
         Map<String, Object> map = new HashMap<>();

@@ -1,10 +1,12 @@
 package com.github.kongpf8848.rxhttp;
 
 import android.app.Activity;
-import android.arch.lifecycle.LifecycleOwner;
 import android.content.Context;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleOwner;
 
 import com.github.kongpf8848.rxhttp.bean.DownloadInfo;
 import com.github.kongpf8848.rxhttp.callback.DownloadCallback;
@@ -243,7 +245,7 @@ public class RxHttp {
                     .observeOn(AndroidSchedulers.mainThread());
             if (request.getContext() instanceof LifecycleOwner) {
                 LifecycleOwner lifecycleOwner = (LifecycleOwner) request.getContext();
-                observableFinal.as(AutoDispose.<T>autoDisposable(AndroidLifecycleScopeProvider.from(lifecycleOwner.getLifecycle())))
+                observableFinal.as(AutoDispose.<T>autoDisposable(AndroidLifecycleScopeProvider.from(lifecycleOwner, Lifecycle.Event.ON_DESTROY)))
                         .subscribeWith(new HttpObserver<T>(callback));
             } else if (request.getContext() instanceof LifecycleTransformer) {
                 observableFinal.compose((LifecycleTransformer) request.getContext())

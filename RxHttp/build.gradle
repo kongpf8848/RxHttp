@@ -30,7 +30,7 @@ android {
 dependencies {
     testImplementation  rootProject.ext.dependencies["junit"]
     api fileTree(dir: 'libs', include: ['*.jar'])
-    api rootProject.ext.dependencies["appcompat-v7"]
+    api rootProject.ext.dependencies["appcompat"]
     api rootProject.ext.dependencies["rxjava2"]
     api rootProject.ext.dependencies["rxandroid"]
     api rootProject.ext.dependencies["retrofit"]

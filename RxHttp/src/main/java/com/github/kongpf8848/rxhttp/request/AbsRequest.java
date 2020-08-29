@@ -2,12 +2,12 @@ package com.github.kongpf8848.rxhttp.request;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.v4.app.Fragment;
+
+import androidx.fragment.app.Fragment;
 
 import com.github.kongpf8848.rxhttp.RxHttp;
 import com.github.kongpf8848.rxhttp.callback.HttpCallback;
 import com.trello.rxlifecycle2.LifecycleTransformer;
-
 
 import java.util.HashMap;
 import java.util.Map;
