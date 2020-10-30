@@ -1,6 +1,6 @@
 # RxHttp
 
-基于Retrofit和RxJava2封装的Http类库，实现了get,post,post表单请求,文件下载及进度监听,文件上传及进度监听功能。
+小巧精致的网络类库，基于Retrofit,RxJava2封装，实现了get,post,post表单请求,文件下载及进度监听,文件上传及进度监听等功能。
 
 # 功能特点
 + 支持上传及进度监听，支持上传多个文件，支持文本和文件混合上传
@@ -16,7 +16,7 @@
 
 # 添加依赖
 ```
-implementation 'com.github.kongpf8848:RxHttp:1.0.6'
+implementation 'com.github.kongpf8848:RxHttp:1.0.7'
 ```
 # get请求
 ```
