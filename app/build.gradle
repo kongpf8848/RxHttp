@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion rootProject.ext.android.compileSdkVersion
@@ -30,8 +32,17 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation rootProject.ext.dependencies["appcompat"]
     implementation rootProject.ext.dependencies["butterknife"]
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     annotationProcessor rootProject.ext.dependencies["butterknife-compiler"]
     implementation 'com.github.kongpf8848:permissionhelper:1.0.0'
     implementation rootProject.ext.dependencies["common-helper"]
+    implementation rootProject.ext.dependencies["logging-interceptor"]
+    implementation "androidx.core:core-ktx:+"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
+
+}
+repositories {
+    mavenCentral()
 }

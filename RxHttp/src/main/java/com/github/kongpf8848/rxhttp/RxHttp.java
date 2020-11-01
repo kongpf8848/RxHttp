@@ -172,7 +172,7 @@ public class RxHttp {
         interceptor.setRequest(request);
         Observable<ResponseBody> observable = null;
         if (request instanceof GetRequest) {
-            observable = httpService.get(request.getUrl());
+            observable = httpService.get(request.getUrl(),request.getParams());
         } else if (request instanceof PostRequest) {
             PostRequest postRequest = (PostRequest) request;
             observable = httpService.post(postRequest.getUrl(), postRequest.buildRequestBody());

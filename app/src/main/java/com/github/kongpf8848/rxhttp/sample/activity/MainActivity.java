@@ -1,6 +1,5 @@
 package com.github.kongpf8848.rxhttp.sample.activity;
 
-import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -18,7 +17,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.kongpf8848.permissionhelper.PermissionHelper;
-import com.github.kongpf8848.permissionhelper.PermissionInfomation;
 import com.github.kongpf8848.rxhttp.RxHttp;
 import com.github.kongpf8848.rxhttp.bean.DownloadInfo;
 import com.github.kongpf8848.rxhttp.callback.DownloadCallback;
@@ -32,8 +30,9 @@ import com.kongpf.commonhelper.ImageHelper;
 import com.kongpf.commonhelper.ToastHelper;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -65,10 +64,13 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.button1)
     public void onButton1() {
-
+        Map<String, Object> map = new HashMap<>();
+        map.put("model", "abcd%jack");
+        map.put("manufacturer", "123+sam");
         RxHttp.getInstance()
                 .get(this)
                 .url(Constants.URL_GET)
+                .params(map)
                 .enqueue(new HttpCallback<Feed>() {
                     @Override
                     public void onStart() {
@@ -158,24 +160,25 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.button4)
     public void onButton4() {
-        permissionHelper = new PermissionHelper(this, new PermissionHelper.OnPermissionListener() {
-            @Override
-            public void onPermissionGranted() {
-                download();
-            }
-
-            @Override
-            public void onPermissionMissing(List<String> permissions) {
-
-            }
-
-            @Override
-            public void onPermissionFailed(List<PermissionInfomation> failList) {
-
-            }
-
-        });
-        permissionHelper.requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE_STORAGE);
+        download();
+//        permissionHelper = new PermissionHelper(this, new PermissionHelper.OnPermissionListener() {
+//            @Override
+//            public void onPermissionGranted() {
+//
+//            }
+//
+//            @Override
+//            public void onPermissionMissing(List<String> permissions) {
+//
+//            }
+//
+//            @Override
+//            public void onPermissionFailed(List<PermissionInfomation> failList) {
+//
+//            }
+//
+//        });
+//        permissionHelper.requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE_STORAGE);
     }
 
     @OnClick(R.id.button5)
@@ -240,9 +243,9 @@ public class MainActivity extends AppCompatActivity {
 
         String fileName = Constants.URL_DOWNLOAD.substring(Constants.URL_DOWNLOAD.lastIndexOf("/") + 1);
         RxHttp.getInstance().download(this)
-                .dir(PATH)
+                .dir(getExternalFilesDir(null)+File.separator+"download")
                 .filename(fileName)
-                .md5("0C7B39AC67E163F0B6119D5FB31AF2D5")
+                .md5("83FC5767038312E66C79BC36AC68FA4D")
                 .breakpoint(true)
                 .url(Constants.URL_DOWNLOAD)
                 .enqueue(new DownloadCallback() {
@@ -369,6 +372,17 @@ public class MainActivity extends AppCompatActivity {
                 }
 
             }
+        }
+    }
+
+
+    @OnClick(R.id.button6)
+    public void onButton6()  {
+        try {
+            String str1=URLEncoder.encode("abc+jack123%tyu","utf-8");
+            String str2=URLEncoder.encode("abc+jack123%tyu","utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
     }
 
