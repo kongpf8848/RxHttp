@@ -30,8 +30,6 @@ import com.kongpf.commonhelper.ImageHelper;
 import com.kongpf.commonhelper.ToastHelper;
 
 import java.io.File;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -378,12 +376,70 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.button6)
     public void onButton6()  {
-        try {
-            String str1=URLEncoder.encode("abc+jack123%tyu","utf-8");
-            String str2=URLEncoder.encode("abc+jack123%tyu","utf-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+        String content = "this is put content";
+        RxHttp.getInstance()
+                .put(this)
+                .content(content)
+                .url(Constants.URL_PUT)
+                .enqueue(new HttpCallback<String>() {
+
+                    @Override
+                    public void onStart() {
+                        Log.d(Constants.LOG_TAG, "onStart");
+                    }
+
+                    @Override
+                    public void onNext(String response) {
+                        Toast.makeText(MainActivity.this, "response:" + response, Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d(Constants.LOG_TAG, "onError:" + e.getMessage());
+                        Toast.makeText(MainActivity.this, "error:" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Log.d(Constants.LOG_TAG, "onComplete");
+                    }
+                });
+    }
+
+
+    @OnClick(R.id.button7)
+    public void onButton7()  {
+        Map<String, Object> map = new HashMap<>();
+        map.put("model", Build.MODEL);
+        map.put("manufacturer", Build.MANUFACTURER);
+        map.put("os", Build.VERSION.SDK_INT);
+        RxHttp.getInstance()
+                .delete(this)
+                .params(map)
+                .url(Constants.URL_DELETE)
+                .enqueue(new HttpCallback<String>() {
+
+                    @Override
+                    public void onStart() {
+                        Log.d(Constants.LOG_TAG, "onStart");
+                    }
+
+                    @Override
+                    public void onNext(String response) {
+                        Toast.makeText(MainActivity.this, "response:" + response, Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d(Constants.LOG_TAG, "onError:" + e.getMessage());
+                        Toast.makeText(MainActivity.this, "error:" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Log.d(Constants.LOG_TAG, "onComplete");
+                    }
+                });
     }
 
 }

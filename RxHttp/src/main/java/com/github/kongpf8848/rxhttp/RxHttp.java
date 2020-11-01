@@ -14,10 +14,12 @@ import com.github.kongpf8848.rxhttp.callback.HttpCallback;
 import com.github.kongpf8848.rxhttp.converter.DownloadConverter;
 import com.github.kongpf8848.rxhttp.converter.GsonConverter;
 import com.github.kongpf8848.rxhttp.request.AbsRequest;
+import com.github.kongpf8848.rxhttp.request.DeleteRequest;
 import com.github.kongpf8848.rxhttp.request.DownloadRequest;
 import com.github.kongpf8848.rxhttp.request.GetRequest;
 import com.github.kongpf8848.rxhttp.request.PostFormRequest;
 import com.github.kongpf8848.rxhttp.request.PostRequest;
+import com.github.kongpf8848.rxhttp.request.PutRequest;
 import com.github.kongpf8848.rxhttp.request.UploadRequest;
 import com.github.kongpf8848.rxhttp.util.LogUtil;
 import com.kongpf.commonhelper.AlgorithmHelper;
@@ -168,17 +170,55 @@ public class RxHttp {
         return new DownloadRequest(transformer);
     }
 
+    //put请求
+    public PutRequest put(Context context) {
+        return new PutRequest(context);
+    }
+    public PutRequest put(Activity activity) {
+        return new PutRequest(activity);
+    }
+    public PutRequest put(Fragment fragment) {
+        return new PutRequest(fragment);
+    }
+    public PutRequest put(LifecycleTransformer transformer) {
+        return new PutRequest(transformer);
+    }
+
+    //delete请求
+    public DeleteRequest delete(Context context) {
+        return new DeleteRequest(context);
+    }
+    public DeleteRequest delete(Activity activity) {
+        return new DeleteRequest(activity);
+    }
+    public DeleteRequest delete(Fragment fragment) {
+        return new DeleteRequest(fragment);
+    }
+    public DeleteRequest delete(LifecycleTransformer transformer) {
+        return new DeleteRequest(transformer);
+    }
+
     public <T> void enqueue(final AbsRequest request, final HttpCallback<T> callback) {
         interceptor.setRequest(request);
         Observable<ResponseBody> observable = null;
         if (request instanceof GetRequest) {
             observable = httpService.get(request.getUrl(),request.getParams());
-        } else if (request instanceof PostRequest) {
+        }
+        else if(request instanceof PutRequest){
+            PutRequest putRequest = (PutRequest) request;
+            observable = httpService.put(putRequest.getUrl(), putRequest.buildRequestBody());
+        }
+        else if (request instanceof PostRequest) {
             PostRequest postRequest = (PostRequest) request;
             observable = httpService.post(postRequest.getUrl(), postRequest.buildRequestBody());
-        } else if (request instanceof PostFormRequest) {
+        }
+        else if (request instanceof PostFormRequest) {
             observable = httpService.postForm(request.getUrl(), request.getParams());
-        } else if (request instanceof UploadRequest) {
+        }
+        else if(request instanceof DeleteRequest){
+            observable = httpService.delete(request.getUrl(), request.getParams());
+        }
+        else if (request instanceof UploadRequest) {
             final UploadRequest uploadRequest = (UploadRequest) request;
             observable = httpService.post(uploadRequest.getUrl(), uploadRequest.buildRequestBody());
         } else if (request instanceof DownloadRequest) {
