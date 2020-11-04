@@ -6,7 +6,6 @@ import com.github.kongpf8848.rxhttp.bean.DownloadInfo;
 import com.github.kongpf8848.rxhttp.callback.DownloadCallback;
 import com.github.kongpf8848.rxhttp.callback.ProgressCallback;
 import com.github.kongpf8848.rxhttp.request.DownloadRequest;
-import com.github.kongpf8848.rxhttp.util.LogUtil;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -48,11 +47,9 @@ public class DownloadConverter<T> implements IConverter<T> {
                 currentProgress=0;
             }
             FileOutputStream fos=new FileOutputStream(file,downloadRequest.isBreakpoint());
-            LogUtil.d("++++++++++++content length:" + body.contentLength());
             ProgressResponseBody progressResponseBody = new ProgressResponseBody(body, new ProgressCallback() {
                 @Override
                 public void onProgress(long totalBytes, long readBytes) {
-                    LogUtil.d("total:" + totalBytes + ",read:" + readBytes);
                     downloadInfo.setProgress(currentProgress+readBytes);
                     Platform.get().defaultCallbackExecutor().execute(new Runnable() {
                         @Override
@@ -66,7 +63,6 @@ public class DownloadConverter<T> implements IConverter<T> {
             Platform.get().defaultCallbackExecutor().execute(new Runnable() {
                 @Override
                 public void run() {
-                    LogUtil.d("onProgress");
                     callback.onProgress(downloadInfo);
                 }
             });
@@ -78,7 +74,6 @@ public class DownloadConverter<T> implements IConverter<T> {
             progressResponseBody.close();
 
         } catch (Exception e) {
-            LogUtil.e(e.getMessage());
             throw e;
         }
         return (T)downloadInfo;

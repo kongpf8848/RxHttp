@@ -1,8 +1,8 @@
 package com.github.kongpf8848.rxhttp.converter;
 
 import android.text.TextUtils;
+
 import com.github.kongpf8848.rxhttp.exception.RxHttpException;
-import com.github.kongpf8848.rxhttp.util.LogUtil;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
@@ -15,7 +15,6 @@ public class GsonConverter<T> implements IConverter<T> {
     public T convert(final ResponseBody body, final Type type) throws Exception {
         T response = null;
         String result = body.string();
-        LogUtil.d("+++++++++++++response:"+result);
         body.close();
         if (TextUtils.isEmpty(result)) {
             throw new RxHttpException(RxHttpException.RXHTTP_CODE_RESPONSE_DATA_EMPTY_EXCEPTION, "response data is empty");

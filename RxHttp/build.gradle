@@ -40,8 +40,8 @@ dependencies {
     api rootProject.ext.dependencies["autodispose"]
     api rootProject.ext.dependencies["rxlifecycle"]
     api rootProject.ext.dependencies["rxlifecycle-components"]
-    api rootProject.ext.dependencies["rxlifecycle-components"]
-    api rootProject.ext.dependencies["common-helper"]
+    api rootProject.ext.dependencies["rxlifecycle-android"]
+    api rootProject.ext.dependencies["logging-interceptor"]
 }
 
 def siteUrl = 'https://github.com/kongpf8848/RxHttp'

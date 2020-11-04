@@ -243,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
         RxHttp.getInstance().download(this)
                 .dir(getExternalFilesDir(null)+File.separator+"download")
                 .filename(fileName)
-                .md5("83FC5767038312E66C79BC36AC68FA4D")
+                //.md5("83FC5767038312E66C79BC36AC68FA4D")
                 .breakpoint(true)
                 .url(Constants.URL_DOWNLOAD)
                 .enqueue(new DownloadCallback() {
@@ -362,7 +362,7 @@ public class MainActivity extends AppCompatActivity {
                     filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + urlString.substring(pre.length());
                 }
                 if (TextUtils.isEmpty(filePath)) {
-                    filePath = ImageHelper.getAbsoluteImagePath(this, uri);
+                    filePath = ImageHelper.getImageAbsolutePath(this, uri);
                 }
                 Log.d(Constants.LOG_TAG, "filePath:" + filePath);
                 if (!TextUtils.isEmpty(filePath)) {

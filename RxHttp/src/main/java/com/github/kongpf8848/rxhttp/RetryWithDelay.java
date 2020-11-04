@@ -1,7 +1,5 @@
 package com.github.kongpf8848.rxhttp;
 
-import com.github.kongpf8848.rxhttp.util.LogUtil;
-
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -26,7 +24,6 @@ public class RetryWithDelay implements Function<Observable<Throwable>, Observabl
             @Override
             public ObservableSource<?> apply(Throwable throwable) throws Exception {
                 if (++retryCount <= maxRetries) {
-                    LogUtil.d("get error:"+throwable.getMessage()+", it will try after " + retryDelayMillis + " millisecond, retry count " + retryCount);
                     return Observable.timer(retryDelayMillis, TimeUnit.MILLISECONDS);
                 }
                 return Observable.error(throwable);

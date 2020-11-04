@@ -5,10 +5,12 @@ import java.util.Map;
 import io.reactivex.Observable;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
+import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.HEAD;
 import retrofit2.http.HTTP;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
@@ -44,7 +46,7 @@ public interface HttpService {
      */
     @POST
     @FormUrlEncoded
-    Observable<ResponseBody> postForm(@Url String url, @FieldMap Map<String, Object> map);
+    Observable<ResponseBody> postForm(@Url String url, @FieldMap(encoded = true) Map<String, Object> map);
 
     /**
      * Put请求
@@ -82,6 +84,10 @@ public interface HttpService {
     @GET
     @Streaming
     Observable<ResponseBody> download(@Url String url, @Header("RANGE") String range);
+
+    @HEAD
+    Call<Void> head(@Url String url);
+
 
 
 }
