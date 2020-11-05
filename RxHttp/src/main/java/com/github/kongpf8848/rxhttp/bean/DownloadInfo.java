@@ -27,4 +27,11 @@ public class DownloadInfo extends ProgressInfo {
         this.fileName = fileName;
     }
 
+    @Override
+    public String toString() {
+        return "DownloadInfo{" +
+                "total='" + getTotal() + '\'' +
+                ", progress='" + getProgress() + '\'' +
+                '}';
+    }
 }
