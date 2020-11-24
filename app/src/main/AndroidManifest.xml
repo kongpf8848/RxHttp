@@ -18,7 +18,7 @@
         android:requestLegacyExternalStorage="true"
 
         >
-        <activity android:name=".activity.SplashActivity"
+        <activity android:name=".activity.MainActivity"
                   android:screenOrientation="portrait"
             >
             <intent-filter>
@@ -28,8 +28,6 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.MainActivity"
-                  android:screenOrientation="portrait" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

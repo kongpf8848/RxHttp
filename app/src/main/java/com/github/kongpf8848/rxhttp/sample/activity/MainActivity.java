@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.text.TextUtils;
@@ -32,10 +33,12 @@ import com.kongpf.commonhelper.ToastHelper;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.disposables.Disposable;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -52,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.button1)
     Button button1;
 
+    private Map<Object, Disposable> map= new ConcurrentHashMap<>(16);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,9 +70,10 @@ public class MainActivity extends AppCompatActivity {
         map.put("model", "abcd%jack");
         map.put("manufacturer", "123+sam");
         RxHttp.getInstance()
-                .get(this)
+                .get(getApplicationContext())
                 .url(TKURL.URL_GET)
                 .params(map)
+                .tag("abcd1234")
                 .enqueue(new HttpCallback<Feed>() {
                     @Override
                     public void onStart() {
@@ -91,6 +96,12 @@ public class MainActivity extends AppCompatActivity {
                         Log.d(TAG, "onComplete");
                     }
                 });
+         new Handler().postDelayed(new Runnable() {
+             @Override
+             public void run() {
+                 RxHttp.getInstance().cancelTag(null);
+             }
+         },50);
     }
 
     @OnClick(R.id.button2)
@@ -409,37 +420,40 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.button7)
     public void onButton7()  {
-        Map<String, Object> map = new HashMap<>();
-        map.put("model", Build.MODEL);
-        map.put("manufacturer", Build.MANUFACTURER);
-        map.put("os", Build.VERSION.SDK_INT);
-        RxHttp.getInstance()
-                .delete(this)
-                .params(map)
-                .url(TKURL.URL_DELETE)
-                .enqueue(new HttpCallback<String>() {
-
-                    @Override
-                    public void onStart() {
-                        Log.d(TAG, "onStart");
-                    }
-
-                    @Override
-                    public void onNext(String response) {
-                        Toast.makeText(MainActivity.this, "response:" + response, Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.d(TAG, "onError:" + e.getMessage());
-                        Toast.makeText(MainActivity.this, "error:" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        Log.d(TAG, "onComplete");
-                    }
-                });
+        map.remove(null);
+        int a=1;
+        int b=2;
+//        Map<String, Object> map = new HashMap<>();
+//        map.put("model", Build.MODEL);
+//        map.put("manufacturer", Build.MANUFACTURER);
+//        map.put("os", Build.VERSION.SDK_INT);
+//        RxHttp.getInstance()
+//                .delete(this)
+//                .params(map)
+//                .url(TKURL.URL_DELETE)
+//                .enqueue(new HttpCallback<String>() {
+//
+//                    @Override
+//                    public void onStart() {
+//                        Log.d(TAG, "onStart");
+//                    }
+//
+//                    @Override
+//                    public void onNext(String response) {
+//                        Toast.makeText(MainActivity.this, "response:" + response, Toast.LENGTH_SHORT).show();
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//                        Log.d(TAG, "onError:" + e.getMessage());
+//                        Toast.makeText(MainActivity.this, "error:" + e.getMessage(), Toast.LENGTH_SHORT).show();
+//                    }
+//
+//                    @Override
+//                    public void onComplete() {
+//                        Log.d(TAG, "onComplete");
+//                    }
+//                });
     }
 
 }

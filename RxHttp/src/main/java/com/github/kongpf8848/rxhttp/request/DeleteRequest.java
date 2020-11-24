@@ -5,15 +5,10 @@ import android.content.Context;
 
 import androidx.fragment.app.Fragment;
 
-import com.trello.rxlifecycle2.LifecycleTransformer;
-
 import okhttp3.RequestBody;
 
 public class DeleteRequest extends AbsRequest {
 
-    public DeleteRequest(LifecycleTransformer transformer) {
-        super(transformer);
-    }
 
     public DeleteRequest(Context context) {
         super(context);

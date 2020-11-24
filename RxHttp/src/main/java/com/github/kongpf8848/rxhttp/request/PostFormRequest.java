@@ -5,8 +5,6 @@ import android.content.Context;
 
 import androidx.fragment.app.Fragment;
 
-import com.trello.rxlifecycle2.LifecycleTransformer;
-
 import okhttp3.RequestBody;
 
 public class PostFormRequest extends AbsRequest {
@@ -20,9 +18,6 @@ public class PostFormRequest extends AbsRequest {
     }
     public PostFormRequest(Fragment fragment) {
         super(fragment);
-    }
-    public PostFormRequest(LifecycleTransformer transformer) {
-        super(transformer);
     }
 
     @Override

@@ -38,9 +38,6 @@ dependencies {
     api rootProject.ext.dependencies["converter-gson"]
     api rootProject.ext.dependencies["adapter-rxjava2"]
     api rootProject.ext.dependencies["autodispose"]
-    api rootProject.ext.dependencies["rxlifecycle"]
-    api rootProject.ext.dependencies["rxlifecycle-components"]
-    api rootProject.ext.dependencies["rxlifecycle-android"]
     api rootProject.ext.dependencies["logging-interceptor"]
 }
 

@@ -22,7 +22,6 @@ import com.github.kongpf8848.rxhttp.request.PostRequest;
 import com.github.kongpf8848.rxhttp.request.PutRequest;
 import com.github.kongpf8848.rxhttp.request.UploadRequest;
 import com.github.kongpf8848.rxhttp.util.Md5Util;
-import com.trello.rxlifecycle2.LifecycleTransformer;
 import com.uber.autodispose.AutoDispose;
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider;
 
@@ -47,6 +46,7 @@ public class RxHttp {
     private HttpInterceptor interceptor;
     private HttpService httpService;
     private static RxHttp instance;
+
 
     public static RxHttp getInstance() {
         if (instance == null) {
@@ -92,9 +92,6 @@ public class RxHttp {
         return new GetRequest(fragment);
     }
 
-    public GetRequest get(LifecycleTransformer transformer) {
-        return new GetRequest(transformer);
-    }
 
     //post请求
     public PostRequest post(Context context) {
@@ -109,9 +106,7 @@ public class RxHttp {
         return new PostRequest(fragment);
     }
 
-    public PostRequest post(LifecycleTransformer transformer) {
-        return new PostRequest(transformer);
-    }
+
 
     //post表单请求
     public PostFormRequest postForm(Context context) {
@@ -126,9 +121,7 @@ public class RxHttp {
         return new PostFormRequest(fragment);
     }
 
-    public PostFormRequest postForm(LifecycleTransformer transformer) {
-        return new PostFormRequest(transformer);
-    }
+
 
     //upload请求
     public UploadRequest upload(Context context) {
@@ -143,9 +136,6 @@ public class RxHttp {
         return new UploadRequest(fragment);
     }
 
-    public UploadRequest upload(LifecycleTransformer transformer) {
-        return new UploadRequest(transformer);
-    }
 
     //download请求
     public DownloadRequest download(Context context) {
@@ -160,9 +150,6 @@ public class RxHttp {
         return new DownloadRequest(fragment);
     }
 
-    public DownloadRequest download(LifecycleTransformer transformer) {
-        return new DownloadRequest(transformer);
-    }
 
     //put请求
     public PutRequest put(Context context) {
@@ -173,9 +160,6 @@ public class RxHttp {
     }
     public PutRequest put(Fragment fragment) {
         return new PutRequest(fragment);
-    }
-    public PutRequest put(LifecycleTransformer transformer) {
-        return new PutRequest(transformer);
     }
 
     //delete请求
@@ -188,9 +172,7 @@ public class RxHttp {
     public DeleteRequest delete(Fragment fragment) {
         return new DeleteRequest(fragment);
     }
-    public DeleteRequest delete(LifecycleTransformer transformer) {
-        return new DeleteRequest(transformer);
-    }
+
 
     public <T> void enqueue(final AbsRequest request, final HttpCallback<T> callback) {
         interceptor.setRequest(request);
@@ -202,6 +184,10 @@ public class RxHttp {
             PutRequest putRequest = (PutRequest) request;
             observable = httpService.put(putRequest.getUrl(), putRequest.buildRequestBody());
         }
+        else if (request instanceof UploadRequest) {
+            final UploadRequest uploadRequest = (UploadRequest) request;
+            observable = httpService.post(uploadRequest.getUrl(), uploadRequest.buildRequestBody());
+        }
         else if (request instanceof PostRequest) {
             PostRequest postRequest = (PostRequest) request;
             observable = httpService.post(postRequest.getUrl(), postRequest.buildRequestBody());
@@ -212,10 +198,7 @@ public class RxHttp {
         else if(request instanceof DeleteRequest){
             observable = httpService.delete(request.getUrl(), request.getParams());
         }
-        else if (request instanceof UploadRequest) {
-            final UploadRequest uploadRequest = (UploadRequest) request;
-            observable = httpService.post(uploadRequest.getUrl(), uploadRequest.buildRequestBody());
-        } else if (request instanceof DownloadRequest) {
+       else if (request instanceof DownloadRequest) {
             final DownloadRequest downloadRequest = ((DownloadRequest) request);
             final File file=new File(downloadRequest.getDir(),downloadRequest.getFilename());
             DownloadInfo downloadInfo=new DownloadInfo(downloadRequest.getUrl(),downloadRequest.getDir(),downloadRequest.getFilename());
@@ -259,7 +242,6 @@ public class RxHttp {
             }
         }
 
-
         if (observable != null) {
             Observable<T> observableFinal = observable.map(new Function<ResponseBody, T>() {
                 @Override
@@ -278,12 +260,9 @@ public class RxHttp {
             if (request.getContext() instanceof LifecycleOwner) {
                 LifecycleOwner lifecycleOwner = (LifecycleOwner) request.getContext();
                 observableFinal.as(AutoDispose.<T>autoDisposable(AndroidLifecycleScopeProvider.from(lifecycleOwner, Lifecycle.Event.ON_DESTROY)))
-                        .subscribeWith(new HttpObserver<T>(callback));
-            } else if (request.getContext() instanceof LifecycleTransformer) {
-                observableFinal.compose((LifecycleTransformer) request.getContext())
-                        .subscribeWith(new HttpObserver<T>(callback));
+                        .subscribe(new HttpObserver<T>(callback,request.getTag()));
             } else {
-                observableFinal.subscribeWith(new HttpObserver<T>(callback));
+                observableFinal.subscribeWith(new HttpObserver<T>(callback,request.getTag()));
             }
 
 
@@ -301,16 +280,10 @@ public class RxHttp {
             }
         }
         return -1;
-//        Request request = new Request.Builder()
-//                .url(url)
-//                .build();
-//        Response response = new OkHttpClient.Builder().build().newCall(request).execute();
-//        if (response.isSuccessful()) {
-//            long contentLength = response.body().contentLength();
-//            response.close();
-//            return contentLength;
-//        }
-//        return -1;
+    }
+
+    public void cancelTag(Object tag) {
+        RxHttpTagManager.getInstance().cancelTag(tag);
     }
 
 

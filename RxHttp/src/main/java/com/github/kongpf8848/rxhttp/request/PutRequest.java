@@ -5,7 +5,6 @@ import android.content.Context;
 
 import androidx.fragment.app.Fragment;
 
-import com.trello.rxlifecycle2.LifecycleTransformer;
 
 public class PutRequest extends PostRequest {
 
@@ -21,7 +20,4 @@ public class PutRequest extends PostRequest {
         super(fragment);
     }
 
-    public PutRequest(LifecycleTransformer transformer) {
-        super(transformer);
-    }
 }

@@ -7,7 +7,6 @@ import android.text.TextUtils;
 import androidx.fragment.app.Fragment;
 
 import com.github.kongpf8848.rxhttp.HttpConstants;
-import com.trello.rxlifecycle2.LifecycleTransformer;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -23,9 +22,6 @@ public class PostRequest extends AbsRequest {
     }
     public PostRequest(Fragment fragment) {
         super(fragment);
-    }
-    public PostRequest(LifecycleTransformer transformer) {
-        super(transformer);
     }
 
     public PostRequest content(String content){

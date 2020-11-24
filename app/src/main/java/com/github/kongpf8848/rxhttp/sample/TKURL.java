@@ -4,7 +4,7 @@ public class TKURL {
 
     public static final String URL_GET = "http://news-at.zhihu.com/api/4/stories/latest";
 
-    public static final String BASE_URL_LOCAL = "http://192.168.0.107:8080/webtest/";
+    public static final String BASE_URL_LOCAL = "http://192.168.0.155:8080/webtest/";
     public static final String URL_UPLOAD = BASE_URL_LOCAL+"upload";
     public static final String URL_POST_FORM = BASE_URL_LOCAL+"testForm";
     public static final String URL_POST = BASE_URL_LOCAL+"testPost";
