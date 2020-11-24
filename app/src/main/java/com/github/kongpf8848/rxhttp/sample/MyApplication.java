@@ -24,7 +24,7 @@ public class MyApplication extends Application {
         RxHttpConfig.getInstance()
                 .maxRetries(3)
                 .retryDelayMillis(200)
-                .debugMode(BuildConfig.DEBUG);
+                .debugMode(false);
 
 
     }

@@ -2,7 +2,9 @@
 package com.github.kongpf8848.rxhttp;
 
 import com.github.kongpf8848.rxhttp.callback.ProgressCallback;
+
 import java.io.IOException;
+
 import okhttp3.MediaType;
 import okhttp3.ResponseBody;
 import okio.Buffer;
@@ -57,7 +59,7 @@ public class ProgressResponseBody extends ResponseBody {
                 long bytesRead = super.read(sink, byteCount);
                 totalBytesRead += ((bytesRead != -1) ? bytesRead : 0);
                 if(callback!=null) {
-                   callback.onProgress(contentLength(),totalBytesRead);
+                   callback.onProgress(totalBytesRead,contentLength());
                 }
                 return bytesRead;
             }

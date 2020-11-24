@@ -49,7 +49,7 @@ public class DownloadConverter<T> implements IConverter<T> {
             FileOutputStream fos=new FileOutputStream(file,downloadRequest.isBreakpoint());
             ProgressResponseBody progressResponseBody = new ProgressResponseBody(body, new ProgressCallback() {
                 @Override
-                public void onProgress(long totalBytes, long readBytes) {
+                public void onProgress(long readBytes,long totalBytes) {
                     downloadInfo.setProgress(currentProgress+readBytes);
                     Platform.get().defaultCallbackExecutor().execute(new Runnable() {
                         @Override

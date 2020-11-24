@@ -69,7 +69,7 @@ public class UploadRequest extends PostRequest {
                 Platform.get().defaultCallbackExecutor().execute(new Runnable() {
                     @Override
                     public void run() {
-                         callback.onProgress(totalBytes, readBytes);
+                         callback.onProgress(readBytes,totalBytes);
                     }
                 });
             }

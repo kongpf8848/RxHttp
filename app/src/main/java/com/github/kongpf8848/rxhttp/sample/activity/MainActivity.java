@@ -8,13 +8,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.provider.MediaStore;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.kongpf8848.permissionhelper.PermissionHelper;
@@ -191,26 +191,20 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.button5)
     public void onButton5() {
-        Intent intent = new Intent();
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-            intent.setAction(Intent.ACTION_GET_CONTENT);
-        } else {
-            intent.setAction(Intent.ACTION_PICK);
-            intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        }
-        intent.setType("image/*");
-        //startActivityForResult(Intent.createChooser(intent, "选择图片"), REQUEST_CODE_PICK);
-        upload("");
+
+       registerForActivityResult(new ActivityResultContracts.GetContent(), result -> {
+             upload(result);
+       }).launch("image/jpeg");
     }
 
 
-    private void upload(String path) {
+    private void upload(Uri uri) {
         Map<String, Object> map = new HashMap<>();
         map.put("model", Build.MODEL);
         map.put("manufacturer", Build.MANUFACTURER);
         map.put("os", Build.VERSION.SDK_INT);
-        path =  "Download/gradle-4.4-all.zip";
-        map.put("image", new File(path));
+        map.put("image.jpg", uri);
+        map.put("video",new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath()+File.separator+"gradle-4.4-all.zip"));
 
         RxHttp.getInstance().upload(this).url(TKURL.URL_UPLOAD).params(map).enqueue(new SimpleHttpCallback<String>() {
             @Override
@@ -220,14 +214,13 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onProgress(final long readBytes,final long totalBytes) {
-                updateProgress(totalBytes, readBytes);
+                updateProgress(readBytes,totalBytes);
             }
 
             @Override
             public void onNext(String response) {
                 Log.d(TAG, "response:" + response);
                 Toast.makeText(MainActivity.this, "response:" + response, Toast.LENGTH_SHORT).show();
-                closeProgressDialog();
             }
 
             @Override
@@ -266,7 +259,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onProgress(DownloadInfo downloadInfo) {
                         if (downloadInfo != null) {
                             Log.d(TAG, "onProgress() called with: downloadInfo = [" + downloadInfo + "]");
-                            updateProgress(downloadInfo.getTotal(), downloadInfo.getProgress());
+                            updateProgress( downloadInfo.getProgress(),downloadInfo.getTotal());
                         }
                     }
 
@@ -309,10 +302,9 @@ public class MainActivity extends AppCompatActivity {
         progressDialog.show();
     }
 
-    private void updateProgress(final long totalBytes, final long readBytes) {
+    private void updateProgress(final long readBytes,final long totalBytes) {
         Log.d(TAG, "updateProgress,readBytes:" + readBytes + ",totalBytes:" + totalBytes);
         if (progressDialog != null && progressDialog.isShowing()) {
-            Log.d(TAG, "progressDialog");
             progressDialog.setProgress((int) readBytes);
             progressDialog.setMax((int) totalBytes);
             float all = totalBytes * 1.0f / 1024 / 1024;
@@ -381,7 +373,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 Log.d(TAG, "filePath:" + filePath);
                 if (!TextUtils.isEmpty(filePath)) {
-                    upload(filePath);
+                    //upload(filePath);
                 }
 
             }
@@ -424,40 +416,7 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.button7)
     public void onButton7()  {
-        map.remove(null);
-        int a=1;
-        int b=2;
-//        Map<String, Object> map = new HashMap<>();
-//        map.put("model", Build.MODEL);
-//        map.put("manufacturer", Build.MANUFACTURER);
-//        map.put("os", Build.VERSION.SDK_INT);
-//        RxHttp.getInstance()
-//                .delete(this)
-//                .params(map)
-//                .url(TKURL.URL_DELETE)
-//                .enqueue(new HttpCallback<String>() {
-//
-//                    @Override
-//                    public void onStart() {
-//                        Log.d(TAG, "onStart");
-//                    }
-//
-//                    @Override
-//                    public void onNext(String response) {
-//                        Toast.makeText(MainActivity.this, "response:" + response, Toast.LENGTH_SHORT).show();
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//                        Log.d(TAG, "onError:" + e.getMessage());
-//                        Toast.makeText(MainActivity.this, "error:" + e.getMessage(), Toast.LENGTH_SHORT).show();
-//                    }
-//
-//                    @Override
-//                    public void onComplete() {
-//                        Log.d(TAG, "onComplete");
-//                    }
-//                });
+
     }
 
 }
