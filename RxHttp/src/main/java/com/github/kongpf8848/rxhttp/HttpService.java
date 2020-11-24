@@ -85,6 +85,11 @@ public interface HttpService {
     @Streaming
     Observable<ResponseBody> download(@Url String url, @Header("RANGE") String range);
 
+    /**
+     * HEAD请求
+     * @param url
+     * @return
+     */
     @HEAD
     Call<Void> head(@Url String url);
 
