@@ -1,7 +1,5 @@
 package com.github.kongpf8848.rxhttp;
 
-import android.util.Log;
-
 import com.github.kongpf8848.rxhttp.callback.HttpCallback;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -29,7 +27,6 @@ public class HttpObserver<T> implements Observer<T>,Disposable {
 
     @Override
     public final void onSubscribe(@NonNull Disposable d) {
-        Log.d(TAG, "onSubscribe() called with: d = [" + d.getClass().getName() + "]");
         if (EndConsumerHelper.setOnce(this.upstream, d, getClass())) {
             if(tag!=null) {
                 RxHttpTagManager.getInstance().addTag(tag,d);

@@ -1,7 +1,5 @@
 package com.github.kongpf8848.rxhttp;
 
-import android.util.Log;
-
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -34,7 +32,6 @@ public class RxHttpTagManager {
     public void removeTag(Object tag){
         if(tag!=null) {
             map.remove(tag);
-            Log.d("JACK8", "removeTag,size:" + map.size());
         }
     }
 
@@ -53,12 +50,10 @@ public class RxHttpTagManager {
             map.clear();
 
         }
-        Log.d("JACK8", "cancelTag,size:" + map.size());
     }
 
     private void dispose( Disposable disposable){
         if (disposable != null && !disposable.isDisposed()) {
-            Log.d("JACK8", "disposable.dispose:" + disposable);
             disposable.dispose();
         }
     }
