@@ -31,4 +31,9 @@ public class SimpleHttpCallback<T> extends HttpCallback<T> {
     public void onComplete() {
 
     }
+
+    @Override
+    public void onProgress(long readBytes, long totalBytes) {
+
+    }
 }

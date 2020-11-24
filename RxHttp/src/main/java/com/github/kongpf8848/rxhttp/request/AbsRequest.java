@@ -7,7 +7,6 @@ import androidx.fragment.app.Fragment;
 
 import com.github.kongpf8848.rxhttp.RxHttp;
 import com.github.kongpf8848.rxhttp.callback.HttpCallback;
-import com.trello.rxlifecycle2.LifecycleTransformer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,9 +24,6 @@ public abstract class AbsRequest<T> {
 
     protected abstract RequestBody buildRequestBody();
 
-    AbsRequest(LifecycleTransformer transformer){
-        this.context=transformer;
-    }
     AbsRequest(Context context){
         this.context=context;
     }
@@ -70,6 +66,20 @@ public abstract class AbsRequest<T> {
     public Object getContext() {
         return context;
     }
+
+    public Context getActualContext(){
+        if(context instanceof Context){
+            return (Context)context;
+        }
+        else if(context instanceof Fragment){
+            return ((Fragment)context).getContext();
+        }
+        else if(context instanceof Activity){
+           return ((Activity)context).getApplicationContext();
+        }
+        return null;
+    }
+
     public String getUrl() {
         return url;
     }

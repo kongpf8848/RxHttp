@@ -12,7 +12,6 @@ import com.github.kongpf8848.rxhttp.HttpConstants;
 import com.github.kongpf8848.rxhttp.Platform;
 import com.github.kongpf8848.rxhttp.ProgressRequestBody;
 import com.github.kongpf8848.rxhttp.callback.ProgressCallback;
-import com.github.kongpf8848.rxhttp.callback.UploadCallback;
 import com.github.kongpf8848.rxhttp.util.StreamUtil;
 
 import java.io.File;
@@ -66,13 +65,11 @@ public class UploadRequest extends PostRequest {
         }
         return new ProgressRequestBody(builder.build(), new ProgressCallback() {
             @Override
-            public void onProgress(final long totalBytes, final long readBytes) {
+            public void onProgress(final long readBytes,final long totalBytes) {
                 Platform.get().defaultCallbackExecutor().execute(new Runnable() {
                     @Override
                     public void run() {
-                        if (callback instanceof UploadCallback) {
-                            ((UploadCallback) callback).onProgress(totalBytes, readBytes);
-                        }
+                         callback.onProgress(totalBytes, readBytes);
                     }
                 });
             }

@@ -17,4 +17,11 @@ package com.github.kongpf8848.rxhttp.callback;
      * http请求完成时回调
      */
     void onComplete();
+
+    /**
+     * 上传下载进度回调
+     * @param readBytes
+     * @param totalBytes
+     */
+    void onProgress(long readBytes,long totalBytes);
 }

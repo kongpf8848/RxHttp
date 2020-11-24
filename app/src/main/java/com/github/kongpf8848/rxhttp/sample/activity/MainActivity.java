@@ -21,8 +21,7 @@ import com.github.kongpf8848.permissionhelper.PermissionHelper;
 import com.github.kongpf8848.rxhttp.RxHttp;
 import com.github.kongpf8848.rxhttp.bean.DownloadInfo;
 import com.github.kongpf8848.rxhttp.callback.DownloadCallback;
-import com.github.kongpf8848.rxhttp.callback.HttpCallback;
-import com.github.kongpf8848.rxhttp.callback.UploadCallback;
+import com.github.kongpf8848.rxhttp.callback.SimpleHttpCallback;
 import com.github.kongpf8848.rxhttp.sample.R;
 import com.github.kongpf8848.rxhttp.sample.TKURL;
 import com.github.kongpf8848.rxhttp.sample.bean.Feed;
@@ -74,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
                 .url(TKURL.URL_GET)
                 .params(map)
                 .tag("abcd1234")
-                .enqueue(new HttpCallback<Feed>() {
+                .enqueue(new SimpleHttpCallback<Feed>() {
                     @Override
                     public void onStart() {
                         Log.d(TAG, "onStart");
@@ -111,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
                 .post(this)
                 .content(content)
                 .url(TKURL.URL_POST)
-                .enqueue(new HttpCallback<String>() {
+                .enqueue(new SimpleHttpCallback<String>() {
 
                     @Override
                     public void onStart() {
@@ -142,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
         map.put("model", Build.MODEL);
         map.put("manufacturer", Build.MANUFACTURER);
         map.put("os", Build.VERSION.SDK_INT);
-        RxHttp.getInstance().postForm(this).url(TKURL.URL_POST_FORM).params(map).enqueue(new HttpCallback<String>() {
+        RxHttp.getInstance().postForm(this).url(TKURL.URL_POST_FORM).params(map).enqueue(new SimpleHttpCallback<String>() {
 
             @Override
             public void onStart() {
@@ -213,14 +212,14 @@ public class MainActivity extends AppCompatActivity {
         path =  "Download/gradle-4.4-all.zip";
         map.put("image", new File(path));
 
-        RxHttp.getInstance().upload(this).url(TKURL.URL_UPLOAD).params(map).enqueue(new UploadCallback<String>() {
+        RxHttp.getInstance().upload(this).url(TKURL.URL_UPLOAD).params(map).enqueue(new SimpleHttpCallback<String>() {
             @Override
             public void onStart() {
                 showProgressDialog("正在上传,请稍等...");
             }
 
             @Override
-            public void onProgress(final long totalBytes, final long readBytes) {
+            public void onProgress(final long readBytes,final long totalBytes) {
                 updateProgress(totalBytes, readBytes);
             }
 
@@ -289,6 +288,11 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onComplete() {
                         Log.d(TAG, "onComplete:");
+                    }
+
+                    @Override
+                    public void onProgress(long readBytes, long totalBytes) {
+
                     }
 
                 });
@@ -392,7 +396,7 @@ public class MainActivity extends AppCompatActivity {
                 .put(this)
                 .content(content)
                 .url(TKURL.URL_PUT)
-                .enqueue(new HttpCallback<String>() {
+                .enqueue(new SimpleHttpCallback<String>() {
 
                     @Override
                     public void onStart() {

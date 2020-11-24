@@ -1,7 +1,9 @@
 package com.github.kongpf8848.rxhttp;
 
 import com.github.kongpf8848.rxhttp.callback.ProgressCallback;
+
 import java.io.IOException;
+
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import okio.Buffer;
@@ -41,7 +43,7 @@ public class ProgressRequestBody extends RequestBody {
         if (progressSink == null) {
             progressSink = Okio.buffer(sink(sink));
         }
-        callback.onProgress(contentLength(),0);
+        callback.onProgress(0,contentLength());
         requestBody.writeTo(progressSink);
         progressSink.flush();
         progressSink.close();
@@ -55,7 +57,7 @@ public class ProgressRequestBody extends RequestBody {
                 super.write(source, byteCount);
                 totalBytesWrite += byteCount;
                 if (callback != null) {
-                    callback.onProgress(contentLength(),totalBytesWrite);
+                    callback.onProgress(totalBytesWrite,contentLength());
                 }
             }
         };
