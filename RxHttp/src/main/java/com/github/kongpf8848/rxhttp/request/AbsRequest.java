@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 
 import com.github.kongpf8848.rxhttp.RxHttp;
 import com.github.kongpf8848.rxhttp.callback.HttpCallback;
+import com.github.kongpf8848.rxhttp.util.MapUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -74,9 +75,6 @@ public abstract class AbsRequest<T> {
         else if(context instanceof Fragment){
             return ((Fragment)context).getContext();
         }
-        else if(context instanceof Activity){
-           return ((Activity)context).getApplicationContext();
-        }
         return null;
     }
 
@@ -92,6 +90,9 @@ public abstract class AbsRequest<T> {
         return headers;
     }
     public Map<String, Object> getParams() {
+        if(params!=null && params.containsValue(null)){
+            MapUtil.removeNullValue(params);
+        }
         return params;
     }
 

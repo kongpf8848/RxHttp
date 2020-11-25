@@ -51,7 +51,7 @@ public class UploadRequest extends PostRequest {
                 builder.addFormDataPart(key, file.getName(), RequestBody.create(MediaType.parse(HttpConstants.MIME_TYPE_BINARY), file));
             } else if (value instanceof Uri) {
                 try {
-                    InputStream inputStream = getActualContext().getContentResolver().openInputStream((Uri) value);
+                    InputStream inputStream = getActualContext().getContentResolver().openInputStream((Uri)value);
                     if (inputStream != null) {
                         byte[] bytes = StreamUtil.toByte(inputStream);
                         builder.addFormDataPart(key, key, new ByteArrayRequestBody(MediaType.parse(HttpConstants.MIME_TYPE_BINARY), bytes));

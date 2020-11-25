@@ -204,7 +204,7 @@ public class MainActivity extends AppCompatActivity {
         map.put("manufacturer", Build.MANUFACTURER);
         map.put("os", Build.VERSION.SDK_INT);
         map.put("image.jpg", uri);
-        map.put("video",new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath()+File.separator+"gradle-4.4-all.zip"));
+//        map.put("video",new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath()+File.separator+"gradle-4.4-all.zip"));
 
         RxHttp.getInstance().upload(this).url(TKURL.URL_UPLOAD).params(map).enqueue(new SimpleHttpCallback<String>() {
             @Override
