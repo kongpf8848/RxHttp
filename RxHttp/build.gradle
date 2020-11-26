@@ -4,11 +4,11 @@ apply plugin: 'com.jfrog.bintray'
 
 version = "1.0.7"
 android {
-    compileSdkVersion rootProject.ext.android.compileSdkVersion
+    compileSdkVersion Config.compileSdkVersion
 
     defaultConfig {
-        minSdkVersion rootProject.ext.android.minSdkVersion
-        targetSdkVersion rootProject.ext.android.targetSdkVersion
+        minSdkVersion Config.minSdkVersion
+        targetSdkVersion Config.targetSdkVersion
         versionCode 7
         versionName version
     }
@@ -28,17 +28,19 @@ android {
 }
 
 dependencies {
-    testImplementation  rootProject.ext.dependencies["junit"]
-    api fileTree(dir: 'libs', include: ['*.jar'])
-    api rootProject.ext.dependencies["appcompat"]
-    api rootProject.ext.dependencies["rxjava2"]
-    api rootProject.ext.dependencies["rxandroid"]
-    api rootProject.ext.dependencies["retrofit"]
-    api rootProject.ext.dependencies["converter-scalars"]
-    api rootProject.ext.dependencies["converter-gson"]
-    api rootProject.ext.dependencies["adapter-rxjava2"]
-    api rootProject.ext.dependencies["autodispose"]
-    api rootProject.ext.dependencies["logging-interceptor"]
+
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation AndroidX.appCompat
+    testImplementation BuildDependencies.junit
+    api BuildDependencies.rxjava2
+    api BuildDependencies.rxAndroid
+    api BuildDependencies.retrofit
+    api BuildDependencies.typeBuilder
+    api BuildDependencies.retrofitConverterScalars
+    api BuildDependencies.retrofitConverterGson
+    api BuildDependencies.retrofitAdapterRxjava2
+    api BuildDependencies.autodispose
+    api BuildDependencies.loggingInterceptor
 }
 
 def siteUrl = 'https://github.com/kongpf8848/RxHttp'

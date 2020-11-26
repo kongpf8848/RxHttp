@@ -1,13 +1,14 @@
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion rootProject.ext.android.compileSdkVersion
+    compileSdkVersion Config.compileSdkVersion
 
     defaultConfig {
-        minSdkVersion rootProject.ext.android.minSdkVersion
-        targetSdkVersion rootProject.ext.android.targetSdkVersion
+        minSdkVersion Config.minSdkVersion
+        targetSdkVersion Config.targetSdkVersion
         versionCode 1
         versionName "1.0"
     }
@@ -25,29 +26,46 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    dataBinding {
+        enabled = true
+    }
 }
 
 dependencies {
-    implementation project(':RxHttp')
+    api project(':RxHttp')
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation rootProject.ext.dependencies["appcompat"]
-    implementation rootProject.ext.dependencies["butterknife"]
-    annotationProcessor rootProject.ext.dependencies["butterknife-compiler"]
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
+    api AndroidX.appCompat
+    api AndroidX.legacyV4
+    api AndroidX.legacyV13
+    api AndroidX.multidex
+    api AndroidX.material
+    api AndroidX.recyclerview
+    api AndroidX.preference
+    api AndroidX.cardview
+    api AndroidX.gridlayout
+    api AndroidX.annotationX
+    api AndroidX.constraintlayout
+    api AndroidX.paging
+    api AndroidX.work
+    api AndroidX.coreKtx
+    api AndroidX.room
+    api AndroidX.roomKtx
+    kapt AndroidX.roomCompiler
+    api AndroidX.roomRxJava2
+    api AndroidX.coordinatorlayout
+    api AndroidX.databindingCommon
+    api AndroidX.databindingRuntime
+    api AndroidX.databindingAdapters
+    api AndroidX.activity
+    api AndroidX.activityKtx
+    api AndroidX.fragment
+    api AndroidX.fragmentKtx
+    implementation BuildDependencies.kotlinStdlibJdk7
+    implementation BuildDependencies.gson
     implementation 'com.github.kongpf8848:permissionhelper:1.0.0'
-    implementation rootProject.ext.dependencies["common-helper"]
-    implementation rootProject.ext.dependencies["logging-interceptor"]
-    implementation "androidx.core:core-ktx:1.3.1"
-    implementation "androidx.activity:activity:1.2.0-alpha06"
-    implementation "androidx.activity:activity-ktx:1.2.0-alpha06"
-    implementation "androidx.fragment:fragment:1.3.0-alpha06"
-    implementation "androidx.fragment:fragment-ktx:1.3.0-alpha06"
 
 
 
-}
-repositories {
-    mavenCentral()
+
 }

@@ -1,8 +1,10 @@
-package com.github.kongpf8848.rxhttp.sample;
+package com.github.kongpf8848.rxhttp.sample.http;
 
 public class TKURL {
 
-    public static final String URL_GET = "http://news-at.zhihu.com/api/4/stories/latest";
+    //public static final String URL_GET = "http://news-at.zhihu.com/api/4/stories/latest";
+
+    public static final String URL_BANNER = "http://xxx.com/banners";
 
     public static final String BASE_URL_LOCAL = "http://192.168.0.155:8080/webtest/";
     public static final String URL_UPLOAD = BASE_URL_LOCAL+"upload";

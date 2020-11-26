@@ -7,10 +7,10 @@ import androidx.fragment.app.Fragment;
 
 import com.github.kongpf8848.rxhttp.RxHttp;
 import com.github.kongpf8848.rxhttp.callback.HttpCallback;
-import com.github.kongpf8848.rxhttp.util.MapUtil;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import okhttp3.RequestBody;
 
@@ -91,7 +91,15 @@ public abstract class AbsRequest<T> {
     }
     public Map<String, Object> getParams() {
         if(params!=null && params.containsValue(null)){
-            MapUtil.removeNullValue(params);
+            Map<String,Object> newMap= new HashMap<>();
+            Set<String> set = params.keySet();
+            for (String key : set) {
+                Object value = params.get(key);
+                if (value != null) {
+                    newMap.put(key, value);
+                }
+            }
+            return newMap;
         }
         return params;
     }
