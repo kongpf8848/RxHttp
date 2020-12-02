@@ -8,12 +8,11 @@ import com.github.kongpf8848.permissionhelper.PermissionHelper
 import com.github.kongpf8848.rxhttp.bean.DownloadInfo
 import com.github.kongpf8848.rxhttp.sample.R
 import com.github.kongpf8848.rxhttp.sample.databinding.ActivityMainBinding
+import com.github.kongpf8848.rxhttp.sample.extension.observeCallback
 import com.github.kongpf8848.rxhttp.sample.mvvm.BaseMvvmActivity
 import com.github.kongpf8848.rxhttp.sample.viewmodel.MainViewModel
-import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
-import java.util.concurrent.ConcurrentHashMap
 
 class MainActivity : BaseMvvmActivity<MainViewModel, ActivityMainBinding>() {
 
@@ -25,7 +24,6 @@ class MainActivity : BaseMvvmActivity<MainViewModel, ActivityMainBinding>() {
     private val REQUEST_CODE_PICK = 100
     private var downloadInfo: DownloadInfo? = null
 
-    private val map: Map<Any, Disposable> = ConcurrentHashMap(16)
 
     override fun getLayoutId(): Int {
         return R.layout.activity_main
@@ -34,29 +32,30 @@ class MainActivity : BaseMvvmActivity<MainViewModel, ActivityMainBinding>() {
     override fun onCreateEnd(savedInstanceState: Bundle?) {
         super.onCreateEnd(savedInstanceState)
         button1.setOnClickListener {
-            onButton1()
+            onButtonGet()
         }
     }
 
-    fun onButton1() {
-         viewModel.getBannerList().observe(this, androidx.lifecycle.Observer {
-             it.handle{
-                 onStart{
-                     Log.d(TAG, "onButton1() onStart called")
-                 }
-                 onSuccess {
-                     Log.d(TAG, "onButton1() onSuccess called:${it}")
-                 }
-                 onFailure { code, msg ->
-                     Log.d(TAG, "onButton1() onFailure called with: code = $code, msg = $msg")
-                 }
-                 onComplete{
-                     Log.d(TAG, "onButton1() onComplete called")
-                 }
-             }
-         })
-
+    /**
+     * GET请求
+     */
+    fun onButtonGet() {
+        viewModel.getBannerList().observeCallback(this) {
+            onStart {
+                Log.d(TAG, "onButton1() onStart called")
+            }
+            onSuccess {
+                Log.d(TAG, "onButton1() onSuccess called:${it}")
+            }
+            onFailure { code, msg ->
+                Log.d(TAG, "onButton1() onFailure called with: code = $code, msg = $msg")
+            }
+            onComplete {
+                Log.d(TAG, "onButton1() onComplete called")
+            }
+        }
     }
+
 
 //    @OnClick(R.id.button2)
 //    fun onButton2() {
@@ -320,5 +319,4 @@ class MainActivity : BaseMvvmActivity<MainViewModel, ActivityMainBinding>() {
 //    @OnClick(R.id.button7)
 //    fun onButton7() {
 //    }
-
 }

@@ -6,6 +6,7 @@ import android.content.Context;
 import androidx.fragment.app.Fragment;
 
 import com.github.kongpf8848.rxhttp.RxHttp;
+import com.github.kongpf8848.rxhttp.RxHttpTagManager;
 import com.github.kongpf8848.rxhttp.callback.HttpCallback;
 
 import java.util.HashMap;
@@ -83,6 +84,9 @@ public abstract class AbsRequest<T> {
     }
 
     public Object getTag() {
+        if(tag==null){
+            return RxHttpTagManager.generateRandomTag();
+        }
         return tag;
     }
 

@@ -2,6 +2,7 @@ package com.github.kongpf8848.rxhttp;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import io.reactivex.disposables.Disposable;
@@ -50,6 +51,10 @@ public class RxHttpTagManager {
             map.clear();
 
         }
+    }
+
+    public static String generateRandomTag(){
+        return UUID.randomUUID().toString();
     }
 
     private void dispose( Disposable disposable){
