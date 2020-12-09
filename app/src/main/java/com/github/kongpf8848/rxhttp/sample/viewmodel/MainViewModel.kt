@@ -19,45 +19,49 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
         )
     }
 
-    fun testPost(tag: Any?=null):MutableLiveData<TKState<User>>{
-        val map= hashMapOf("name" to  "jack", "location" to "shanghai", "age" to 28)
+    fun testPost(params: Map<String, Any?>?,tag: Any?=null):MutableLiveData<TKState<User>>{
         return networkbaseRepository.httpPost(
                 context=context,
                 url=TKURL.URL_POST,
-                params =map,
+                params =params,
                 tag=tag
         )
     }
 
-    fun testPostForm(tag: Any?=null):MutableLiveData<TKState<User>>{
-        val map= hashMapOf("name" to  "jack2", "location" to "shanghai2", "age" to 24)
+    fun testPostForm(params: Map<String, Any?>?, tag: Any?=null):MutableLiveData<TKState<User>>{
         return networkbaseRepository.httpPostForm(
                 context=context,
                 url=TKURL.URL_POST_FORM,
-                params =map,
+                params =params,
                 tag=tag
         )
     }
 
-    fun testPut(tag: Any?=null):MutableLiveData<TKState<User>>{
-        val map= hashMapOf("name" to  "jack2", "location" to "shanghai2", "age" to 24)
+    fun testPut(params: Map<String, Any?>?,tag: Any?=null):MutableLiveData<TKState<User>>{
         return networkbaseRepository.httpPut(
                 context=context,
                 url=TKURL.URL_PUT,
-                params =map,
+                params =params,
                 tag=tag
         )
     }
 
-    fun testDelete(tag: Any?=null):MutableLiveData<TKState<User>>{
-        val map= hashMapOf("name" to  "jack2", "location" to "shanghai2", "age" to 24)
+    fun testDelete(params: Map<String, Any?>?,tag: Any?=null):MutableLiveData<TKState<User>>{
         return networkbaseRepository.httpDelete(
                 context=context,
                 url=TKURL.URL_DELETE,
-                params =map,
+                params =params,
                 tag=tag
         )
     }
 
+    fun testUpload(params: Map<String, Any?>?,tag:Any?=null):MutableLiveData<TKState<User>> {
+        return networkbaseRepository.httpUpload(
+                context = context,
+                url = TKURL.URL_UPLOAD,
+                params = params,
+                tag = tag
+        )
+    }
 
 }

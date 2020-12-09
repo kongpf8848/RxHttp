@@ -5,12 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.util.Log
-import android.widget.Toast
-import com.github.kongpf8848.rxhttp.RxHttp
-import com.github.kongpf8848.rxhttp.bean.DownloadInfo
-import com.github.kongpf8848.rxhttp.callback.SimpleHttpCallback
 import com.github.kongpf8848.rxhttp.sample.R
 import com.github.kongpf8848.rxhttp.sample.databinding.ActivityMainBinding
 import com.github.kongpf8848.rxhttp.sample.extension.getContent
@@ -18,16 +13,17 @@ import com.github.kongpf8848.rxhttp.sample.extension.observeCallback
 import com.github.kongpf8848.rxhttp.sample.http.TKURL
 import com.github.kongpf8848.rxhttp.sample.mvvm.BaseMvvmActivity
 import com.github.kongpf8848.rxhttp.sample.service.DownloadService
+import com.github.kongpf8848.rxhttp.sample.utils.LogUtils
 import com.github.kongpf8848.rxhttp.sample.viewmodel.MainViewModel
+import com.kongpf.commonhelper.ToastHelper
 import kotlinx.android.synthetic.main.activity_main.*
-import java.io.File
 
 class MainActivity : BaseMvvmActivity<MainViewModel, ActivityMainBinding>() {
 
     private var progressDialog: ProgressDialog? = null
-    private val PATH = Environment.getExternalStorageDirectory().absolutePath + File.separator
-    private var downloadInfo: DownloadInfo? = null
 
+
+    private val params= hashMapOf("name" to  "jack", "location" to "shanghai", "age" to 28)
 
     override fun getLayoutId(): Int {
         return R.layout.activity_main
@@ -70,7 +66,7 @@ class MainActivity : BaseMvvmActivity<MainViewModel, ActivityMainBinding>() {
                 Log.d(TAG, "onButtonGet() onSuccess called:${it}")
             }
             onFailure { code, msg ->
-                Log.d(TAG, "onButtonGet() onFailure called with: code = $code, msg = $msg")
+                ToastHelper.toast("失败,code:${code},msg:${msg}")
             }
             onComplete {
                 Log.d(TAG, "onButtonGet() onComplete called")
@@ -83,7 +79,7 @@ class MainActivity : BaseMvvmActivity<MainViewModel, ActivityMainBinding>() {
      */
     fun onButtonPost() {
 
-        viewModel.testPost().observeCallback(this) {
+        viewModel.testPost(params).observeCallback(this) {
             onStart {
                 Log.d(TAG, "onButtonPost() onStart called")
             }
@@ -91,7 +87,7 @@ class MainActivity : BaseMvvmActivity<MainViewModel, ActivityMainBinding>() {
                 Log.d(TAG, "onButtonPost() onSuccess called:${it}")
             }
             onFailure { code, msg ->
-                Log.d(TAG, "onButtonPost() onFailure called with: code = $code, msg = $msg")
+                ToastHelper.toast("失败,code:${code},msg:${msg}")
             }
             onComplete {
                 Log.d(TAG, "onButtonPost() onComplete called")
@@ -104,7 +100,7 @@ class MainActivity : BaseMvvmActivity<MainViewModel, ActivityMainBinding>() {
      */
     fun onButtonPostForm() {
 
-        viewModel.testPostForm().observeCallback(this) {
+        viewModel.testPostForm(params).observeCallback(this) {
             onStart {
                 Log.d(TAG, "onButtonPostForm() onStart called")
             }
@@ -112,7 +108,7 @@ class MainActivity : BaseMvvmActivity<MainViewModel, ActivityMainBinding>() {
                 Log.d(TAG, "onButtonPostForm() onSuccess called:${it}")
             }
             onFailure { code, msg ->
-                Log.d(TAG, "onButtonPostForm() onFailure called with: code = $code, msg = $msg")
+                ToastHelper.toast("失败,code:${code},msg:${msg}")
             }
             onComplete {
                 Log.d(TAG, "onButtonPostForm() onComplete called")
@@ -125,7 +121,7 @@ class MainActivity : BaseMvvmActivity<MainViewModel, ActivityMainBinding>() {
      */
     fun onButtonPut() {
 
-        viewModel.testPut().observeCallback(this) {
+        viewModel.testPut(params).observeCallback(this) {
             onStart {
                 Log.d(TAG, "onButtonPut() onStart called")
             }
@@ -133,7 +129,7 @@ class MainActivity : BaseMvvmActivity<MainViewModel, ActivityMainBinding>() {
                 Log.d(TAG, "onButtonPut() onSuccess called:${it}")
             }
             onFailure { code, msg ->
-                Log.d(TAG, "onButtonPut() onFailure called with: code = $code, msg = $msg")
+                ToastHelper.toast("失败,code:${code},msg:${msg}")
             }
             onComplete {
                 Log.d(TAG, "onButtonPut() onComplete called")
@@ -146,7 +142,7 @@ class MainActivity : BaseMvvmActivity<MainViewModel, ActivityMainBinding>() {
      */
     fun onButtonDelete() {
 
-        viewModel.testDelete().observeCallback(this) {
+        viewModel.testDelete(params).observeCallback(this) {
             onStart {
                 Log.d(TAG, "onButtonDelete() onStart called")
             }
@@ -154,7 +150,7 @@ class MainActivity : BaseMvvmActivity<MainViewModel, ActivityMainBinding>() {
                 Log.d(TAG, "onButtonDelete() onSuccess called:${it}")
             }
             onFailure { code, msg ->
-                Log.d(TAG, "onButtonDelete() onFailure called with: code = $code, msg = $msg")
+                ToastHelper.toast("失败,code:${code},msg:${msg}")
             }
             onComplete {
                 Log.d(TAG, "onButtonDelete() onComplete called")
@@ -177,31 +173,29 @@ class MainActivity : BaseMvvmActivity<MainViewModel, ActivityMainBinding>() {
         map["manufacturer"] = Build.MANUFACTURER
         map["os"] = Build.VERSION.SDK_INT
         map["image"] = uri
-        RxHttp.getInstance().upload(this).url(TKURL.URL_UPLOAD).params(map).enqueue(object : SimpleHttpCallback<String>() {
-            override fun onStart() {
+
+        viewModel.testUpload(map).observeCallback(this){
+            onStart{
                 showProgressDialog("正在上传,请稍等...")
             }
 
-            override fun onProgress(readBytes: Long, totalBytes: Long) {
-                updateProgress(readBytes, totalBytes)
+            onProgress { progress, total ->
+                updateProgress(progress, total)
             }
 
-            override fun onNext(response: String) {
-                Log.d(TAG, "response:$response")
-                Toast.makeText(this@MainActivity, "response:$response", Toast.LENGTH_SHORT).show()
+            onSuccess {
+                ToastHelper.toast("上传成功,返回结果:${it}")
             }
 
-            override fun onError(e: Throwable) {
-                Log.d(TAG, "onError:" + e.message)
-                Toast.makeText(this@MainActivity, "error:" + e.message, Toast.LENGTH_SHORT).show()
+            onFailure { code, msg ->
+                ToastHelper.toast("上传失败,code:${code},msg:${msg}")
+            }
+
+            onComplete{
                 closeProgressDialog()
             }
+        }
 
-            override fun onComplete() {
-                Log.d(TAG, "onComplete")
-                closeProgressDialog()
-            }
-        })
     }
 
     /**
@@ -218,28 +212,30 @@ class MainActivity : BaseMvvmActivity<MainViewModel, ActivityMainBinding>() {
 
     private fun showProgressDialog(title: String) {
         progressDialog = ProgressDialog(this)
-        progressDialog!!.setMessage(title)
-        progressDialog!!.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL)
-        progressDialog!!.setCanceledOnTouchOutside(true)
-        progressDialog!!.setCancelable(true)
-        progressDialog!!.show()
+        progressDialog?.apply {
+            setMessage(title)
+            setProgressStyle(ProgressDialog.STYLE_HORIZONTAL)
+            setCanceledOnTouchOutside(false)
+            setCancelable(false)
+            show()
+        }
     }
 
-    private fun updateProgress(readBytes: Long, totalBytes: Long) {
-        Log.d(TAG, "updateProgress,readBytes:$readBytes,totalBytes:$totalBytes")
-        if (progressDialog != null && progressDialog!!.isShowing) {
-            progressDialog!!.progress = readBytes.toInt()
-            progressDialog!!.max = totalBytes.toInt()
-            val all = totalBytes * 1.0f / 1024 / 1024
-            val percent = readBytes * 1.0f / 1024 / 1024
-            progressDialog!!.setProgressNumberFormat(String.format("%.2fM/%.2fM", percent, all))
+    private fun updateProgress(progress: Long, total: Long) {
+        LogUtils.d(TAG, "updateProgress,readBytes:$progress,totalBytes:$total")
+        progressDialog?.apply {
+            if(isShowing){
+                this.progress = progress.toInt()
+                this.max=total.toInt()
+                val all = total * 1.0f / 1024 / 1024
+                val percent = progress * 1.0f / 1024 / 1024
+                setProgressNumberFormat(String.format("%.2fM/%.2fM", percent, all))
+            }
         }
     }
 
     private fun closeProgressDialog() {
-        if (progressDialog != null) {
-            progressDialog!!.dismiss()
-        }
+        progressDialog?.dismiss()
     }
 }
 
