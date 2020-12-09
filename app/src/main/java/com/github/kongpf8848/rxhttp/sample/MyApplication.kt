@@ -23,7 +23,7 @@ class MyApplication : Application() {
         RxHttpConfig.getInstance()
                 .maxRetries(3)
                 .retryDelayMillis(200)
-                .debugMode(BuildConfig.DEBUG)
+                .debugMode(true)
                 .builder.addInterceptor(MockInterceptor())
     }
 }

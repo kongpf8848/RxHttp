@@ -1,7 +1,9 @@
 package com.github.kongpf8848.rxhttp.sample.utils
 
 import com.github.kongpf8848.rxhttp.sample.bean.Banner
+import com.github.kongpf8848.rxhttp.sample.bean.User
 import com.jsy.tk.library.http.TKResponse
+import java.util.*
 
 object MockUtils {
 
@@ -15,6 +17,14 @@ object MockUtils {
         )
         val response=TKResponse(200,"",list)
         return GsonUtils.toJson(response)
+    }
 
+    /**
+     * 获取用户信息
+     */
+    fun getUserData():String {
+        val user= User(UUID.randomUUID().toString(),"feifei","beijing")
+        val response=TKResponse(200,"",user)
+        return GsonUtils.toJson(response)
     }
 }

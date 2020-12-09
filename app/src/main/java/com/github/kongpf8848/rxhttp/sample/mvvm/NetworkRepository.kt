@@ -86,6 +86,21 @@ class NetworkRepository private constructor(){
         return liveData
     }
 
+    inline fun <reified T> httpPostForm(
+            context: Context,
+            url: String,
+            params: Map<String, Any?>?,
+            tag: Any? = null
+    ): MutableLiveData<TKState<T>> {
+        val liveData = MutableLiveData<TKState<T>>()
+        RxHttp.getInstance()
+                .postForm(context)
+                .params(params)
+                .url(url)
+                .tag(tag)
+                .enqueue(newCallback(liveData))
+        return liveData
+    }
 
     inline fun <reified T> httpPut(
         context: Context,

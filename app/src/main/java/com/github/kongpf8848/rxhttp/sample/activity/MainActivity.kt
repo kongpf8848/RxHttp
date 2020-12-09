@@ -1,14 +1,20 @@
 package com.github.kongpf8848.rxhttp.sample.activity
 
 import android.app.ProgressDialog
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
-import com.github.kongpf8848.permissionhelper.PermissionHelper
+import android.widget.Toast
+import com.github.kongpf8848.rxhttp.RxHttp
 import com.github.kongpf8848.rxhttp.bean.DownloadInfo
+import com.github.kongpf8848.rxhttp.callback.SimpleHttpCallback
 import com.github.kongpf8848.rxhttp.sample.R
 import com.github.kongpf8848.rxhttp.sample.databinding.ActivityMainBinding
+import com.github.kongpf8848.rxhttp.sample.extension.getContent
 import com.github.kongpf8848.rxhttp.sample.extension.observeCallback
+import com.github.kongpf8848.rxhttp.sample.http.TKURL
 import com.github.kongpf8848.rxhttp.sample.mvvm.BaseMvvmActivity
 import com.github.kongpf8848.rxhttp.sample.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.activity_main.*
@@ -17,11 +23,7 @@ import java.io.File
 class MainActivity : BaseMvvmActivity<MainViewModel, ActivityMainBinding>() {
 
     private var progressDialog: ProgressDialog? = null
-    private val permissionHelper: PermissionHelper? = null
     private val PATH = Environment.getExternalStorageDirectory().absolutePath + File.separator
-    private val REQUEST_CODE_STORAGE = 88
-    private val REQUEST_CODE_INSTALL = 99
-    private val REQUEST_CODE_PICK = 100
     private var downloadInfo: DownloadInfo? = null
 
 
@@ -34,144 +36,219 @@ class MainActivity : BaseMvvmActivity<MainViewModel, ActivityMainBinding>() {
         button1.setOnClickListener {
             onButtonGet()
         }
+        button2.setOnClickListener {
+            onButtonPost()
+        }
+        button3.setOnClickListener {
+            onButtonPostForm()
+        }
+        button4.setOnClickListener {
+            onButtonPut()
+        }
+        button5.setOnClickListener {
+            onButtonDelete()
+        }
+        button6.setOnClickListener {
+            onButtonHead()
+        }
+        button7.setOnClickListener {
+            onButtonUpload()
+        }
+        button8.setOnClickListener {
+            onButtonDownload()
+        }
     }
 
     /**
      * GET请求
      */
     fun onButtonGet() {
-        viewModel.getBannerList().observeCallback(this) {
+        viewModel.testGet().observeCallback(this) {
             onStart {
-                Log.d(TAG, "onButton1() onStart called")
+                Log.d(TAG, "onButtonGet() onStart called")
             }
             onSuccess {
-                Log.d(TAG, "onButton1() onSuccess called:${it}")
+                Log.d(TAG, "onButtonGet() onSuccess called:${it}")
             }
             onFailure { code, msg ->
-                Log.d(TAG, "onButton1() onFailure called with: code = $code, msg = $msg")
+                Log.d(TAG, "onButtonGet() onFailure called with: code = $code, msg = $msg")
             }
             onComplete {
-                Log.d(TAG, "onButton1() onComplete called")
+                Log.d(TAG, "onButtonGet() onComplete called")
             }
         }
     }
 
+    /**
+     * POST请求
+     */
+    fun onButtonPost() {
 
-//    @OnClick(R.id.button2)
-//    fun onButton2() {
-//        val content = "this is post content"
-//        RxHttp.getInstance()
-//                .post(this)
-//                .content(content)
-//                .url(TKURL.URL_POST)
-//                .enqueue(object : SimpleHttpCallback<String?>() {
-//                    override fun onStart() {
-//                        Log.d(TAG, "onStart")
-//                    }
-//
-//                    override fun onNext(response: String) {
-//                        Toast.makeText(this@MainActivity, "response:$response", Toast.LENGTH_SHORT).show()
-//                    }
-//
-//                    override fun onError(e: Throwable) {
-//                        Log.d(TAG, "onError:" + e.message)
-//                        Toast.makeText(this@MainActivity, "error:" + e.message, Toast.LENGTH_SHORT).show()
-//                    }
-//
-//                    override fun onComplete() {
-//                        Log.d(TAG, "onComplete")
-//                    }
-//                })
-//    }
-//
-//    @OnClick(R.id.button3)
-//    fun onButton3() {
-//        val map: MutableMap<String, Any> = HashMap()
-//        map["model"] = Build.MODEL
-//        map["manufacturer"] = Build.MANUFACTURER
-//        map["os"] = Build.VERSION.SDK_INT
-//        RxHttp.getInstance().postForm(this).url(TKURL.URL_POST_FORM).params(map).enqueue(object : SimpleHttpCallback<String?>() {
-//            override fun onStart() {
-//                Log.d(TAG, "onStart")
-//            }
-//
-//            override fun onNext(response: String) {
-//                Toast.makeText(this@MainActivity, "response:$response", Toast.LENGTH_SHORT).show()
-//            }
-//
-//            override fun onError(e: Throwable) {
-//                Log.d(TAG, "onError:" + e.message)
-//                Toast.makeText(this@MainActivity, "error:" + e.message, Toast.LENGTH_SHORT).show()
-//            }
-//
-//            override fun onComplete() {
-//                Log.d(TAG, "onComplete")
-//            }
-//        })
-//    }
-//
-//    @OnClick(R.id.button4)
-//    fun onButton4() {
-//        download()
-//        //        permissionHelper = new PermissionHelper(this, new PermissionHelper.OnPermissionListener() {
-////            @Override
-////            public void onPermissionGranted() {
-////
-////            }
-////
-////            @Override
-////            public void onPermissionMissing(List<String> permissions) {
-////
-////            }
-////
-////            @Override
-////            public void onPermissionFailed(List<PermissionInfomation> failList) {
-////
-////            }
-////
-////        });
-////        permissionHelper.requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE_STORAGE);
-//    }
-//
-//    @OnClick(R.id.button5)
-//    fun onButton5() {
-//        registerForActivityResult<String, Uri>(GetContent(), ActivityResultCallback { result: Uri -> upload(result) }).launch("image/jpeg")
-//    }
-//
-//    private fun upload(uri: Uri) {
-//        val map: MutableMap<String, Any> = HashMap()
-//        map["model"] = Build.MODEL
-//        map["manufacturer"] = Build.MANUFACTURER
-//        map["os"] = Build.VERSION.SDK_INT
-//        map["image.jpg"] = uri
-//        //        map.put("video",new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath()+File.separator+"gradle-4.4-all.zip"));
-//        RxHttp.getInstance().upload(this).url(TKURL.URL_UPLOAD).params(map).enqueue(object : SimpleHttpCallback<String?>() {
-//            override fun onStart() {
-//                showProgressDialog("正在上传,请稍等...")
-//            }
-//
-//            override fun onProgress(readBytes: Long, totalBytes: Long) {
-//                updateProgress(readBytes, totalBytes)
-//            }
-//
-//            override fun onNext(response: String) {
-//                Log.d(TAG, "response:$response")
-//                Toast.makeText(this@MainActivity, "response:$response", Toast.LENGTH_SHORT).show()
-//            }
-//
-//            override fun onError(e: Throwable) {
-//                Log.d(TAG, "onError:" + e.message)
-//                Toast.makeText(this@MainActivity, "error:" + e.message, Toast.LENGTH_SHORT).show()
-//                closeProgressDialog()
-//            }
-//
-//            override fun onComplete() {
-//                Log.d(TAG, "onComplete")
-//                closeProgressDialog()
-//            }
-//        })
-//    }
-//
+        viewModel.testPost().observeCallback(this) {
+            onStart {
+                Log.d(TAG, "onButtonPost() onStart called")
+            }
+            onSuccess {
+                Log.d(TAG, "onButtonPost() onSuccess called:${it}")
+            }
+            onFailure { code, msg ->
+                Log.d(TAG, "onButtonPost() onFailure called with: code = $code, msg = $msg")
+            }
+            onComplete {
+                Log.d(TAG, "onButtonPost() onComplete called")
+            }
+        }
+    }
+
+    /**
+     * POST FORM请求
+     */
+    fun onButtonPostForm() {
+
+        viewModel.testPostForm().observeCallback(this) {
+            onStart {
+                Log.d(TAG, "onButtonPostForm() onStart called")
+            }
+            onSuccess {
+                Log.d(TAG, "onButtonPostForm() onSuccess called:${it}")
+            }
+            onFailure { code, msg ->
+                Log.d(TAG, "onButtonPostForm() onFailure called with: code = $code, msg = $msg")
+            }
+            onComplete {
+                Log.d(TAG, "onButtonPostForm() onComplete called")
+            }
+        }
+    }
+
+    /**
+     * PUT请求
+     */
+    fun onButtonPut() {
+
+        viewModel.testPut().observeCallback(this) {
+            onStart {
+                Log.d(TAG, "onButtonPut() onStart called")
+            }
+            onSuccess {
+                Log.d(TAG, "onButtonPut() onSuccess called:${it}")
+            }
+            onFailure { code, msg ->
+                Log.d(TAG, "onButtonPut() onFailure called with: code = $code, msg = $msg")
+            }
+            onComplete {
+                Log.d(TAG, "onButtonPut() onComplete called")
+            }
+        }
+    }
+
+    /**
+     * DELETE请求
+     */
+    fun onButtonDelete() {
+
+        viewModel.testDelete().observeCallback(this) {
+            onStart {
+                Log.d(TAG, "onButtonDelete() onStart called")
+            }
+            onSuccess {
+                Log.d(TAG, "onButtonDelete() onSuccess called:${it}")
+            }
+            onFailure { code, msg ->
+                Log.d(TAG, "onButtonDelete() onFailure called with: code = $code, msg = $msg")
+            }
+            onComplete {
+                Log.d(TAG, "onButtonDelete() onComplete called")
+            }
+        }
+    }
+
+    fun onButtonHead() {
+
+    }
+
+    /**
+     * 上传
+     */
+    fun onButtonUpload() {
+        getContent("image/*") {
+            upload(it)
+        }
+    }
+
+    private fun upload(uri: Uri) {
+        val map: MutableMap<String, Any> = HashMap()
+        map["model"] = Build.MODEL
+        map["manufacturer"] = Build.MANUFACTURER
+        map["os"] = Build.VERSION.SDK_INT
+        map["image"] = uri
+        RxHttp.getInstance().upload(this).url(TKURL.URL_UPLOAD).params(map).enqueue(object : SimpleHttpCallback<String>() {
+            override fun onStart() {
+                showProgressDialog("正在上传,请稍等...")
+            }
+
+            override fun onProgress(readBytes: Long, totalBytes: Long) {
+                updateProgress(readBytes, totalBytes)
+            }
+
+            override fun onNext(response: String) {
+                Log.d(TAG, "response:$response")
+                Toast.makeText(this@MainActivity, "response:$response", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onError(e: Throwable) {
+                Log.d(TAG, "onError:" + e.message)
+                Toast.makeText(this@MainActivity, "error:" + e.message, Toast.LENGTH_SHORT).show()
+                closeProgressDialog()
+            }
+
+            override fun onComplete() {
+                Log.d(TAG, "onComplete")
+                closeProgressDialog()
+            }
+        })
+    }
+
+    /**
+     * 下载
+     */
+    fun onButtonDownload() {
+
+    }
+
+    private fun showProgressDialog(title: String) {
+        progressDialog = ProgressDialog(this)
+        progressDialog!!.setMessage(title)
+        progressDialog!!.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL)
+        progressDialog!!.setCanceledOnTouchOutside(true)
+        progressDialog!!.setCancelable(true)
+        progressDialog!!.show()
+    }
+
+    private fun updateProgress(readBytes: Long, totalBytes: Long) {
+        Log.d(TAG, "updateProgress,readBytes:$readBytes,totalBytes:$totalBytes")
+        if (progressDialog != null && progressDialog!!.isShowing) {
+            progressDialog!!.progress = readBytes.toInt()
+            progressDialog!!.max = totalBytes.toInt()
+            val all = totalBytes * 1.0f / 1024 / 1024
+            val percent = readBytes * 1.0f / 1024 / 1024
+            progressDialog!!.setProgressNumberFormat(String.format("%.2fM/%.2fM", percent, all))
+        }
+    }
+
+    private fun closeProgressDialog() {
+        if (progressDialog != null) {
+            progressDialog!!.dismiss()
+        }
+    }
+}
+
+
+
+
+
+
+    //
 //    private fun download() {
 //        val fileName = TKURL.URL_DOWNLOAD.substring(TKURL.URL_DOWNLOAD.lastIndexOf("/") + 1)
 //        RxHttp.getInstance().download(this)
@@ -211,31 +288,6 @@ class MainActivity : BaseMvvmActivity<MainViewModel, ActivityMainBinding>() {
 //                })
 //    }
 //
-//    private fun showProgressDialog(title: String) {
-//        progressDialog = ProgressDialog(this)
-//        progressDialog!!.setMessage(title)
-//        progressDialog!!.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL)
-//        progressDialog!!.setCanceledOnTouchOutside(true)
-//        progressDialog!!.setCancelable(true)
-//        progressDialog!!.show()
-//    }
-//
-//    private fun updateProgress(readBytes: Long, totalBytes: Long) {
-//        Log.d(TAG, "updateProgress,readBytes:$readBytes,totalBytes:$totalBytes")
-//        if (progressDialog != null && progressDialog!!.isShowing) {
-//            progressDialog!!.progress = readBytes.toInt()
-//            progressDialog!!.max = totalBytes.toInt()
-//            val all = totalBytes * 1.0f / 1024 / 1024
-//            val percent = readBytes * 1.0f / 1024 / 1024
-//            progressDialog!!.setProgressNumberFormat(String.format("%.2fM/%.2fM", percent, all))
-//        }
-//    }
-//
-//    private fun closeProgressDialog() {
-//        if (progressDialog != null) {
-//            progressDialog!!.dismiss()
-//        }
-//    }
 //
 //    private fun install() {
 //        val authority = "$packageName.fileprovider"
@@ -254,10 +306,7 @@ class MainActivity : BaseMvvmActivity<MainViewModel, ActivityMainBinding>() {
 //        }
 //    }
 //
-//    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-//        permissionHelper?.onRequestPermissionsResult(requestCode, permissions, grantResults)
-//    }
+
 //
 //    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 //        super.onActivityResult(requestCode, resultCode, data)
@@ -289,34 +338,3 @@ class MainActivity : BaseMvvmActivity<MainViewModel, ActivityMainBinding>() {
 //        }
 //    }
 //
-//    @OnClick(R.id.button6)
-//    fun onButton6() {
-//        val content = "this is put content"
-//        RxHttp.getInstance()
-//                .put(this)
-//                .content(content)
-//                .url(TKURL.URL_PUT)
-//                .enqueue(object : SimpleHttpCallback<String?>() {
-//                    override fun onStart() {
-//                        Log.d(TAG, "onStart")
-//                    }
-//
-//                    override fun onNext(response: String) {
-//                        Toast.makeText(this@MainActivity, "response:$response", Toast.LENGTH_SHORT).show()
-//                    }
-//
-//                    override fun onError(e: Throwable) {
-//                        Log.d(TAG, "onError:" + e.message)
-//                        Toast.makeText(this@MainActivity, "error:" + e.message, Toast.LENGTH_SHORT).show()
-//                    }
-//
-//                    override fun onComplete() {
-//                        Log.d(TAG, "onComplete")
-//                    }
-//                })
-//    }
-//
-//    @OnClick(R.id.button7)
-//    fun onButton7() {
-//    }
-}
