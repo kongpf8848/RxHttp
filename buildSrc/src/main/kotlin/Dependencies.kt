@@ -3,8 +3,6 @@ import org.gradle.api.JavaVersion
 object Config{
     val compileSdkVersion = 30
     val buildToolsVersion = "30.0.2"
-    val applicationProdId="com.jsy.tk"
-    val applicationTestId="com.jsy.tk.test"
     val minSdkVersion = 21
     val targetSdkVersion = 30
     val sourceCompatibilityVersion = JavaVersion.VERSION_1_8
@@ -94,6 +92,7 @@ object Versions {
     const val BUTTER_KNIFE_VERSION = "10.2.3"
     const val BGA_BANNER_VERSION="2.1.8"
     const val GOOGLE_PHONENUMBER_VERSION = "8.10.7"
+    const val COMMON_HELPER_VERSION="1.0.20"
 
 }
 
@@ -156,6 +155,7 @@ object BuildDependencies {
     val butterknifeAnotation= "com.jakewharton:butterknife-compiler:${Versions.BUTTER_KNIFE_VERSION}"
     val bgaBanner="cn.bingoogolapple:bga-banner:${Versions.BGA_BANNER_VERSION}@aar"
     val googlePhonenumber="com.googlecode.libphonenumber:libphonenumber:${Versions.GOOGLE_PHONENUMBER_VERSION}"
+    val commonhelper= "com.kongpf.commonhelper:common-helper:${Versions.COMMON_HELPER_VERSION}"
 }
 
 object AndroidX {

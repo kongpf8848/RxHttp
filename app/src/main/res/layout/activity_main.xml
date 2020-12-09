@@ -46,12 +46,14 @@
                 android:layout_marginTop="20dp"
                 android:text="delete" />
 
+
             <Button
                 android:id="@+id/button6"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:text="head" />
+                android:text="upload" />
+
 
             <Button
                 android:id="@+id/button7"
@@ -59,14 +61,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:text="download" />
-
-
-            <Button
-                android:id="@+id/button8"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="upload" />
 
 
         </LinearLayout>

@@ -30,6 +30,11 @@
         </activity>
 
 
+        <service android:name="com.github.kongpf8848.rxhttp.sample.service.DownloadService"
+            android:exported="false"
+            android:label="下载服务"
+            />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"

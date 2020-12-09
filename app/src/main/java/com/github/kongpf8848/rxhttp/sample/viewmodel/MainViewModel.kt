@@ -59,7 +59,5 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
         )
     }
 
-    fun testHead(){
 
-    }
 }

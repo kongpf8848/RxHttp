@@ -1,8 +1,12 @@
 <resources>
-    <string name="app_name">RxHttp Sample</string>
+    <string name="app_name">RxHttp</string>
 
     <string name="permission_dialog_title">权限申请</string>
     <string name="permission_dialog_ok">确定</string>
     <string name="permission_dialog_cancel">取消</string>
     <string name="permission_dialog_message">%1$s需要%2$s权限,去设置?</string>
+
+    <string name="download_progress">下载进度:%d%%</string>
+    <string name="download_failed">下载失败</string>
+    <string name="download_success">下载完成</string>
 </resources>

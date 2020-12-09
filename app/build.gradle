@@ -63,7 +63,7 @@ dependencies {
     api AndroidX.fragmentKtx
     implementation BuildDependencies.kotlinStdlibJdk7
     implementation BuildDependencies.gson
-    implementation 'com.github.kongpf8848:permissionhelper:1.0.0'
+    implementation BuildDependencies.commonhelper
 
 
 

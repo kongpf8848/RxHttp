@@ -1,6 +1,7 @@
 package com.github.kongpf8848.rxhttp.sample.activity
 
 import android.app.ProgressDialog
+import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -16,6 +17,7 @@ import com.github.kongpf8848.rxhttp.sample.extension.getContent
 import com.github.kongpf8848.rxhttp.sample.extension.observeCallback
 import com.github.kongpf8848.rxhttp.sample.http.TKURL
 import com.github.kongpf8848.rxhttp.sample.mvvm.BaseMvvmActivity
+import com.github.kongpf8848.rxhttp.sample.service.DownloadService
 import com.github.kongpf8848.rxhttp.sample.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
@@ -49,12 +51,9 @@ class MainActivity : BaseMvvmActivity<MainViewModel, ActivityMainBinding>() {
             onButtonDelete()
         }
         button6.setOnClickListener {
-            onButtonHead()
-        }
-        button7.setOnClickListener {
             onButtonUpload()
         }
-        button8.setOnClickListener {
+        button7.setOnClickListener {
             onButtonDownload()
         }
     }
@@ -163,10 +162,6 @@ class MainActivity : BaseMvvmActivity<MainViewModel, ActivityMainBinding>() {
         }
     }
 
-    fun onButtonHead() {
-
-    }
-
     /**
      * 上传
      */
@@ -213,7 +208,12 @@ class MainActivity : BaseMvvmActivity<MainViewModel, ActivityMainBinding>() {
      * 下载
      */
     fun onButtonDownload() {
-
+        /**
+         * 启动Service进行下载
+         */
+        val intent= Intent(this, DownloadService::class.java)
+        intent.putExtra("url",TKURL.URL_DOWNLOAD)
+        startService(intent)
     }
 
     private fun showProgressDialog(title: String) {
@@ -247,94 +247,3 @@ class MainActivity : BaseMvvmActivity<MainViewModel, ActivityMainBinding>() {
 
 
 
-
-    //
-//    private fun download() {
-//        val fileName = TKURL.URL_DOWNLOAD.substring(TKURL.URL_DOWNLOAD.lastIndexOf("/") + 1)
-//        RxHttp.getInstance().download(this)
-//                .dir(getExternalFilesDir(null).toString() + File.separator + "download")
-//                .filename(fileName)
-//                .breakpoint(false)
-//                .url(TKURL.URL_DOWNLOAD)
-//                .enqueue(object : DownloadCallback() {
-//                    override fun onStart() {
-//                        showProgressDialog("正在下载新版本,请稍等...")
-//                    }
-//
-//                    override fun onProgress(downloadInfo: DownloadInfo) {
-//                        if (downloadInfo != null) {
-//                            Log.d(TAG, "onProgress() called with: downloadInfo = [$downloadInfo]")
-//                            updateProgress(downloadInfo.progress, downloadInfo.total)
-//                        }
-//                    }
-//
-//                    override fun onNext(downloadInfo: DownloadInfo) {
-//                        closeProgressDialog()
-//                        this@MainActivity.downloadInfo = downloadInfo
-//                        install()
-//                    }
-//
-//                    override fun onError(e: Throwable) {
-//                        Log.e(TAG, "onError:" + e.message)
-//                        ToastHelper.toast(e.message)
-//                        closeProgressDialog()
-//                    }
-//
-//                    override fun onComplete() {
-//                        Log.d(TAG, "onComplete:")
-//                    }
-//
-//                    override fun onProgress(readBytes: Long, totalBytes: Long) {}
-//                })
-//    }
-//
-//
-//    private fun install() {
-//        val authority = "$packageName.fileprovider"
-//        val file = File(downloadInfo!!.destDir, downloadInfo!!.fileName)
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            val pm = packageManager
-//            if (pm.canRequestPackageInstalls()) {
-//                ApkHelper.installApk(applicationContext, file, authority)
-//            } else {
-//                val uri = Uri.parse("package:$packageName")
-//                val intent = Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, uri)
-//                startActivityForResult(intent, REQUEST_CODE_INSTALL)
-//            }
-//        } else {
-//            ApkHelper.installApk(applicationContext, file, authority)
-//        }
-//    }
-//
-
-//
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//        permissionHelper?.onActivityResult(requestCode, resultCode, data)
-//        if (requestCode == REQUEST_CODE_INSTALL) {
-//            if (resultCode == Activity.RESULT_OK) {
-//                val authority = "$packageName.fileprovider"
-//                val file = File(downloadInfo!!.destDir, downloadInfo!!.fileName)
-//                ApkHelper.installApk(applicationContext, file, authority)
-//            }
-//        } else if (requestCode == REQUEST_CODE_PICK) {
-//            if (resultCode == Activity.RESULT_OK) {
-//                val uri = data!!.data
-//                var urlString = uri.toString()
-//                urlString = Uri.decode(urlString)
-//                val pre = "file://" + "/storage/emulated/0" + File.separator
-//                var filePath: String? = null
-//                if (urlString.startsWith(pre)) {
-//                    filePath = Environment.getExternalStorageDirectory().absolutePath + File.separator + urlString.substring(pre.length)
-//                }
-//                if (TextUtils.isEmpty(filePath)) {
-//                    filePath = ImageHelper.getImageAbsolutePath(this, uri)
-//                }
-//                Log.d(TAG, "filePath:$filePath")
-//                if (!TextUtils.isEmpty(filePath)) {
-//                    //upload(filePath);
-//                }
-//            }
-//        }
-//    }
-//

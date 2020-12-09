@@ -182,5 +182,4 @@ class NetworkRepository private constructor(){
             .enqueue(callback)
     }
 
-
 }
