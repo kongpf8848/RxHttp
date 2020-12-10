@@ -3,7 +3,7 @@
 基于RxJava2+Retrofit+OkHttp3封装的网络请求类库，小巧精致，高度解耦，网络请求就是这么简单:smile::smile::smile:
 
 # 亮点
-+ 完美兼容MVVM架构,ViewModel,LiveData用起来
++ 完美兼容MVVM架构,兼容Kotlin和Java,Kotlin+MVVM+RxHttp结合使用更酸爽
 
 + 完美解决泛型类型擦除的棘手问题，还原泛型的真实类型
 
