@@ -1,17 +1,21 @@
 # RxHttp
 
-基于RxJava2+Retrofit+OkHttp3封装的网络请求类库，小巧精致，高度解耦，实现了GET,POST，PUT,DELETE等多种请求方法。
+基于RxJava2+Retrofit+OkHttp3封装的网络请求类库，小巧精致，高度解耦，简单易用。
 
-# 功能特点
-+ 支持上传及进度监听，支持上传多个文件，支持文本和文件混合上传
+# 亮点
++ 完美兼容MVVM架构,ViewModel,LiveData用起来
+
++支持网络请求和Activity,Fragment生命周期绑定，界面销毁时自动取消网络请求回调
+
++ 天生支持多BaseUrl，支持动态传入Url，支持任意多个Url
+
++ 支持自定义OkHttpClient.Builder及OkHttpClient,可高度自定义网络请求参数
+
++ 支持Glide和网络请求公用一个OkHttpClient，一个App一个OkHttpClient就足够了
+
++ 支持文件上传及进度监听，支持同时上传多个文件，支持文本和文件混合上传，支持Uri上传，兼容Android 10,11系统
 
 + 支持下载及进度监听，支持大文件下载，支持断点下载，支持文件MD5校验
-
-+ 支持自定义OkHttpClient
-
-+ 链式调用，支持每一个请求动态添加Header
-
-+ 支持网络请求和Activity,Fragment生命周期绑定，界面销毁时自动取消订阅
 
 
 # 添加依赖
@@ -23,14 +27,14 @@ implementation 'com.github.kongpf8848:RxHttp:1.0.7'
        RxHttp.getInstance()
                 .get(this)
                 .url(Constants.URL_GET)
-                .enqueue(new HttpCallback<Feed>() {
+                .enqueue(new HttpCallback<xxx>() {
                     @Override
                     public void onStart() {
                         Log.d(TAG, "onStart");
                     }
 
                     @Override
-                    public void onNext(Feed response) {
+                    public void onNext(xxx response) {
                         Toast.makeText(MainActivity.this, response.getDate(), Toast.LENGTH_SHORT).show();
                     }
 
@@ -189,7 +193,7 @@ implementation 'com.github.kongpf8848:RxHttp:1.0.7'
             }
         });
 ```
-具体使用可参考Demo
+具体使用可参考Demo,Demo中有详细的示例，将MVVM和RxHttp结合起来使用
 
 # License
 ```
