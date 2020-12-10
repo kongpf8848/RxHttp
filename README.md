@@ -5,7 +5,7 @@
 # 亮点
 + 完美兼容MVVM架构,ViewModel,LiveData用起来
 
-+支持网络请求和Activity,Fragment生命周期绑定，界面销毁时自动取消网络请求回调
++ 支持网络请求和Activity,Fragment生命周期绑定，界面销毁时自动取消网络请求回调
 
 + 天生支持多BaseUrl，支持动态传入Url，支持任意多个Url
 
