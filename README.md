@@ -1,6 +1,6 @@
 # RxHttp
 
-基于RxJava2+Retrofit+OkHttp3封装的网络请求类库，小巧精致，高度解耦，简单易用。
+基于RxJava2+Retrofit+OkHttp3封装的网络请求类库，小巧精致，高度解耦，网络请求就是这么简单:smile::smile
 
 # 亮点
 + 完美兼容MVVM架构,ViewModel,LiveData用起来
