@@ -20,9 +20,9 @@
 
 # 添加依赖
 ```
-implementation 'com.github.kongpf8848:RxHttp:1.0.7'
+implementation 'com.github.kongpf8848:RxHttp:1.0.8'
 ```
-# get请求
+# GET请求
 ```
        RxHttp.getInstance()
                 .get(this)
@@ -50,7 +50,7 @@ implementation 'com.github.kongpf8848:RxHttp:1.0.7'
                     }
                 });
 ```
-# post请求
+# POST请求
 ```
         String content = "this is post content";
         RxHttp.getInstance()
@@ -81,7 +81,7 @@ implementation 'com.github.kongpf8848:RxHttp:1.0.7'
                     }
                 });
 ```
-# post表单请求
+# POST FORM表单请求
 ```
  Map<String, Object> map = new HashMap<>();
         map.put("model", Build.MODEL);
