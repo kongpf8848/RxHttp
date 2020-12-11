@@ -7,12 +7,13 @@ import android.text.TextUtils;
 import androidx.fragment.app.Fragment;
 
 import com.github.kongpf8848.rxhttp.HttpConstants;
+import com.github.kongpf8848.rxhttp.util.GsonUtil;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
 public class PostRequest extends AbsRequest {
-    private String content;
+
     private String type;
     public PostRequest(Context context) {
         super(context);
@@ -24,10 +25,6 @@ public class PostRequest extends AbsRequest {
         super(fragment);
     }
 
-    public PostRequest content(String content){
-        this.content=content;
-        return this;
-    }
     public PostRequest type(String type){
         this.type=type;
         return this;
@@ -35,6 +32,7 @@ public class PostRequest extends AbsRequest {
 
     @Override
     public RequestBody buildRequestBody() {
+        String content= GsonUtil.toJson(getParams());
         if(TextUtils.isEmpty(type)) {
             return RequestBody.create(MediaType.parse(HttpConstants.MIME_TYPE_JSON), content);
         }

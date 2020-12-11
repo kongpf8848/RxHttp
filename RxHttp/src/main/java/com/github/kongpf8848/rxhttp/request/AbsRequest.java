@@ -21,7 +21,7 @@ public abstract class AbsRequest<T> {
     protected String url;
     protected Object tag;
     protected Map<String,String> headers=new HashMap<>();
-    protected Map<String,Object> params=new HashMap<>();
+    private Map<String,Object> params=new HashMap<>();
     protected HttpCallback<T> callback;
 
     protected abstract RequestBody buildRequestBody();

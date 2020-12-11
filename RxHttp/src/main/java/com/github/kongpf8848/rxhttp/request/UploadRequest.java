@@ -41,26 +41,29 @@ public class UploadRequest extends PostRequest {
     @Override
     public RequestBody buildRequestBody() {
         MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
-        Iterator<Map.Entry<String, Object>> iterator = params.entrySet().iterator();
-        while (iterator.hasNext()) {
-            Map.Entry<String, Object> entry = iterator.next();
-            String key = entry.getKey();
-            Object value = entry.getValue();
-            if (value instanceof File) {
-                File file = (File) value;
-                builder.addFormDataPart(key, file.getName(), RequestBody.create(MediaType.parse(HttpConstants.MIME_TYPE_BINARY), file));
-            } else if (value instanceof Uri) {
-                try {
-                    InputStream inputStream = getActualContext().getContentResolver().openInputStream((Uri)value);
-                    if (inputStream != null) {
-                        byte[] bytes = StreamUtil.toByte(inputStream);
-                        builder.addFormDataPart(key, key, new ByteArrayRequestBody(MediaType.parse(HttpConstants.MIME_TYPE_BINARY), bytes));
+        Map<String, Object> params=getParams();
+        if(params!=null && params.size()>0) {
+            Iterator<Map.Entry<String, Object>> iterator = params.entrySet().iterator();
+            while (iterator.hasNext()) {
+                Map.Entry<String, Object> entry = iterator.next();
+                String key = entry.getKey();
+                Object value = entry.getValue();
+                if (value instanceof File) {
+                    File file = (File) value;
+                    builder.addFormDataPart(key, file.getName(), RequestBody.create(MediaType.parse(HttpConstants.MIME_TYPE_BINARY), file));
+                } else if (value instanceof Uri) {
+                    try {
+                        InputStream inputStream = getActualContext().getContentResolver().openInputStream((Uri) value);
+                        if (inputStream != null) {
+                            byte[] bytes = StreamUtil.toByte(inputStream);
+                            builder.addFormDataPart(key, key, new ByteArrayRequestBody(MediaType.parse(HttpConstants.MIME_TYPE_BINARY), bytes));
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } else {
+                    builder.addFormDataPart(key, String.valueOf(value));
                 }
-            } else {
-                builder.addFormDataPart(key, String.valueOf(value));
             }
         }
         return new ProgressRequestBody(builder.build(), new ProgressCallback() {

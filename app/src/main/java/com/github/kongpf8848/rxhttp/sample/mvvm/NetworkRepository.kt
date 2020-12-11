@@ -6,7 +6,6 @@ import com.github.kongpf8848.rxhttp.RxHttp
 import com.github.kongpf8848.rxhttp.callback.DownloadCallback
 import com.github.kongpf8848.rxhttp.callback.HttpCallback
 import com.github.kongpf8848.rxhttp.sample.http.TKState
-import com.github.kongpf8848.rxhttp.sample.utils.GsonUtils
 import com.jsy.tk.library.http.TKHttpCallback
 import com.jsy.tk.library.http.TKResponse
 
@@ -76,10 +75,9 @@ class NetworkRepository private constructor(){
         tag: Any? = null
     ): MutableLiveData<TKState<T>> {
         val liveData = MutableLiveData<TKState<T>>()
-        val json = GsonUtils.toJson(params)
         RxHttp.getInstance()
             .post(context)
-            .content(json)
+            .params(params)
             .url(url)
             .tag(tag)
             .enqueue(newCallback(liveData))
@@ -109,10 +107,9 @@ class NetworkRepository private constructor(){
         tag: Any? = null
     ): MutableLiveData<TKState<T>> {
         val liveData = MutableLiveData<TKState<T>>()
-        val json = GsonUtils.toJson(params)
         RxHttp.getInstance()
             .put(context)
-            .content(json)
+            .params(params)
             .url(url)
             .tag(tag)
             .enqueue(newCallback(liveData))
