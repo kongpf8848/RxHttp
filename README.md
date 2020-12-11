@@ -1,11 +1,13 @@
 # RxHttp
 
-基于RxJava2+Retrofit+OkHttp3封装的网络请求类库，小巧精致，高度解耦，简单易用。
+基于RxJava2+Retrofit+OkHttp3封装的网络请求类库，小巧精致，高度解耦，网络请求就是这么简单:smile::smile::smile:
 
 # 亮点
-+ 完美兼容MVVM架构,ViewModel,LiveData用起来
++ 完美兼容MVVM架构,兼容Kotlin和Java,Kotlin+MVVM+RxHttp结合使用更酸爽
 
-+ 支持网络请求和Activity,Fragment生命周期绑定，界面销毁时自动取消网络请求回调
++ 完美解决泛型类型擦除的棘手问题，还原泛型的真实类型
+
++ 天生支持网络请求和Activity,Fragment生命周期绑定，界面销毁时自动取消网络请求回调
 
 + 天生支持多BaseUrl，支持动态传入Url，支持任意多个Url
 
@@ -20,9 +22,9 @@
 
 # 添加依赖
 ```
-implementation 'com.github.kongpf8848:RxHttp:1.0.7'
+implementation 'com.github.kongpf8848:RxHttp:1.0.8'
 ```
-# get请求
+# GET请求
 ```
        RxHttp.getInstance()
                 .get(this)
@@ -50,7 +52,7 @@ implementation 'com.github.kongpf8848:RxHttp:1.0.7'
                     }
                 });
 ```
-# post请求
+# POST请求
 ```
         String content = "this is post content";
         RxHttp.getInstance()
@@ -81,7 +83,7 @@ implementation 'com.github.kongpf8848:RxHttp:1.0.7'
                     }
                 });
 ```
-# post表单请求
+# POST FORM表单请求
 ```
  Map<String, Object> map = new HashMap<>();
         map.put("model", Build.MODEL);
