@@ -52,12 +52,16 @@ public class ProgressRequestBody extends RequestBody {
     private Sink sink(Sink sink) {
         return new ForwardingSink(sink) {
             long totalBytesWrite = 0L;
+            long lastBytesWrite=0L;
             @Override
             public void write(Buffer source, long byteCount) throws IOException {
                 super.write(source, byteCount);
+                lastBytesWrite=totalBytesWrite;
                 totalBytesWrite += byteCount;
-                if (callback != null) {
-                    callback.onProgress(totalBytesWrite,contentLength());
+                if(totalBytesWrite!=lastBytesWrite) {
+                    if (callback != null) {
+                        callback.onProgress(totalBytesWrite, contentLength());
+                    }
                 }
             }
         };

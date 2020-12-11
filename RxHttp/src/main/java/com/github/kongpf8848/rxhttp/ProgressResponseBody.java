@@ -53,13 +53,17 @@ public class ProgressResponseBody extends ResponseBody {
         return new ForwardingSource(source) {
 
             long totalBytesRead=0L;
+            long lastBytesRead=0L;
 
             @Override
             public long read(Buffer sink, long byteCount) throws IOException {
                 long bytesRead = super.read(sink, byteCount);
+                lastBytesRead=totalBytesRead;
                 totalBytesRead += ((bytesRead != -1) ? bytesRead : 0);
-                if(callback!=null) {
-                   callback.onProgress(totalBytesRead,contentLength());
+                if(totalBytesRead!=lastBytesRead) {
+                    if (callback != null) {
+                        callback.onProgress(totalBytesRead, contentLength());
+                    }
                 }
                 return bytesRead;
             }
