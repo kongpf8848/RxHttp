@@ -1,6 +1,17 @@
 <resources>
     <string name="app_name">RxHttp</string>
 
+    <string name="mvvm_demo">MVVM架构使用RxHttp示例</string>
+    <string name="mvc_demo">MVC架构使用RxHttp示例</string>
+
+    <string name="http_get">GET请求</string>
+    <string name="http_post">POST请求</string>
+    <string name="http_post_form">POST FORM请求</string>
+    <string name="http_put">PUT请求</string>
+    <string name="http_delete">DELETE请求</string>
+    <string name="upload">上传</string>
+    <string name="download">下载</string>
+
     <string name="permission_dialog_title">权限申请</string>
     <string name="permission_dialog_ok">确定</string>
     <string name="permission_dialog_cancel">取消</string>

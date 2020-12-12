@@ -13,14 +13,12 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 
 public class RxHttpConfig {
 
     private static RxHttpConfig instance;
 
     private OkHttpClient.Builder builder;
-    private boolean debugMode;
     private int maxRetries;
     private long retryDelayMillis;
 
@@ -59,13 +57,6 @@ public class RxHttpConfig {
         } catch (KeyManagementException e) {
             e.printStackTrace();
         }
-
-        if(isDebugMode()){
-            HttpLoggingInterceptor loggingInterceptor=new HttpLoggingInterceptor();
-            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-            builder.addInterceptor(loggingInterceptor);
-        }
-
         return builder;
     }
 
@@ -75,10 +66,6 @@ public class RxHttpConfig {
         return this;
     }
 
-    public RxHttpConfig debugMode(boolean debug) {
-        this.debugMode = debug;
-        return this;
-    }
 
     public RxHttpConfig retryDelayMillis(long retryDelayMillis){
         this.retryDelayMillis=retryDelayMillis;
@@ -97,10 +84,6 @@ public class RxHttpConfig {
         return builder;
     }
 
-
-    public boolean isDebugMode() {
-        return debugMode;
-    }
 
     public int getMaxRetries() {
         return maxRetries;

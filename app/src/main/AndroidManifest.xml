@@ -20,14 +20,23 @@
 
         >
         <activity android:name=".activity.MainActivity"
-                  android:screenOrientation="portrait"
+           android:screenOrientation="portrait"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <activity android:name=".activity.MVVMActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/mvvm_demo"
+            />
+
+        <activity android:name=".activity.MVCActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/mvc_demo"
+            />
 
 
         <service android:name="com.github.kongpf8848.rxhttp.sample.service.DownloadService"
