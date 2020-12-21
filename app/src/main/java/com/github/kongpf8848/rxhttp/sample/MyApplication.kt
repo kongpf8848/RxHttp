@@ -15,7 +15,7 @@ class MyApplication : Application() {
             e.printStackTrace()
             LogUtils.e("Exception", e.message)
         }
-        LogUtils.init(this,BuildConfig.DEBUG)
+        LogUtils.init(this, BuildConfig.DEBUG)
         ToastHelper.init(this)
 
         /**
@@ -27,9 +27,12 @@ class MyApplication : Application() {
         RxHttpConfig.getInstance()
                 .maxRetries(3)
                 .retryDelayMillis(200)
-                .builder.addInterceptor(HttpLoggingInterceptor().apply {
-                    level = HttpLoggingInterceptor.Level.BODY
-                })
-                .addInterceptor(MockInterceptor())
+                .getBuilder().apply {
+                    addInterceptor(HttpLoggingInterceptor().apply {
+                        level = HttpLoggingInterceptor.Level.BODY
+                    })
+                    addInterceptor(MockInterceptor())
+                }
+
     }
 }

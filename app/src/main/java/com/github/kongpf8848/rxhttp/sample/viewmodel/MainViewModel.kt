@@ -10,12 +10,11 @@ import com.github.kongpf8848.rxhttp.sample.mvvm.BaseViewModel
 
 class MainViewModel(application: Application) : BaseViewModel(application) {
 
-    fun testGet(tag: Any? = null): MutableLiveData<TKState<List<Banner>>> {
+    fun testGet(params: Map<String, Any?>?): MutableLiveData<TKState<List<Banner>>> {
         return networkbaseRepository.httpGet(
                 context=context,
                 url=TKURL.URL_GET,
-                params = null,
-                tag=tag
+                params = params
         )
     }
 

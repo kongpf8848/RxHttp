@@ -23,7 +23,7 @@ class MockInterceptor : Interceptor {
         /**
          * 模拟网络请求
          */
-        response = if (TKURL.URL_GET.equals(url)) {
+        response = if (url.startsWith(TKURL.URL_GET)) {
             val responseString = MockUtils.getBannerData()
             responseBuilder.body(ResponseBody.create(MediaType.parse("application/json"), responseString.toByteArray()))
             responseBuilder.build()
