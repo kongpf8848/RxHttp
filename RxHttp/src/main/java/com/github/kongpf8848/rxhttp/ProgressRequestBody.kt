@@ -7,14 +7,20 @@ import okio.*
 import java.io.IOException
 
 class ProgressRequestBody(private val requestBody: RequestBody, private val callback: ProgressCallback?) : RequestBody() {
+
     private var progressSink: BufferedSink? = null
+    private var contentLength = 0L
+
     override fun contentType(): MediaType? {
         return requestBody.contentType()
     }
 
     @Throws(IOException::class)
     override fun contentLength(): Long {
-        return requestBody.contentLength()
+        if (contentLength == 0L) {
+            contentLength = requestBody.contentLength()
+        }
+        return contentLength
     }
 
     @Throws(IOException::class)
@@ -28,8 +34,10 @@ class ProgressRequestBody(private val requestBody: RequestBody, private val call
         }
         callback.onProgress(0, contentLength())
         requestBody.writeTo(progressSink)
-        progressSink!!.flush()
-        progressSink!!.close()
+        progressSink?.apply {
+            flush()
+            close()
+        }
     }
 
     private fun sink(sink: Sink): Sink {

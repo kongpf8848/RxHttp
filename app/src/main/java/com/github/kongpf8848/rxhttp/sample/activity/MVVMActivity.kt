@@ -57,7 +57,7 @@ class MVVMActivity : BaseMvvmActivity<MainViewModel, ActivityMainBinding>() {
      * GET请求
      */
     private fun onButtonGet() {
-        viewModel.testGet(params).observeCallback(this) {
+        viewModel.testGet(null).observeCallback(this) {
             onStart {
                 LogUtils.d(TAG, "onButtonGet() onStart called")
             }

@@ -10,20 +10,22 @@ import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManager
 import javax.net.ssl.X509TrustManager
 
-class RxHttpConfig  {
+class RxHttpConfig {
 
+    private object Config {
+        val holder = RxHttpConfig()
+    }
 
-     var okhttpBuilder: OkHttpClient.Builder? = null
-    private set
-
-     var maxRetries = 0
-     var retryDelayMillis: Long = 0
+    var okhttpBuilder: OkHttpClient.Builder? = null
+    var maxRetries = 0
+    var retryDelayMillis = 0L
 
     private fun defaultBuilder(): OkHttpClient.Builder {
-        val builder = OkHttpClient.Builder()
-        builder.connectTimeout(HttpConstants.TIME_OUT.toLong(), TimeUnit.SECONDS)
-        builder.readTimeout(HttpConstants.TIME_OUT.toLong(), TimeUnit.SECONDS)
-        builder.writeTimeout(HttpConstants.TIME_OUT.toLong(), TimeUnit.SECONDS)
+        val builder = OkHttpClient.Builder().apply {
+            connectTimeout(HttpConstants.TIME_OUT.toLong(), TimeUnit.SECONDS)
+            readTimeout(HttpConstants.TIME_OUT.toLong(), TimeUnit.SECONDS)
+            writeTimeout(HttpConstants.TIME_OUT.toLong(), TimeUnit.SECONDS)
+        }
         try {
             val sslContext = SSLContext.getInstance("TLS")
             sslContext.init(null, arrayOf<TrustManager>(UnSafeTrustManager), null)
@@ -61,11 +63,7 @@ class RxHttpConfig  {
 
     companion object {
 
-        private object RxHttpConfig2 {
-            val holder = RxHttpConfig()
-        }
-
-        fun getInstance() = RxHttpConfig2.holder
+        fun getInstance() = Config.holder
 
         val UnSafeTrustManager: X509TrustManager = object : X509TrustManager {
             @Throws(CertificateException::class)

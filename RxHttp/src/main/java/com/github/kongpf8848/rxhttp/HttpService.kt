@@ -8,49 +8,59 @@ import retrofit2.http.*
 
 interface HttpService {
     /**
-     * Get请求
+     * GET请求
      * @param url
      * @return
      */
     @GET
-    fun get(@Url url: String?, @QueryMap map: @JvmSuppressWildcards Map<String, Any?>?): Observable<ResponseBody?>?
+    fun get(@Url url: String): Observable<ResponseBody>
+
+    @GET
+    fun get(@Url url: String, @QueryMap map: @JvmSuppressWildcards Map<String, Any?>): Observable<ResponseBody>
 
     /**
-     * Post请求
+     * POST请求
      * @param url
      * @param body
      * @return
      */
     @POST
-    fun post(@Url url: String?, @Body body: RequestBody?): Observable<ResponseBody?>?
+    fun post(@Url url: String, @Body body: RequestBody): Observable<ResponseBody>
 
     /**
-     * Post表单请求
+     * POST表单请求
      * @param url
      * @param map
      * @return
      */
     @POST
     @FormUrlEncoded
-    fun postForm(@Url url: String?, @FieldMap(encoded = true) map: @JvmSuppressWildcards Map<String, Any?>?): Observable<ResponseBody?>?
+    fun postForm(@Url url: String): Observable<ResponseBody>
+
+    @POST
+    @FormUrlEncoded
+    fun postForm(@Url url: String, @FieldMap(encoded = true) map: @JvmSuppressWildcards Map<String, Any?>): Observable<ResponseBody>
 
     /**
-     * Put请求
+     * PUT请求
      * @param url
      * @param body
      * @return
      */
     @PUT
-    fun put(@Url url: String?, @Body body: RequestBody?): Observable<ResponseBody?>?
+    fun put(@Url url: String, @Body body: RequestBody): Observable<ResponseBody>
 
     /**
-     * Delete请求
+     * DELETE请求
      * @param url
      * @param map
      * @return
      */
     @HTTP(method = "DELETE", hasBody = true)
-    fun delete(@Url url: String?, @Body map: @JvmSuppressWildcards Map<String, Any?>?): Observable<ResponseBody?>?
+    fun delete(@Url url: String): Observable<ResponseBody>
+
+    @HTTP(method = "DELETE", hasBody = true)
+    fun delete(@Url url: String, @Body map: @JvmSuppressWildcards Map<String, Any?>): Observable<ResponseBody>
 
     /**
      * 下载请求
@@ -59,7 +69,7 @@ interface HttpService {
      */
     @GET
     @Streaming
-    fun download(@Url url: String?): Observable<ResponseBody?>?
+    fun download(@Url url: String): Observable<ResponseBody>
 
     /**
      * 下载请求
@@ -69,7 +79,7 @@ interface HttpService {
      */
     @GET
     @Streaming
-    fun download(@Url url: String?, @Header("RANGE") range: String?): Observable<ResponseBody?>?
+    fun download(@Url url: String, @Header("RANGE") range: String): Observable<ResponseBody>
 
     /**
      * HEAD请求
@@ -77,5 +87,5 @@ interface HttpService {
      * @return
      */
     @HEAD
-    fun head(@Url url: String?): Call<Void?>
+    fun head(@Url url: String): Call<Void>
 }

@@ -7,13 +7,19 @@ import okio.*
 import java.io.IOException
 
 class ProgressResponseBody(private val responseBody: ResponseBody, private val callback: ProgressCallback?) : ResponseBody() {
+
     private var progressSource: BufferedSource? = null
+    private var contentLength = 0L
+
     override fun contentType(): MediaType? {
         return responseBody.contentType()
     }
 
     override fun contentLength(): Long {
-        return responseBody.contentLength()
+        if (contentLength == 0L) {
+            contentLength = responseBody.contentLength()
+        }
+        return contentLength
     }
 
     override fun source(): BufferedSource {
@@ -45,12 +51,10 @@ class ProgressResponseBody(private val responseBody: ResponseBody, private val c
     }
 
     override fun close() {
-        if (progressSource != null) {
-            try {
-                progressSource!!.close()
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+        try {
+            progressSource?.close()
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 

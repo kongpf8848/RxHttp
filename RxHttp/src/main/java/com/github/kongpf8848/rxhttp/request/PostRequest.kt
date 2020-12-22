@@ -12,11 +12,11 @@ import okhttp3.RequestBody
 open class PostRequest<T> : AbsRequest<T> {
     private var type: String? = null
 
-    constructor(context: Context) : super(context) {}
-    constructor(activity: Activity) : super(activity) {}
-    constructor(fragment: Fragment) : super(fragment) {}
+    constructor(context: Context) : super(context)
+    constructor(activity: Activity) : super(activity)
+    constructor(fragment: Fragment) : super(fragment)
 
-    fun type(type: String?): PostRequest<T> {
+    fun type(type: String): PostRequest<T> {
         this.type = type
         return this
     }
@@ -26,7 +26,7 @@ open class PostRequest<T> : AbsRequest<T> {
         return if (TextUtils.isEmpty(type)) {
             RequestBody.create(MediaType.parse(HttpConstants.MIME_TYPE_JSON), content)
         } else {
-            RequestBody.create(MediaType.parse(type), content)
+            RequestBody.create(MediaType.parse(type!!), content)
         }
     }
 }

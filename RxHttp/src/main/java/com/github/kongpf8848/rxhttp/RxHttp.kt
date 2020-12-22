@@ -131,22 +131,38 @@ class RxHttp private constructor() {
     }
 
     fun <T> enqueue(request: AbsRequest<T>, callback: HttpCallback<T>) {
-        var observable: Observable<ResponseBody?>? = null
+        var observable: Observable<ResponseBody>? = null
         if (request is GetRequest) {
-            observable = httpService.get(request.url, request.getParams())
+            if(request.getParams()!=null) {
+                observable = httpService.get(request.url!!, request.getParams()!!)
+            }
+            else{
+                observable=httpService.get(request.url!!)
+            }
         } else if (request is PutRequest) {
             val putRequest = request
-            observable = httpService.put(putRequest.url, putRequest.buildRequestBody())
+            observable = httpService.put(putRequest.url!!, putRequest.buildRequestBody()!!)
         } else if (request is UploadRequest) {
             val uploadRequest = request
-            observable = httpService.post(uploadRequest.url, uploadRequest.buildRequestBody())
+            observable = httpService.post(uploadRequest.url!!, uploadRequest.buildRequestBody()!!)
         } else if (request is PostRequest) {
             val postRequest = request
-            observable = httpService.post(postRequest.url, postRequest.buildRequestBody())
+            observable = httpService.post(postRequest.url!!, postRequest.buildRequestBody()!!)
         } else if (request is PostFormRequest) {
-            observable = httpService.postForm(request.url, request.getParams())
+            if(request.getParams()!=null){
+                observable = httpService.postForm(request.url!!, request.getParams()!!)
+            }
+            else{
+                observable = httpService.postForm(request.url!!)
+            }
+
         } else if (request is DeleteRequest) {
-            observable = httpService.delete(request.url, request.getParams())
+            if(request.getParams()!=null) {
+                observable = httpService.delete(request.url!!, request.getParams()!!)
+            }
+            else{
+                observable=httpService.delete(request.url!!)
+            }
         } else if (request is DownloadRequest) {
             val downloadRequest = request
             val file = File(downloadRequest.dir, downloadRequest.filename)
@@ -175,14 +191,14 @@ class RxHttp private constructor() {
                                 }
                             }
                             Observable.just(start)
-                        }.flatMap(object : Function<Long?, ObservableSource<ResponseBody?>?> {
+                        }.flatMap(object : Function<Long?, ObservableSource<ResponseBody>?> {
                             @Throws(Exception::class)
-                            override fun apply(start: Long): ObservableSource<ResponseBody?>? {
-                                return httpService.download(downloadRequest.url, String.format("bytes=%d-", start))
+                            override fun apply(start: Long): ObservableSource<ResponseBody>? {
+                                return httpService.download(downloadRequest.url!!, String.format("bytes=%d-", start))
                             }
                         }).subscribeOn(Schedulers.io())
             } else {
-                observable = httpService.download(request.url)
+                observable = httpService.download(request.url!!)
             }
         }
         if (observable != null) {

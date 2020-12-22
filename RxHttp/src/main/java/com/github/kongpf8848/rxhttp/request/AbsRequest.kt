@@ -15,6 +15,7 @@ abstract class AbsRequest<T> {
     private var headers: HashMap<String, String> = HashMap()
     private var param: Map<String, Any?>?=null
     protected var callback: HttpCallback<T>? = null
+
     protected abstract fun buildRequestBody(): RequestBody?
 
     internal constructor(context: Context) {
@@ -29,7 +30,7 @@ abstract class AbsRequest<T> {
         context = activity
     }
 
-    fun url(url: String?): AbsRequest<T> {
+    fun url(url: String): AbsRequest<T> {
         this.url = url
         return this
     }

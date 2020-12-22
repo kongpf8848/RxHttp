@@ -14,7 +14,7 @@ class RxHttpTagManager private constructor(){
 
     fun addTag(tag: Any?, disposable: Disposable) {
         if (tag != null) {
-            map[tag] = disposable
+            this.map[tag] = disposable
         }
     }
 

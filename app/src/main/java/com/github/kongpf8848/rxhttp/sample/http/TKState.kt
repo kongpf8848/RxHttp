@@ -1,5 +1,6 @@
 package com.github.kongpf8848.rxhttp.sample.http
 
+import com.github.kongpf8848.rxhttp.sample.utils.LogUtils
 import com.google.gson.JsonSyntaxException
 import com.jsy.tk.library.http.TKErrorCode
 import com.jsy.tk.library.http.TKResponse
@@ -53,12 +54,12 @@ class TKState<T> {
                 handleCallback.onSuccess?.invoke(data)
             FAIL -> {
                 handleCallback.onFailure?.invoke(code, msg)
-                handleCallback.onComplete?.invoke()
             }
             PROGRESS ->
                 handleCallback.onProgress?.invoke(progress, total)
-            COMPLETE ->
-                handleCallback.onComplete?.invoke()
+        }
+        if(state== SUCCESS || state== FAIL){
+            handleCallback.onComplete?.invoke()
         }
     }
 
@@ -92,7 +93,6 @@ class TKState<T> {
         const val SUCCESS = 1
         const val FAIL = 2
         const val PROGRESS = 3
-        const val COMPLETE = 4
         fun <T> start(): TKState<T> {
             return TKState(START)
         }
@@ -112,10 +112,6 @@ class TKState<T> {
         }
 
 
-        fun <T> complete(): TKState<T> {
-            return TKState(COMPLETE)
-        }
-
         fun <T> error(t: Throwable?): TKState<T> {
             return TKState(FAIL, t)
         }
@@ -126,6 +122,7 @@ class TKState<T> {
     }
 
     private fun handleThrowable(throwable: Throwable?): Pair<Int, String?> {
+        LogUtils.d("handleThrowable:${throwable}")
         return when (throwable) {
             /**
              * 网络异常

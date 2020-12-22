@@ -43,7 +43,6 @@ class NetworkRepository private constructor() {
             }
 
             override fun onComplete() {
-                liveData.value = TKState.complete()
             }
 
             override fun onProgress(readBytes: Long, totalBytes: Long) {
