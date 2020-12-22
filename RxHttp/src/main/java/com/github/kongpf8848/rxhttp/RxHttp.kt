@@ -16,7 +16,6 @@ import com.github.kongpf8848.rxhttp.util.Md5Util
 import com.uber.autodispose.AutoDispose
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
 import io.reactivex.Observable
-import io.reactivex.ObservableSource
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Function
 import io.reactivex.schedulers.Schedulers
@@ -30,7 +29,6 @@ import java.io.File
 
 class RxHttp private constructor() {
 
-
     private object RxHttp {
         val holder = RxHttp()
     }
@@ -39,15 +37,27 @@ class RxHttp private constructor() {
     private val retrofit: Retrofit
     private val httpService: HttpService
 
-    //get请求
-    fun <T >get(context: Context): GetRequest<T> {
-        return GetRequest(context)
+    init {
+        val config= RxHttpConfig.getInstance()
+        val builder = config.getBuilder()
+        okHttpClient = builder.build()
+        retrofit = Retrofit.Builder()
+                .client(okHttpClient)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .baseUrl("http://example.com")
+                .build()
+        httpService = retrofit.create(HttpService::class.java)
     }
 
+    //get请求
+    fun <T> get(context: Context): GetRequest<T> {
+        return GetRequest(context)
+    }
     fun <T> get(activity: Activity): GetRequest<T> {
         return GetRequest(activity)
     }
-
     fun <T> get(fragment: Fragment): GetRequest<T> {
         return GetRequest(fragment)
     }
@@ -56,11 +66,9 @@ class RxHttp private constructor() {
     fun <T> post(context: Context): PostRequest<T> {
         return PostRequest(context)
     }
-
     fun <T> post(activity: Activity): PostRequest<T> {
         return PostRequest(activity)
     }
-
     fun <T> post(fragment: Fragment): PostRequest<T> {
         return PostRequest(fragment)
     }
@@ -69,11 +77,9 @@ class RxHttp private constructor() {
     fun <T> postForm(context: Context): PostFormRequest<T> {
         return PostFormRequest(context)
     }
-
     fun <T> postForm(activity: Activity): PostFormRequest<T> {
         return PostFormRequest(activity)
     }
-
     fun <T> postForm(fragment: Fragment): PostFormRequest<T> {
         return PostFormRequest(fragment)
     }
@@ -82,11 +88,9 @@ class RxHttp private constructor() {
     fun <T> upload(context: Context): UploadRequest<T> {
         return UploadRequest(context)
     }
-
     fun <T> upload(activity: Activity): UploadRequest<T> {
         return UploadRequest(activity)
     }
-
     fun <T> upload(fragment: Fragment): UploadRequest<T> {
         return UploadRequest(fragment)
     }
@@ -95,11 +99,9 @@ class RxHttp private constructor() {
     fun  download(context: Context): DownloadRequest {
         return DownloadRequest(context)
     }
-
     fun  download(activity: Activity): DownloadRequest {
         return DownloadRequest(activity)
     }
-
     fun  download(fragment: Fragment): DownloadRequest {
         return DownloadRequest(fragment)
     }
@@ -108,11 +110,9 @@ class RxHttp private constructor() {
     fun <T> put(context: Context): PutRequest<T> {
         return PutRequest(context)
     }
-
     fun <T> put(activity: Activity): PutRequest<T> {
         return PutRequest(activity)
     }
-
     fun <T> put(fragment: Fragment): PutRequest<T> {
         return PutRequest(fragment)
     }
@@ -121,56 +121,47 @@ class RxHttp private constructor() {
     fun <T> delete(context: Context): DeleteRequest<T> {
         return DeleteRequest(context)
     }
-
     fun <T> delete(activity: Activity): DeleteRequest<T> {
         return DeleteRequest(activity)
     }
-
     fun <T> delete(fragment: Fragment): DeleteRequest<T> {
         return DeleteRequest(fragment)
     }
 
+
     fun <T> enqueue(request: AbsRequest<T>, callback: HttpCallback<T>) {
         var observable: Observable<ResponseBody>? = null
         if (request is GetRequest) {
-            if(request.getParams()!=null) {
-                observable = httpService.get(request.url!!, request.getParams()!!)
-            }
-            else{
-                observable=httpService.get(request.url!!)
+            observable = if(request.getParams()!=null) {
+                httpService.get(request.url!!, request.getParams()!!)
+            } else{
+                httpService.get(request.url!!)
             }
         } else if (request is PutRequest) {
-            val putRequest = request
-            observable = httpService.put(putRequest.url!!, putRequest.buildRequestBody()!!)
+            observable = httpService.put(request.url!!, request.buildRequestBody()!!)
         } else if (request is UploadRequest) {
-            val uploadRequest = request
-            observable = httpService.post(uploadRequest.url!!, uploadRequest.buildRequestBody()!!)
+            observable = httpService.post(request.url!!, request.buildRequestBody()!!)
         } else if (request is PostRequest) {
-            val postRequest = request
-            observable = httpService.post(postRequest.url!!, postRequest.buildRequestBody()!!)
+            observable = httpService.post(request.url!!, request.buildRequestBody()!!)
         } else if (request is PostFormRequest) {
-            if(request.getParams()!=null){
-                observable = httpService.postForm(request.url!!, request.getParams()!!)
+            observable = if(request.getParams()!=null){
+                httpService.postForm(request.url!!, request.getParams()!!)
+            } else{
+                httpService.postForm(request.url!!)
             }
-            else{
-                observable = httpService.postForm(request.url!!)
-            }
-
         } else if (request is DeleteRequest) {
-            if(request.getParams()!=null) {
-                observable = httpService.delete(request.url!!, request.getParams()!!)
-            }
-            else{
-                observable=httpService.delete(request.url!!)
+            observable = if(request.getParams()!=null) {
+                httpService.delete(request.url!!, request.getParams()!!)
+            } else{
+                httpService.delete(request.url!!)
             }
         } else if (request is DownloadRequest) {
-            val downloadRequest = request
-            val file = File(downloadRequest.dir, downloadRequest.filename)
-            val downloadInfo = DownloadInfo(downloadRequest.url, downloadRequest.dir, downloadRequest.filename)
-            if (!TextUtils.isEmpty(downloadRequest.md5)) {
+            val file = File(request.dir, request.filename)
+            val downloadInfo = DownloadInfo(request.url, request.dir, request.filename)
+            if (!TextUtils.isEmpty(request.md5)) {
                 if (file.exists()) {
                     val fileMd5 = Md5Util.getMD5(file)
-                    if (downloadRequest.md5.equals(fileMd5, ignoreCase = true)) {
+                    if (request.md5.equals(fileMd5, ignoreCase = true)) {
                         downloadInfo.total = file.length()
                         downloadInfo.progress = file.length()
                         callback.onNext(downloadInfo as T)
@@ -178,8 +169,8 @@ class RxHttp private constructor() {
                     }
                 }
             }
-            if (downloadRequest.isBreakpoint) {
-                observable = Observable.just(downloadRequest.url)
+            if (request.isBreakpoint) {
+                observable = Observable.just(request.url)
                         .flatMap { url ->
                             val contentLength = getContentLength(url)
                             var start: Long = 0
@@ -191,26 +182,18 @@ class RxHttp private constructor() {
                                 }
                             }
                             Observable.just(start)
-                        }.flatMap(object : Function<Long?, ObservableSource<ResponseBody>?> {
-                            @Throws(Exception::class)
-                            override fun apply(start: Long): ObservableSource<ResponseBody>? {
-                                return httpService.download(downloadRequest.url!!, String.format("bytes=%d-", start))
-                            }
-                        }).subscribeOn(Schedulers.io())
+                        }.flatMap { start -> httpService.download(request.url!!, String.format("bytes=%d-", start)) }.subscribeOn(Schedulers.io())
             } else {
                 observable = httpService.download(request.url!!)
             }
         }
         if (observable != null) {
-            val observableFinal: Observable<T> = observable.map(object : Function<ResponseBody?, T> {
-                @Throws(Exception::class)
-                override fun apply(body: ResponseBody): T {
-                    return if (request is DownloadRequest) {
-                        val downloadConverter: DownloadConverter<T> = DownloadConverter<T>(request, callback as DownloadCallback)
-                        downloadConverter.convert(body, callback.type)
-                    } else {
-                        GsonConverter<T>().convert(body, callback.type)
-                    }
+            val observableFinal= observable.map(Function<ResponseBody,T> { body ->
+                if (request is DownloadRequest) {
+                    val downloadConverter: DownloadConverter<T> = DownloadConverter(request, callback as DownloadCallback)
+                    downloadConverter.convert(body, callback.type)
+                } else {
+                    GsonConverter<T>().convert(body, callback.type)
                 }
             }).retryWhen(RetryWithDelay(RxHttpConfig.getInstance().maxRetries, RxHttpConfig.getInstance().retryDelayMillis))
                     .subscribeOn(Schedulers.io())
@@ -238,24 +221,11 @@ class RxHttp private constructor() {
     }
 
     fun cancelTag(tag: Any?) {
-        RxHttpTagManager.Companion.getInstance().cancelTag(tag)
+        RxHttpTagManager.getInstance().cancelTag(tag)
     }
 
     companion object {
         fun getInstance()= RxHttp.holder
     }
 
-    init {
-        val config: RxHttpConfig = RxHttpConfig.getInstance()
-        val builder = config.getBuilder()
-        okHttpClient = builder.build()
-        retrofit = Retrofit.Builder()
-                .client(okHttpClient)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .baseUrl("http://example.com")
-                .build()
-        httpService = retrofit.create(HttpService::class.java)
-    }
 }

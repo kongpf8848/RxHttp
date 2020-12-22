@@ -9,6 +9,7 @@ import java.nio.charset.StandardCharsets
  * Created by pengf on 2017/2/21.
  */
 object StreamUtil {
+
     //将InputStream转换为String
     fun toString(`is`: InputStream): String? {
         return try {

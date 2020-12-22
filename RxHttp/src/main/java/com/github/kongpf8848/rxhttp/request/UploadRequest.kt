@@ -17,9 +17,9 @@ import java.io.File
 import java.io.IOException
 
 class UploadRequest<T> : PostRequest<T> {
-    constructor(context: Context) : super(context) {}
-    constructor(activity: Activity) : super(activity) {}
-    constructor(fragment: Fragment) : super(fragment) {}
+    constructor(context: Context) : super(context)
+    constructor(activity: Activity) : super(activity)
+    constructor(fragment: Fragment) : super(fragment)
 
     override fun buildRequestBody(): RequestBody? {
         val builder = MultipartBody.Builder().setType(MultipartBody.FORM)

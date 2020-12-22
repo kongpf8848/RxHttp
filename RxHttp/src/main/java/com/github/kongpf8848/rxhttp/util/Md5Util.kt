@@ -8,6 +8,7 @@ import java.nio.charset.StandardCharsets
 import java.security.MessageDigest
 
 object Md5Util {
+
     fun getMD5(str: String): String {
         try {
             val md = MessageDigest.getInstance("MD5")
@@ -57,11 +58,8 @@ object Md5Util {
     //字节数组转化为16进制字符串
     fun byteArray2HexString(bArr: ByteArray): String {
         val builder = StringBuilder()
-        var i = 0
-        val len = bArr.size
-        while (i < len) {
-            builder.append(String.format("%02X", bArr[i]))
-            i++
+        bArr.forEach {
+            builder.append(String.format("%02X", it))
         }
         return builder.toString()
     }
