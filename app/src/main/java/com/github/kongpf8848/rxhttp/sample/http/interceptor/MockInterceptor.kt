@@ -1,5 +1,6 @@
 package com.github.kongpf8848.rxhttp.sample.http.interceptor
 
+import com.github.kongpf8848.rxhttp.HttpConstants
 import com.github.kongpf8848.rxhttp.sample.http.TKURL
 import com.github.kongpf8848.rxhttp.sample.utils.MockUtils
 import okhttp3.*
@@ -17,7 +18,7 @@ class MockInterceptor : Interceptor {
                 .message("")
                 .request(request)
                 .protocol(Protocol.HTTP_1_1)
-                .addHeader("Content-Type", "application/json")
+                .addHeader("Content-Type", HttpConstants.MIME_TYPE_JSON)
         val url = request.url().toString()
 
         /**
@@ -25,11 +26,11 @@ class MockInterceptor : Interceptor {
          */
         response = if (url.startsWith(TKURL.URL_GET)) {
             val responseString = MockUtils.getBannerData()
-            responseBuilder.body(ResponseBody.create(MediaType.parse("application/json"), responseString.toByteArray()))
+            responseBuilder.body(ResponseBody.create(MediaType.parse(HttpConstants.MIME_TYPE_JSON), responseString.toByteArray()))
             responseBuilder.build()
-        } else if (TKURL.URL_POST.equals(url) || TKURL.URL_POST_FORM.equals(url) || TKURL.URL_PUT.equals(url) || TKURL.URL_DELETE.equals(url) || TKURL.URL_UPLOAD.equals(url)) {
+        } else if (TKURL.URL_POST == url || TKURL.URL_POST_FORM == url || TKURL.URL_PUT == url || TKURL.URL_DELETE == url ) {
             val responseString = MockUtils.getUserData()
-            responseBuilder.body(ResponseBody.create(MediaType.parse("application/json"), responseString.toByteArray()))
+            responseBuilder.body(ResponseBody.create(MediaType.parse(HttpConstants.MIME_TYPE_JSON), responseString.toByteArray()))
             responseBuilder.build()
         } else {
             chain.proceed(request)

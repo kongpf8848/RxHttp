@@ -17,6 +17,7 @@ import java.io.File
 import java.io.IOException
 
 class UploadRequest<T> : PostRequest<T> {
+
     constructor(context: Context) : super(context)
     constructor(activity: Activity) : super(activity)
     constructor(fragment: Fragment) : super(fragment)
@@ -24,18 +25,13 @@ class UploadRequest<T> : PostRequest<T> {
     override fun buildRequestBody(): RequestBody? {
         val builder = MultipartBody.Builder().setType(MultipartBody.FORM)
         val params: Map<String, Any?>? = getParams()
-        if (params != null && params.size > 0) {
-            val iterator = params.entries.iterator()
-            while (iterator.hasNext()) {
-                val entry = iterator.next()
-                val key = entry.key
-                val value = entry.value
+        if (!params.isNullOrEmpty()) {
+            for((key,value) in params){
                 if (value is File) {
-                    val file = value
-                    builder.addFormDataPart(key, file.name, RequestBody.create(MediaType.parse(HttpConstants.MIME_TYPE_BINARY), file))
+                    builder.addFormDataPart(key, value.name, RequestBody.create(MediaType.parse(HttpConstants.MIME_TYPE_BINARY), value))
                 } else if (value is Uri) {
                     try {
-                        val inputStream = actualContext!!.contentResolver.openInputStream(value as Uri)
+                        val inputStream = actualContext!!.contentResolver.openInputStream(value)
                         if (inputStream != null) {
                             val bytes = StreamUtil.toByte(inputStream)
                             builder.addFormDataPart(key, key, ByteArrayRequestBody(MediaType.parse(HttpConstants.MIME_TYPE_BINARY), bytes))

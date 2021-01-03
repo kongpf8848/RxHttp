@@ -166,7 +166,7 @@ class MVVMActivity : BaseMvvmActivity<MainViewModel, ActivityMainBinding>() {
             map["model"] = Build.MODEL
             map["manufacturer"] = Build.MANUFACTURER
             map["os"] = Build.VERSION.SDK_INT
-            map["image"] = it
+            map["image.jpg"] = it
 
             viewModel.testUpload(map).observeCallback(this){
                 onStart{

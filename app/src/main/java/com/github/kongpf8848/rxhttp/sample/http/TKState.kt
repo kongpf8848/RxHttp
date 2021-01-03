@@ -19,7 +19,6 @@ class TKState<T> {
     var code = TKErrorCode.ERRCODE_UNKNOWN
     var msg: String? = null
     var data: T? = null
-    var error: Throwable? = null
     var progress: Long = 0
     var total: Long = 0
 

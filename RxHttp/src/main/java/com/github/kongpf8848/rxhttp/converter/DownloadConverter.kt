@@ -54,6 +54,6 @@ class DownloadConverter<T>(private val downloadRequest: DownloadRequest, private
     }
 
     init {
-        downloadInfo = DownloadInfo(downloadRequest.url, downloadRequest.dir, downloadRequest.filename)
+        downloadInfo = DownloadInfo(downloadRequest.url!!, downloadRequest.dir!!, downloadRequest.filename!!)
     }
 }

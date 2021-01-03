@@ -8,9 +8,6 @@ import com.github.kongpf8848.rxhttp.sample.mvvm.BaseMvvmActivity
 import com.github.kongpf8848.rxhttp.sample.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 
-/**
- * MVVM架构使用RxHttp示例
- */
 class MainActivity : BaseMvvmActivity<MainViewModel, ActivityMainBinding>() {
 
 

@@ -10,6 +10,7 @@ import okhttp3.MediaType
 import okhttp3.RequestBody
 
 open class PostRequest<T> : AbsRequest<T> {
+
     private var type: String? = null
 
     constructor(context: Context) : super(context)

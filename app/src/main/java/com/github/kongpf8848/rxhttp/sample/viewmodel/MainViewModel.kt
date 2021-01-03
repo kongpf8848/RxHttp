@@ -54,7 +54,7 @@ class MainViewModel(application: Application) : BaseViewModel(application) {
         )
     }
 
-    fun testUpload(params: Map<String, Any?>?,tag:Any?=null):MutableLiveData<TKState<User>> {
+    fun testUpload(params: Map<String, Any?>?,tag:Any?=null):MutableLiveData<TKState<String>> {
         return networkbaseRepository.httpUpload(
                 context = context,
                 url = TKURL.URL_UPLOAD,

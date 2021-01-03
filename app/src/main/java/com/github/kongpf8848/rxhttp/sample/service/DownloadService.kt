@@ -13,6 +13,7 @@ import com.github.kongpf8848.rxhttp.bean.DownloadInfo
 import com.github.kongpf8848.rxhttp.callback.DownloadCallback
 import com.github.kongpf8848.rxhttp.sample.R
 import com.github.kongpf8848.rxhttp.sample.mvvm.NetworkRepository
+import com.github.kongpf8848.rxhttp.sample.utils.LogUtils
 import com.kongpf.commonhelper.ApkHelper
 import com.kongpf.commonhelper.NotificationHelper
 import com.kongpf.commonhelper.StorageHelper
@@ -92,7 +93,7 @@ class DownloadService : Service() {
             handler?.sendEmptyMessage(MSG_SHOW_NOTIFICATION)
         }
 
-        override fun onProgress(downloadInfo: DownloadInfo?) {
+        override fun onProgress(downloadInfo: DownloadInfo) {
             downloadInfo?.apply {
                 handler?.sendMessage(Message.obtain(handler, MSG_UPDATE_NOTIFICATION, this))
             }
@@ -102,7 +103,7 @@ class DownloadService : Service() {
          * 此方法没有使用
          */
         override fun onProgress(readBytes: Long, totalBytes: Long) {
-            Log.d(
+            LogUtils.d(
                 TAG,
                 "onProgress() called with: readBytes = $readBytes, totalBytes = $totalBytes"
             )
@@ -110,12 +111,12 @@ class DownloadService : Service() {
         }
 
         override fun onNext(response: DownloadInfo?) {
-            Log.d(TAG, "onNext() called with: response = $response")
+            LogUtils.d(TAG, "onNext() called with: response = $response")
             handler?.sendEmptyMessage(MSG_INSTALL_APK)
         }
 
         override fun onError(e: Throwable?) {
-            Log.d(TAG, "onError() called with: e = $e")
+            LogUtils.d(TAG, "onError() called with: e = $e")
             handler?.sendEmptyMessage(MSG_CANCEL_NOTIFICATION)
         }
 

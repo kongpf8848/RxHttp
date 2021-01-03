@@ -5,7 +5,7 @@ import android.content.Context
 import androidx.fragment.app.Fragment
 
 class PutRequest<T> : PostRequest<T> {
-    constructor(context: Context) : super(context) {}
-    constructor(activity: Activity) : super(activity) {}
-    constructor(fragment: Fragment) : super(fragment) {}
+    constructor(context: Context) : super(context)
+    constructor(activity: Activity) : super(activity)
+    constructor(fragment: Fragment) : super(fragment)
 }

@@ -11,6 +11,8 @@ import androidx.activity.result.contract.ActivityResultContracts
  */
 fun ComponentActivity.getContent(input: String, callback: ((uri: Uri) -> Unit)? = null) {
     registerForActivityResult(ActivityResultContracts.GetContent(), ActivityResultCallback {
-        callback?.invoke(it)
+        if (it != null && it.toString().isNotEmpty()) {
+            callback?.invoke(it)
+        }
     }).launch(input)
 }

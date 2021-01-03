@@ -157,7 +157,7 @@ class RxHttp private constructor() {
             }
         } else if (request is DownloadRequest) {
             val file = File(request.dir, request.filename)
-            val downloadInfo = DownloadInfo(request.url, request.dir, request.filename)
+            val downloadInfo = DownloadInfo(request.url!!, request.dir!!, request.filename!!)
             if (!TextUtils.isEmpty(request.md5)) {
                 if (file.exists()) {
                     val fileMd5 = Md5Util.getMD5(file)

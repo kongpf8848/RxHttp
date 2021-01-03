@@ -7,12 +7,7 @@ import androidx.lifecycle.AndroidViewModel
 open class BaseViewModel(application: Application) : AndroidViewModel(application) {
 
     protected val networkbaseRepository: NetworkRepository = NetworkRepository.instance
-    protected var context: Context
-
-    init {
-        context = application.applicationContext
-    }
-
+    protected var context: Context = application.applicationContext
 
 
 }

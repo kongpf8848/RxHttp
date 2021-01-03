@@ -1,11 +1,11 @@
 package com.github.kongpf8848.rxhttp.sample
 
 import android.app.Application
+import com.github.kongpf8848.rxhttp.FixHttpLoggingInterceptor
 import com.github.kongpf8848.rxhttp.RxHttpConfig
 import com.github.kongpf8848.rxhttp.sample.http.interceptor.MockInterceptor
 import com.github.kongpf8848.rxhttp.sample.utils.LogUtils
 import com.kongpf.commonhelper.ToastHelper
-import okhttp3.logging.HttpLoggingInterceptor
 
 
 class MyApplication : Application() {
@@ -28,10 +28,12 @@ class MyApplication : Application() {
                 .maxRetries(3)
                 .retryDelayMillis(200)
                 .getBuilder().apply {
-                    addInterceptor(HttpLoggingInterceptor().apply {
-                        level = HttpLoggingInterceptor.Level.BODY
-                    })
-                    addInterceptor(MockInterceptor())
+                    if(BuildConfig.DEBUG) {
+                        addInterceptor(FixHttpLoggingInterceptor().apply {
+                            level = FixHttpLoggingInterceptor.Level.BODY
+                        })
+                        addInterceptor(MockInterceptor())
+                    }
                 }
 
     }

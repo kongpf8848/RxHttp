@@ -6,9 +6,9 @@ import androidx.fragment.app.Fragment
 import okhttp3.RequestBody
 
 class DeleteRequest<T> : AbsRequest<T> {
-    constructor(context: Context) : super(context) {}
-    constructor(fragment: Fragment) : super(fragment) {}
-    constructor(activity: Activity) : super(activity) {}
+    constructor(context: Context) : super(context)
+    constructor(fragment: Fragment) : super(fragment)
+    constructor(activity: Activity) : super(activity)
 
     override fun buildRequestBody(): RequestBody? {
         return null

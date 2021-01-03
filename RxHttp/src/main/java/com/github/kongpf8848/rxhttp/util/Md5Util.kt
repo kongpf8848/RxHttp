@@ -11,8 +11,8 @@ object Md5Util {
 
     fun getMD5(str: String): String {
         try {
-            val md = MessageDigest.getInstance("MD5")
-            val bytes = md.digest(str.toByteArray(StandardCharsets.UTF_8))
+            val md5 = MessageDigest.getInstance("MD5")
+            val bytes = md5.digest(str.toByteArray(StandardCharsets.UTF_8))
             val HEX_DIGITS = "0123456789ABCDEF".toCharArray()
             val ret = StringBuilder(bytes.size * 2)
             for (i in bytes.indices) {
@@ -32,7 +32,7 @@ object Md5Util {
             return hash
         }
         var `is`: InputStream? = null
-        try {
+        try{
             val messageDigest = MessageDigest.getInstance("MD5")
             `is` = FileInputStream(file)
             val buffer = ByteArray(1024)
