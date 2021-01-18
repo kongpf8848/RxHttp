@@ -2,6 +2,7 @@ package com.github.kongpf8848.rxhttp.util
 
 import android.text.TextUtils
 import com.google.gson.Gson
+import java.lang.reflect.Type
 
 object GsonUtil {
 
@@ -14,4 +15,6 @@ object GsonUtil {
         }
         return gsonString
     }
+
+    fun <T> fromJson(str:String,type: Type):T=gson.fromJson(str,type)
 }
