@@ -9,7 +9,6 @@ import com.github.kongpf8848.rxhttp.HttpConstants
 import com.github.kongpf8848.rxhttp.Platform
 import com.github.kongpf8848.rxhttp.ProgressRequestBody
 import com.github.kongpf8848.rxhttp.callback.ProgressCallback
-import com.github.kongpf8848.rxhttp.util.StreamUtil
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -33,7 +32,8 @@ class UploadRequest<T> : PostRequest<T> {
                     try {
                         val inputStream = actualContext!!.contentResolver.openInputStream(value)
                         if (inputStream != null) {
-                            val bytes = StreamUtil.toByte(inputStream)
+                            val bytes = inputStream.readBytes()
+                            inputStream.close()
                             builder.addFormDataPart(key, key, ByteArrayRequestBody(MediaType.parse(HttpConstants.MIME_TYPE_BINARY), bytes))
                         }
                     } catch (e: IOException) {
@@ -46,7 +46,7 @@ class UploadRequest<T> : PostRequest<T> {
         }
         return ProgressRequestBody(builder.build(), object : ProgressCallback {
             override fun onProgress(readBytes: Long, totalBytes: Long) {
-                Platform.get().defaultCallbackExecutor()!!.execute(Runnable { callback!!.onProgress(readBytes, totalBytes) })
+                Platform.get().defaultCallbackExecutor()?.execute { callback?.onProgress(readBytes, totalBytes) }
             }
         })
     }

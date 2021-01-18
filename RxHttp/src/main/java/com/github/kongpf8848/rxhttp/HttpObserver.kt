@@ -1,5 +1,6 @@
 package com.github.kongpf8848.rxhttp
 
+import androidx.annotation.NonNull
 import com.github.kongpf8848.rxhttp.callback.HttpCallback
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
@@ -8,8 +9,10 @@ import io.reactivex.internal.util.EndConsumerHelper
 import java.util.concurrent.atomic.AtomicReference
 
 class HttpObserver<T>(private val callback: HttpCallback<T>?, private val tag: Any?) : Observer<T>, Disposable {
-    val upstream = AtomicReference<Disposable>()
-    override fun onSubscribe(d: Disposable) {
+
+    private val upstream = AtomicReference<Disposable>()
+
+    override fun onSubscribe(@NonNull d: Disposable) {
         if (EndConsumerHelper.setOnce(upstream, d, javaClass)) {
             if (tag != null) {
                 RxHttpTagManager.getInstance().addTag(tag, d)

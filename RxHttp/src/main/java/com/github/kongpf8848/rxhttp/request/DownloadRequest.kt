@@ -7,25 +7,21 @@ import com.github.kongpf8848.rxhttp.bean.DownloadInfo
 import okhttp3.RequestBody
 
 class DownloadRequest : AbsRequest<DownloadInfo> {
-    var dir: String? = null
-        private set
-    var filename: String? = null
-        private set
+    var dir: String = ""
+    var filename: String = ""
     var md5: String? = null
-        private set
     var isBreakpoint = false
-        private set
 
     constructor(context: Context) : super(context) {}
     constructor(activity: Activity) : super(activity) {}
     constructor(fragment: Fragment) : super(fragment) {}
 
-    fun dir(dir: String?): DownloadRequest {
+    fun dir(dir: String): DownloadRequest {
         this.dir = dir
         return this
     }
 
-    fun filename(filename: String?): DownloadRequest {
+    fun filename(filename: String): DownloadRequest {
         this.filename = filename
         return this
     }

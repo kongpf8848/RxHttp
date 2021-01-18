@@ -13,35 +13,35 @@ import java.io.FileOutputStream
 import java.lang.reflect.Type
 
 class DownloadConverter<T>(private val downloadRequest: DownloadRequest, private val callback: DownloadCallback) : IConverter<T> {
-    private val downloadInfo: DownloadInfo
+
+    private val downloadInfo= DownloadInfo(downloadRequest.url, downloadRequest.dir, downloadRequest.filename)
 
     @Throws(Exception::class)
     override fun convert(body: ResponseBody, type: Type): T {
         try {
-            val fileDir = File(downloadInfo.destDir)
+            val fileDir = File(downloadInfo.dir)
             if (!fileDir.exists()) {
                 fileDir.mkdirs()
             }
-            val file = File(downloadInfo.destDir, downloadInfo.fileName)
-            val currentProgress: Long
-            currentProgress = if (downloadRequest.isBreakpoint) {
+            val file = File(downloadInfo.dir, downloadInfo.fileName)
+            val currentProgress= if (downloadRequest.isBreakpoint) {
                 if (file.exists()) {
                     file.length()
                 } else {
-                    0
+                    0L
                 }
             } else {
-                0
+                0L
             }
             val fos = FileOutputStream(file, downloadRequest.isBreakpoint)
             val progressResponseBody = ProgressResponseBody(body, object : ProgressCallback {
                 override fun onProgress(readBytes: Long, totalBytes: Long) {
-                    downloadInfo.progress = currentProgress + readBytes
-                    Platform.get().defaultCallbackExecutor()!!.execute(Runnable { callback.onProgress(downloadInfo) })
+                    downloadInfo.progress=currentProgress+readBytes
+                    Platform.get().defaultCallbackExecutor()!!.execute { callback.onProgress(downloadInfo.progress, currentProgress+totalBytes) }
                 }
             })
             downloadInfo.total = currentProgress + progressResponseBody.contentLength()
-            Platform.Companion.get().defaultCallbackExecutor()!!.execute(Runnable { callback.onProgress(downloadInfo) })
+            Platform.get().defaultCallbackExecutor()?.execute { callback.onProgress(currentProgress,downloadInfo.total) }
             val sink = Okio.buffer(Okio.sink(fos))
             sink.writeAll(progressResponseBody.source())
             sink.flush()
@@ -53,7 +53,4 @@ class DownloadConverter<T>(private val downloadRequest: DownloadRequest, private
         return downloadInfo as T
     }
 
-    init {
-        downloadInfo = DownloadInfo(downloadRequest.url!!, downloadRequest.dir!!, downloadRequest.filename!!)
-    }
 }

@@ -22,9 +22,9 @@ class RxHttpConfig {
 
     private fun defaultBuilder(): OkHttpClient.Builder {
         val builder = OkHttpClient.Builder().apply {
-            connectTimeout(HttpConstants.TIME_OUT.toLong(), TimeUnit.SECONDS)
-            readTimeout(HttpConstants.TIME_OUT.toLong(), TimeUnit.SECONDS)
-            writeTimeout(HttpConstants.TIME_OUT.toLong(), TimeUnit.SECONDS)
+            connectTimeout(HttpConstants.TIME_OUT, TimeUnit.SECONDS)
+            readTimeout(HttpConstants.TIME_OUT, TimeUnit.SECONDS)
+            writeTimeout(HttpConstants.TIME_OUT, TimeUnit.SECONDS)
         }
         try {
             val sslContext = SSLContext.getInstance("TLS")
@@ -39,7 +39,7 @@ class RxHttpConfig {
         return builder
     }
 
-    fun builder(builder: OkHttpClient.Builder?): RxHttpConfig {
+    fun builder(builder: OkHttpClient.Builder): RxHttpConfig {
         this.okhttpBuilder = builder
         return this
     }

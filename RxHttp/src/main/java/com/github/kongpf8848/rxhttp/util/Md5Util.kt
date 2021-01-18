@@ -14,12 +14,12 @@ object Md5Util {
             val md5 = MessageDigest.getInstance("MD5")
             val bytes = md5.digest(str.toByteArray(StandardCharsets.UTF_8))
             val HEX_DIGITS = "0123456789ABCDEF".toCharArray()
-            val ret = StringBuilder(bytes.size * 2)
+            val result = StringBuilder(bytes.size * 2)
             for (i in bytes.indices) {
-                ret.append(HEX_DIGITS[bytes[i].toInt() shr 4 and 0x0f])
-                ret.append(HEX_DIGITS[bytes[i].toInt() and 0x0f])
+                result.append(HEX_DIGITS[(bytes[i].toInt() shr 4) and 0x0f])
+                result.append(HEX_DIGITS[bytes[i].toInt() and 0x0f])
             }
-            return ret.toString()
+            return result.toString()
         } catch (e: Exception) {
             e.printStackTrace()
         }

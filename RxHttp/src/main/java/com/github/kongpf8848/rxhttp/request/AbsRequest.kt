@@ -9,24 +9,25 @@ import com.github.kongpf8848.rxhttp.callback.HttpCallback
 import okhttp3.RequestBody
 
 abstract class AbsRequest<T> {
-     var context:Any?=null
-     var url: String? = null
+
+    var context: Any? = null
+    var url: String = ""
     private var ta: Any? = null
     private var headers: HashMap<String, String> = HashMap()
-    private var param: Map<String, Any?>?=null
+    private var param: Map<String, Any?>? = null
     protected var callback: HttpCallback<T>? = null
 
     protected abstract fun buildRequestBody(): RequestBody?
 
-    internal constructor(context: Context) {
+    constructor(context: Context) {
         this.context = context
     }
 
-    internal constructor(fragment: Fragment) {
+     constructor(fragment: Fragment) {
         context = fragment
     }
 
-    internal constructor(activity: Activity) {
+     constructor(activity: Activity) {
         context = activity
     }
 
@@ -45,18 +46,14 @@ abstract class AbsRequest<T> {
         return this
     }
 
-    fun headers(headers: HashMap<String, String>?): AbsRequest<T> {
-        if (headers != null) {
-            this.headers = headers
-        }
+    fun headers(headers: HashMap<String, String>): AbsRequest<T> {
+        this.headers = headers
         return this
     }
 
 
     fun params(params: Map<String, Any?>?): AbsRequest<T> {
-        if (params != null) {
-            this.param = params
-        }
+        this.param = params
         return this
     }
 
@@ -65,7 +62,7 @@ abstract class AbsRequest<T> {
             if (context is Context) {
                 return context as Context
             } else if (context is Fragment) {
-                return (context as Fragment).context
+                return (context as Fragment).requireContext()
             }
             return null
         }
@@ -81,21 +78,10 @@ abstract class AbsRequest<T> {
     }
 
     fun getParams(): Map<String, Any?>? {
-        if (param != null && param!!.containsValue(null)) {
-            val newMap: MutableMap<String, Any?> = HashMap()
-            val set: Set<String> = param!!.keys
-            for (key in set) {
-                val value = param!![key]
-                if (value != null) {
-                    newMap[key] = value
-                }
-            }
-            return newMap
-        }
-        return param
+        return param?.filterValues { it!=null }
     }
 
-    inline fun enqueue(callback: HttpCallback<T>) {
+    fun enqueue(callback: HttpCallback<T>) {
         this.callback = callback
         RxHttp.getInstance().enqueue(this, callback)
     }

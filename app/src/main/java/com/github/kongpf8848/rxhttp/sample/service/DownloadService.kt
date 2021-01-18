@@ -30,20 +30,21 @@ class DownloadService : Service() {
 
     private var url: String? = null
     lateinit var dir: String
-    lateinit var fileName: String
+    lateinit var filename: String
 
     lateinit var notificationBuilder: NotificationCompat.Builder
     lateinit var notificationManager: NotificationManager
-    private var handlerThread: HandlerThread?=null
-    private var handler: DownloadHandler?=null
+    private var handlerThread: HandlerThread? = null
+    private var handler: DownloadHandler? = null
 
-    val DOWNLOAD_NOTIFY_ID = 1005
-    val MSG_SHOW_NOTIFICATION = 0
-    val MSG_UPDATE_NOTIFICATION = 1
-    val MSG_CANCEL_NOTIFICATION = 2
-    val MSG_INSTALL_APK = 3
-
-    private val TAG = "DownloadService"
+    companion object {
+        const val TAG = "DownloadService"
+        const val DOWNLOAD_NOTIFY_ID = 1005
+        const val MSG_SHOW_NOTIFICATION = 0
+        const val MSG_UPDATE_NOTIFICATION = 1
+        const val MSG_CANCEL_NOTIFICATION = 2
+        const val MSG_INSTALL_APK = 3
+    }
 
 
     /**
@@ -57,29 +58,26 @@ class DownloadService : Service() {
                     notificationManager.notify(DOWNLOAD_NOTIFY_ID, notificationBuilder.build())
                 }
                 MSG_UPDATE_NOTIFICATION -> {
-                    val downloadInfo = msg.obj as DownloadInfo
-                    val percent =
-                        DecimalFormat("0.00").format(downloadInfo.progress * 1.0 / downloadInfo.total)
-                    Log.d(
-                        TAG,
-                        "onProgress() called with: progress = ${downloadInfo.progress}, totalBytes = ${downloadInfo.total},percent:" + percent
-                    )
-                    val progress = (percent.toDouble() * 100).toInt()
+                    val pair = msg.obj as Pair<Long, Long>
+                    val progress = pair.first
+                    val total = pair.second
+                    val percentFloat = DecimalFormat("0.00").format(progress * 1.0f / total)
+                    val percentInt = (percentFloat.toDouble() * 100).toInt()
+                    Log.d(TAG, "handleMessage() called with: progress = ${progress}, total = ${total},percentFloat:${percentFloat},percentInt:${percentInt}")
                     var content = ""
-                    content = if (progress < 100) {
-                        applicationContext.getResources()
-                            .getString(R.string.download_progress, progress)
+                    content = if (percentInt < 100) {
+                        applicationContext.resources.getString(R.string.download_progress, percentInt)
                     } else {
-                        applicationContext.getResources().getString(R.string.download_success)
+                        applicationContext.resources.getString(R.string.download_success)
                     }
-                    notificationBuilder.setContentText(content).setProgress(100, progress, false)
+                    notificationBuilder.setContentText(content).setProgress(100, percentInt, false)
                     notificationManager.notify(DOWNLOAD_NOTIFY_ID, notificationBuilder.build())
                 }
                 MSG_CANCEL_NOTIFICATION -> {
                     notificationManager.cancel(DOWNLOAD_NOTIFY_ID)
                 }
                 MSG_INSTALL_APK -> {
-                    ApkHelper.installApk(applicationContext, File(dir, fileName), "$packageName.fileprovider")
+                    ApkHelper.installApk(applicationContext, File(dir, filename), "$packageName.fileprovider")
                 }
             }
         }
@@ -93,20 +91,10 @@ class DownloadService : Service() {
             handler?.sendEmptyMessage(MSG_SHOW_NOTIFICATION)
         }
 
-        override fun onProgress(downloadInfo: DownloadInfo) {
-            downloadInfo?.apply {
-                handler?.sendMessage(Message.obtain(handler, MSG_UPDATE_NOTIFICATION, this))
-            }
-        }
 
-        /**
-         * 此方法没有使用
-         */
         override fun onProgress(readBytes: Long, totalBytes: Long) {
-            LogUtils.d(
-                TAG,
-                "onProgress() called with: readBytes = $readBytes, totalBytes = $totalBytes"
-            )
+            LogUtils.d(TAG, "onProgress() called with: readBytes = $readBytes, totalBytes = $totalBytes")
+            handler?.sendMessage(Message.obtain(handler, MSG_UPDATE_NOTIFICATION, Pair(readBytes, totalBytes)))
 
         }
 
@@ -137,29 +125,29 @@ class DownloadService : Service() {
         super.onCreate()
 
         dir = StorageHelper.getExternalSandBoxPath(
-            applicationContext,
-            Environment.DIRECTORY_DOWNLOADS
+                applicationContext,
+                Environment.DIRECTORY_DOWNLOADS
         )
 
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationBuilder = NotificationHelper.getNotificationBuilder(
-            applicationContext,
-            NotificationInfo("001", "Category", "001", "Download")
+                applicationContext,
+                NotificationInfo("001", "Category", "001", "Download")
         )
-            .setOnlyAlertOnce(true)
-            .setSmallIcon(R.mipmap.ic_launcher)
-            .setContentIntent(
-                PendingIntent.getActivity(
-                    applicationContext,
-                    0,
-                    Intent(),
-                    PendingIntent.FLAG_UPDATE_CURRENT
+                .setOnlyAlertOnce(true)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentIntent(
+                        PendingIntent.getActivity(
+                                applicationContext,
+                                0,
+                                Intent(),
+                                PendingIntent.FLAG_UPDATE_CURRENT
+                        )
                 )
-            )
-            .setContentTitle(getString(R.string.app_name))
-            .setAutoCancel(true)
-            .setOngoing(true)
-            .setProgress(100, 0, false);
+                .setContentTitle("正在下载新版本,请稍等...")
+                .setAutoCancel(true)
+                .setOngoing(true)
+                .setProgress(100, 0, false);
 
 
         val handlerThread = HandlerThread("DownloadHandlerThread")
@@ -171,16 +159,17 @@ class DownloadService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         url = intent?.getStringExtra("url")
         url?.run {
-            fileName = substring(lastIndexOf(File.separator)+1)
-            if (TextUtils.isEmpty(fileName)) {
-                fileName = UUID.randomUUID().toString()
+            filename = substring(lastIndexOf(File.separator) + 1)
+            if (TextUtils.isEmpty(filename)) {
+                filename = UUID.randomUUID().toString()
             }
             NetworkRepository.instance.httpDownload(
-                context = applicationContext,
-                url = this,
-                dir = dir,
-                fileName = fileName,
-                callback = downloadCallback
+                    context = applicationContext,
+                    url = this,
+                    dir = dir,
+                    filename = filename,
+                    md5 = "CFF28E423D581E107CC62BBC32A2E638",
+                    callback = downloadCallback
             )
         }
         return super.onStartCommand(intent, flags, startId)

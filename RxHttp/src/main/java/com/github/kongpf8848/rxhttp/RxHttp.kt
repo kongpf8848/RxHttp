@@ -51,7 +51,7 @@ class RxHttp private constructor() {
         httpService = retrofit.create(HttpService::class.java)
     }
 
-    //get请求
+    //GET请求
     fun <T> get(context: Context): GetRequest<T> {
         return GetRequest(context)
     }
@@ -62,7 +62,7 @@ class RxHttp private constructor() {
         return GetRequest(fragment)
     }
 
-    //post请求
+    //POST请求
     fun <T> post(context: Context): PostRequest<T> {
         return PostRequest(context)
     }
@@ -73,7 +73,7 @@ class RxHttp private constructor() {
         return PostRequest(fragment)
     }
 
-    //post表单请求
+    //POST FORM请求
     fun <T> postForm(context: Context): PostFormRequest<T> {
         return PostFormRequest(context)
     }
@@ -84,7 +84,7 @@ class RxHttp private constructor() {
         return PostFormRequest(fragment)
     }
 
-    //upload请求
+    //Upload请求
     fun <T> upload(context: Context): UploadRequest<T> {
         return UploadRequest(context)
     }
@@ -95,7 +95,7 @@ class RxHttp private constructor() {
         return UploadRequest(fragment)
     }
 
-    //download请求
+    //Download请求
     fun  download(context: Context): DownloadRequest {
         return DownloadRequest(context)
     }
@@ -106,7 +106,7 @@ class RxHttp private constructor() {
         return DownloadRequest(fragment)
     }
 
-    //put请求
+    //PUT请求
     fun <T> put(context: Context): PutRequest<T> {
         return PutRequest(context)
     }
@@ -117,7 +117,7 @@ class RxHttp private constructor() {
         return PutRequest(fragment)
     }
 
-    //delete请求
+    //DELETE请求
     fun <T> delete(context: Context): DeleteRequest<T> {
         return DeleteRequest(context)
     }
@@ -128,36 +128,35 @@ class RxHttp private constructor() {
         return DeleteRequest(fragment)
     }
 
-
     fun <T> enqueue(request: AbsRequest<T>, callback: HttpCallback<T>) {
         var observable: Observable<ResponseBody>? = null
         if (request is GetRequest) {
             observable = if(request.getParams()!=null) {
-                httpService.get(request.url!!, request.getParams()!!)
+                httpService.get(request.url, request.getParams()!!)
             } else{
-                httpService.get(request.url!!)
+                httpService.get(request.url)
             }
         } else if (request is PutRequest) {
-            observable = httpService.put(request.url!!, request.buildRequestBody()!!)
+            observable = httpService.put(request.url, request.buildRequestBody()!!)
         } else if (request is UploadRequest) {
-            observable = httpService.post(request.url!!, request.buildRequestBody()!!)
+            observable = httpService.post(request.url, request.buildRequestBody()!!)
         } else if (request is PostRequest) {
-            observable = httpService.post(request.url!!, request.buildRequestBody()!!)
+            observable = httpService.post(request.url, request.buildRequestBody()!!)
         } else if (request is PostFormRequest) {
             observable = if(request.getParams()!=null){
-                httpService.postForm(request.url!!, request.getParams()!!)
+                httpService.postForm(request.url, request.getParams()!!)
             } else{
-                httpService.postForm(request.url!!)
+                httpService.postForm(request.url)
             }
         } else if (request is DeleteRequest) {
             observable = if(request.getParams()!=null) {
-                httpService.delete(request.url!!, request.getParams()!!)
+                httpService.delete(request.url, request.getParams()!!)
             } else{
-                httpService.delete(request.url!!)
+                httpService.delete(request.url)
             }
         } else if (request is DownloadRequest) {
             val file = File(request.dir, request.filename)
-            val downloadInfo = DownloadInfo(request.url!!, request.dir!!, request.filename!!)
+            val downloadInfo = DownloadInfo(request.url, request.dir, request.filename)
             if (!TextUtils.isEmpty(request.md5)) {
                 if (file.exists()) {
                     val fileMd5 = Md5Util.getMD5(file)
@@ -173,22 +172,22 @@ class RxHttp private constructor() {
                 observable = Observable.just(request.url)
                         .flatMap { url ->
                             val contentLength = getContentLength(url)
-                            var start: Long = 0
+                            var startPosition: Long = 0
                             if (file.exists()) {
                                 if (contentLength == -1L || file.length() >= contentLength) {
                                     file.delete()
                                 } else {
-                                    start = file.length()
+                                    startPosition = file.length()
                                 }
                             }
-                            Observable.just(start)
-                        }.flatMap { start -> httpService.download(request.url!!, String.format("bytes=%d-", start)) }.subscribeOn(Schedulers.io())
+                            Observable.just(startPosition)
+                        }.flatMap { position -> httpService.download(request.url, String.format("bytes=%d-", position)) }.subscribeOn(Schedulers.io())
             } else {
-                observable = httpService.download(request.url!!)
+                observable = httpService.download(request.url)
             }
         }
         if (observable != null) {
-            val observableFinal= observable.map(Function<ResponseBody,T> { body ->
+            val observableFinal= observable.map(Function<ResponseBody, T> { body ->
                 if (request is DownloadRequest) {
                     val downloadConverter: DownloadConverter<T> = DownloadConverter(request, callback as DownloadCallback)
                     downloadConverter.convert(body, callback.type)
@@ -220,7 +219,10 @@ class RxHttp private constructor() {
         return -1
     }
 
-    fun cancelTag(tag: Any?) {
+    /**
+     * 取消网络请求,tag为null取消所有网络请求,tag不为null值取消指定的网络请求
+     */
+    fun cancelRequest(tag: Any?) {
         RxHttpTagManager.getInstance().cancelTag(tag)
     }
 
