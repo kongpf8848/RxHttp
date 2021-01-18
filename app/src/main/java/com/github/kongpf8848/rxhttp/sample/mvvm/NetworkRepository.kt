@@ -177,7 +177,7 @@ class NetworkRepository private constructor() {
      * breakpoint:是否支持断点下载,默认为true
      */
     fun httpDownload(context: Context, url: String, dir: String, filename: String, callback: DownloadCallback, md5: String? = null, breakPoint: Boolean = true, tag: Any? = null) {
-        RxHttp.getInstance().download(context).dir(dir).filename(filename).breakpoint(breakPoint).md5(md5).tag(tag).enqueue(callback)
+        RxHttp.getInstance().download(context).dir(dir).filename(filename).breakpoint(breakPoint).md5(md5).url(url).tag(tag).enqueue(callback)
 
     }
 

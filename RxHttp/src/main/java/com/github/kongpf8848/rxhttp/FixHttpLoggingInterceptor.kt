@@ -115,6 +115,19 @@ class FixHttpLoggingInterceptor @JvmOverloads constructor(private val logger: Lo
         val logHeaders = logBody || level == Level.HEADERS
         val requestBody = request.body()
         val hasRequestBody = requestBody != null
+
+        //++++++++++++++++++++++++++++修改开始+++++++++++++++++++++++++++++++++++++++++++++
+        //上传不做拦截
+        if (hasRequestBody) {
+            if(requestBody!!.contentType()!=null){
+                val contentType=requestBody.contentType().toString()
+                if(contentType.contains(MultipartBody.FORM.toString()) || contentType.contains(HttpConstants.MIME_TYPE_BINARY)){
+                    return chain.proceed(request)
+                }
+            }
+        }
+        //++++++++++++++++++++++++++++修改结束+++++++++++++++++++++++++++++++++++++++++++++
+
         val connection = chain.connection()
         var requestStartMessage = ("--> "
                 + request.method()
@@ -241,16 +254,12 @@ class FixHttpLoggingInterceptor @JvmOverloads constructor(private val logger: Lo
 
     private fun bodyHasUnknownEncoding(headers: Headers): Boolean {
         val contentType=headers["Content-Type"]
+
+        //++++++++++++++++++++++++++++修改开始+++++++++++++++++++++++++++++++++++++++++++++
         /**
-         * 上传下载不做拦截
+         * 下载不做拦截
          */
         if (!TextUtils.isEmpty(contentType)) {
-            /**
-             * 上传
-             */
-            if(contentType!!.startsWith(MultipartBody.FORM.type())){
-                return true
-            }
             /**
              * 下载
              */
@@ -258,6 +267,8 @@ class FixHttpLoggingInterceptor @JvmOverloads constructor(private val logger: Lo
                 return true
             }
         }
+        //++++++++++++++++++++++++++++修改结束+++++++++++++++++++++++++++++++++++++++++++++
+
         val contentEncoding = headers["Content-Encoding"]
         return (contentEncoding != null && !contentEncoding.equals("identity", ignoreCase = true)
                 && !contentEncoding.equals("gzip", ignoreCase = true))

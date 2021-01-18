@@ -168,7 +168,6 @@ class DownloadService : Service() {
                     url = this,
                     dir = dir,
                     filename = filename,
-                    md5 = "CFF28E423D581E107CC62BBC32A2E638",
                     callback = downloadCallback
             )
         }
