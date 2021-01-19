@@ -6,7 +6,7 @@ import android.text.TextUtils
 import androidx.fragment.app.Fragment
 import com.github.kongpf8848.rxhttp.HttpConstants
 import com.github.kongpf8848.rxhttp.util.GsonUtil
-import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
 
 open class PostRequest<T> : AbsRequest<T> {
@@ -25,9 +25,9 @@ open class PostRequest<T> : AbsRequest<T> {
     public override fun buildRequestBody(): RequestBody? {
         val content = GsonUtil.toJson(getParams())
         return if (TextUtils.isEmpty(type)) {
-            RequestBody.create(MediaType.parse(HttpConstants.MIME_TYPE_JSON), content)
+            RequestBody.create(HttpConstants.MIME_TYPE_JSON.toMediaTypeOrNull(), content)
         } else {
-            RequestBody.create(MediaType.parse(type!!), content)
+            RequestBody.create(type!!.toMediaTypeOrNull(), content)
         }
     }
 }

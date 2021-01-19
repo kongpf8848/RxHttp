@@ -30,7 +30,7 @@ class ProgressRequestBody(private val requestBody: RequestBody, private val call
             return
         }
         if (progressSink == null) {
-            progressSink = Okio.buffer(sink(sink))
+            progressSink = sink(sink).buffer()
         }
         callback.onProgress(0, contentLength())
         requestBody.writeTo(progressSink!!)

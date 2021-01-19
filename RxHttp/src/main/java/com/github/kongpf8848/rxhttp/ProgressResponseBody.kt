@@ -27,7 +27,7 @@ class ProgressResponseBody(private val responseBody: ResponseBody, private val c
             return responseBody.source()
         }
         if (progressSource == null) {
-            progressSource = Okio.buffer(source(responseBody.source()))
+            progressSource = source(responseBody.source()).buffer()
         }
         return progressSource!!
     }

@@ -9,7 +9,7 @@ import com.github.kongpf8848.rxhttp.HttpConstants
 import com.github.kongpf8848.rxhttp.Platform
 import com.github.kongpf8848.rxhttp.ProgressRequestBody
 import com.github.kongpf8848.rxhttp.callback.ProgressCallback
-import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
@@ -27,14 +27,14 @@ class UploadRequest<T> : PostRequest<T> {
         if (!params.isNullOrEmpty()) {
             for((key,value) in params){
                 if (value is File) {
-                    builder.addFormDataPart(key, value.name, RequestBody.create(MediaType.parse(HttpConstants.MIME_TYPE_BINARY), value))
+                    builder.addFormDataPart(key, value.name, RequestBody.create(HttpConstants.MIME_TYPE_BINARY.toMediaTypeOrNull(), value))
                 } else if (value is Uri) {
                     try {
                         val inputStream = actualContext!!.contentResolver.openInputStream(value)
                         if (inputStream != null) {
                             val bytes = inputStream.readBytes()
                             inputStream.close()
-                            builder.addFormDataPart(key, key, ByteArrayRequestBody(MediaType.parse(HttpConstants.MIME_TYPE_BINARY), bytes))
+                            builder.addFormDataPart(key, key, ByteArrayRequestBody(HttpConstants.MIME_TYPE_BINARY.toMediaTypeOrNull(), bytes))
                         }
                     } catch (e: IOException) {
                         e.printStackTrace()

@@ -7,7 +7,8 @@ import com.github.kongpf8848.rxhttp.callback.DownloadCallback
 import com.github.kongpf8848.rxhttp.callback.ProgressCallback
 import com.github.kongpf8848.rxhttp.request.DownloadRequest
 import okhttp3.ResponseBody
-import okio.Okio
+import okio.buffer
+import okio.sink
 import java.io.File
 import java.io.FileOutputStream
 import java.lang.reflect.Type
@@ -42,7 +43,7 @@ class DownloadConverter<T>(private val downloadRequest: DownloadRequest, private
             })
             downloadInfo.total = currentProgress + progressResponseBody.contentLength()
             Platform.get().defaultCallbackExecutor()?.execute { callback.onProgress(currentProgress,downloadInfo.total) }
-            val sink = Okio.buffer(Okio.sink(fos))
+            val sink = fos.sink().buffer()
             sink.writeAll(progressResponseBody.source())
             sink.flush()
             sink.close()

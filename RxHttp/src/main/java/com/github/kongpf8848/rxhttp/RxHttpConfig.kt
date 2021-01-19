@@ -6,6 +6,7 @@ import java.security.NoSuchAlgorithmException
 import java.security.cert.CertificateException
 import java.security.cert.X509Certificate
 import java.util.concurrent.TimeUnit
+import javax.net.ssl.HostnameVerifier
 import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManager
 import javax.net.ssl.X509TrustManager
@@ -30,7 +31,7 @@ class RxHttpConfig {
             val sslContext = SSLContext.getInstance("TLS")
             sslContext.init(null, arrayOf<TrustManager>(UnSafeTrustManager), null)
             builder.sslSocketFactory(sslContext.socketFactory, UnSafeTrustManager)
-            builder.hostnameVerifier { _, _ -> true }
+            builder.hostnameVerifier(HostnameVerifier { _, _ -> true })
         } catch (e: NoSuchAlgorithmException) {
             e.printStackTrace()
         } catch (e: KeyManagementException) {
