@@ -295,7 +295,7 @@ class FixHttpLoggingInterceptor @JvmOverloads constructor(
             /**
              * 下载
              */
-            if(contentType==HttpConstants.MIME_TYPE_BINARY || contentType==HttpConstants.MIME_TYPE_APK){
+            if(contentType==HttpConstants.MIME_TYPE_BINARY || contentType==HttpConstants.MIME_TYPE_APK || contentType==HttpConstants.MIME_TYPE_JPG || contentType==HttpConstants.MIME_TYPE_PNG){
                 return true
             }
         }

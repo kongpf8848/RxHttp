@@ -58,8 +58,8 @@ class NetworkRepository private constructor() {
             tag: Any? = null
     ): MutableLiveData<TKState<T>> {
         val liveData = MutableLiveData<TKState<T>>()
-        val request: GetRequest<TKResponse<T>>? = RxHttp.getInstance().get(context)
-        request?.apply {
+        val request: GetRequest<TKResponse<T>> = RxHttp.getInstance().get(context)
+        request.apply {
             url(url)
             params(params)
             tag(tag)
@@ -76,8 +76,8 @@ class NetworkRepository private constructor() {
             tag: Any? = null
     ): MutableLiveData<TKState<T>> {
         val liveData = MutableLiveData<TKState<T>>()
-        val request: PostRequest<TKResponse<T>>? = RxHttp.getInstance().post(context)
-        request?.apply {
+        val request: PostRequest<TKResponse<T>> = RxHttp.getInstance().post(context)
+        request.apply {
             params(params)
             url(url)
             tag(tag)
@@ -93,8 +93,8 @@ class NetworkRepository private constructor() {
             tag: Any? = null
     ): MutableLiveData<TKState<T>> {
         val liveData = MutableLiveData<TKState<T>>()
-        val request: PostFormRequest<TKResponse<T>>? = RxHttp.getInstance().postForm(context)
-        request?.apply {
+        val request: PostFormRequest<TKResponse<T>> = RxHttp.getInstance().postForm(context)
+        request.apply {
             params(params)
             url(url)
             tag(tag)
@@ -110,8 +110,8 @@ class NetworkRepository private constructor() {
             tag: Any? = null
     ): MutableLiveData<TKState<T>> {
         val liveData = MutableLiveData<TKState<T>>()
-        val request: PutRequest<TKResponse<T>>? = RxHttp.getInstance().put(context)
-        request?.apply {
+        val request: PutRequest<TKResponse<T>> = RxHttp.getInstance().put(context)
+        request.apply {
             params(params)
             url(url)
             tag(tag)
@@ -127,8 +127,8 @@ class NetworkRepository private constructor() {
             tag: Any? = null
     ): MutableLiveData<TKState<T>> {
         val liveData = MutableLiveData<TKState<T>>()
-        val request: DeleteRequest<TKResponse<T>>? = RxHttp.getInstance().delete(context)
-        request?.apply {
+        val request: DeleteRequest<TKResponse<T>> = RxHttp.getInstance().delete(context)
+        request.apply {
             params(params)
             url(url)
             tag(tag)
@@ -156,8 +156,8 @@ class NetworkRepository private constructor() {
             tag: Any? = null
     ): MutableLiveData<TKState<T>> {
         val liveData = MutableLiveData<TKState<T>>()
-        val request: UploadRequest<TKResponse<T>>? = RxHttp.getInstance().upload(context)
-        request?.apply {
+        val request: UploadRequest<TKResponse<T>> = RxHttp.getInstance().upload(context)
+        request.apply {
             url(url)
             params(params)
             tag(tag)

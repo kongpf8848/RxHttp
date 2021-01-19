@@ -7,5 +7,6 @@ object HttpConstants {
     const val MIME_TYPE_JSON = "application/json; charset=utf-8"
     const val MIME_TYPE_PROTOBUF = "application/x-protobuf"
     const val MIME_TYPE_APK = "application/vnd.android.package-archive"
-
+    const val MIME_TYPE_JPG = "image/jpeg"
+    const val MIME_TYPE_PNG = "image/png"
 }
