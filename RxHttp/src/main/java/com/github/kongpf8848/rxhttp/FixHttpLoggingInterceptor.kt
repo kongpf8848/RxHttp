@@ -287,17 +287,12 @@ class FixHttpLoggingInterceptor @JvmOverloads constructor(
 
     private fun bodyHasUnknownEncoding(headers: Headers): Boolean {
         //++++++++++++++++++++++++++++修改开始+++++++++++++++++++++++++++++++++++++++++++++
-        /**
-         * 下载不做拦截
-         */
         val contentType=headers["Content-Type"]
         if (contentType!=null) {
             /**
-             * 下载
+             * 非text/json/xml类型不记录日志
              */
-            if(contentType==HttpConstants.MIME_TYPE_BINARY || contentType==HttpConstants.MIME_TYPE_APK || contentType==HttpConstants.MIME_TYPE_JPG || contentType==HttpConstants.MIME_TYPE_PNG){
-                return true
-            }
+            return !(contentType.contains(HttpConstants.TEXT_PLAIN) || contentType.contains(HttpConstants.APPLICATION_JSON) || contentType.contains(HttpConstants.APPLICATION_XML))
         }
         //++++++++++++++++++++++++++++修改结束+++++++++++++++++++++++++++++++++++++++++++++
 
