@@ -2,7 +2,7 @@ package com.github.kongpf8848.rxhttp.callback
 
 import java.lang.reflect.Type
 
-class SimpleHttpCallback<T>(type: Type) : HttpCallback<T>(type) {
+open class SimpleHttpCallback<T>(type: Type) : HttpCallback<T>(type) {
     override fun onStart() {}
     override fun onNext(response: T?) {}
     override fun onError(e: Throwable?) {}
