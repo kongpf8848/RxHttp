@@ -5,14 +5,14 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
-version = "1.0.8"
+version = "1.0.9"
 android {
     compileSdkVersion Config.compileSdkVersion
 
     defaultConfig {
         minSdkVersion Config.minSdkVersion
         targetSdkVersion Config.targetSdkVersion
-        versionCode 8
+        versionCode 9
         versionName version
     }
 
@@ -104,7 +104,7 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 
 }
 artifacts {
-    archives javadocJar
+    //archives javadocJar
     archives sourcesJar
 }
 Properties properties = new Properties()
