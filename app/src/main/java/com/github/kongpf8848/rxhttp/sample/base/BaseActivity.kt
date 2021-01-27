@@ -9,6 +9,7 @@ import com.github.kongpf8848.rxhttp.sample.utils.LogUtils
 open class BaseActivity : AppCompatActivity() {
 
     val TAG=javaClass.simpleName
+
     lateinit var baseActivity: BaseActivity
 
     override fun onCreate(savedInstanceState: Bundle?) {

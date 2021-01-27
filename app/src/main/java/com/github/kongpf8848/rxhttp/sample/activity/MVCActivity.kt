@@ -10,8 +10,8 @@ import com.github.kongpf8848.rxhttp.sample.bean.Banner
 import com.github.kongpf8848.rxhttp.sample.bean.User
 import com.github.kongpf8848.rxhttp.sample.extension.getContent
 import com.github.kongpf8848.rxhttp.sample.http.TKURL
+import com.github.kongpf8848.rxhttp.sample.mvc.MVCApi
 import com.github.kongpf8848.rxhttp.sample.mvc.MVCHttpCallback
-import com.github.kongpf8848.rxhttp.sample.mvc.TKApi
 import com.github.kongpf8848.rxhttp.sample.service.DownloadService
 import com.github.kongpf8848.rxhttp.sample.utils.LogUtils
 import kotlinx.android.synthetic.main.activity_mvvm.*
@@ -49,7 +49,7 @@ class MVCActivity : BaseActivity() {
 
     private fun onButtonGet() {
 
-        TKApi.httpGet(context = baseActivity,
+        MVCApi.httpGet(context = baseActivity,
                 url = TKURL.URL_GET,
                 params = null,
                 tag = null, callback = object : MVCHttpCallback<List<Banner>>() {
@@ -74,7 +74,7 @@ class MVCActivity : BaseActivity() {
     }
 
     private fun onButtonPost() {
-        TKApi.httpPost(context = baseActivity,
+        MVCApi.httpPost(context = baseActivity,
                 url = TKURL.URL_POST,
                 params = params,
                 tag = null,
@@ -100,7 +100,7 @@ class MVCActivity : BaseActivity() {
     }
 
     private fun onButtonPostForm() {
-        TKApi.httpPostForm(context = baseActivity,
+        MVCApi.httpPostForm(context = baseActivity,
                 url = TKURL.URL_POST_FORM,
                 params = params,
                 tag = null,
@@ -126,7 +126,7 @@ class MVCActivity : BaseActivity() {
     }
 
     private fun onButtonPut() {
-        TKApi.httpPut(context = baseActivity,
+        MVCApi.httpPut(context = baseActivity,
                 url = TKURL.URL_PUT,
                 params = params,
                 tag = null,
@@ -152,7 +152,7 @@ class MVCActivity : BaseActivity() {
     }
 
     private fun onButtonDelete() {
-        TKApi.httpDelete(context = baseActivity,
+        MVCApi.httpDelete(context = baseActivity,
                 url = TKURL.URL_DELETE,
                 params = params,
                 tag = null,
@@ -183,9 +183,9 @@ class MVCActivity : BaseActivity() {
             map["model"] = Build.MODEL
             map["manufacturer"] = Build.MANUFACTURER
             map["os"] = Build.VERSION.SDK_INT
-            map["image.jpg"] = it
+            map["image"] = it
 
-            TKApi.httpUpload(context = baseActivity,
+            MVCApi.httpUpload(context = baseActivity,
                     url = TKURL.URL_UPLOAD,
                     params = map,
                     tag = null,

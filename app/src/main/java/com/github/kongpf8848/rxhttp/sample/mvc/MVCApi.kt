@@ -4,24 +4,14 @@ import android.content.Context
 import com.github.kongpf8848.rxhttp.RxHttp
 import com.github.kongpf8848.rxhttp.callback.SimpleHttpCallback
 import com.github.kongpf8848.rxhttp.request.*
-import com.github.kongpf8848.rxhttp.sample.utils.LogUtils
-import com.google.gson.JsonSyntaxException
-import com.jsy.tk.library.http.TKErrorCode
+import com.github.kongpf8848.rxhttp.sample.http.TKErrorCode
+import com.github.kongpf8848.rxhttp.sample.http.TKErrorCode.handleThrowable
+import com.github.kongpf8848.rxhttp.sample.http.exception.NullResponseException
 import com.jsy.tk.library.http.TKResponse
 import com.jsy.tk.library.http.exception.ServerException
-import org.json.JSONException
-import retrofit2.HttpException
-import java.net.ConnectException
-import java.net.SocketTimeoutException
-import java.net.UnknownHostException
-import java.text.ParseException
-import javax.net.ssl.SSLHandshakeException
 
-object TKApi {
+object MVCApi {
 
-    /**
-     * GET请求
-     */
     inline fun <reified T> httpGet(
             context: Context,
             url: String,
@@ -131,7 +121,6 @@ object TKApi {
     }
 
 
-
     inline fun <reified T> simpleHttpCallback(callback: MVCHttpCallback<T>): SimpleHttpCallback<TKResponse<T>> {
         return object : SimpleHttpCallback<TKResponse<T>>(callback.getType()) {
             override fun onStart() {
@@ -149,7 +138,7 @@ object TKApi {
                     }
 
                 } else {
-                    return onError(ServerException(TKErrorCode.ERRCODE_RESPONSE_NULL, null))
+                    return onError(NullResponseException(TKErrorCode.ERRCODE_RESPONSE_NULL,TKErrorCode.ERRCODE_RESPONSE_NULL_DESC))
                 }
 
             }
@@ -169,57 +158,10 @@ object TKApi {
             override fun onProgress(readBytes: Long, totalBytes: Long) {
                 super.onProgress(readBytes, totalBytes)
                 callback.onComplete()
-
             }
         }
     }
 
 
-    fun handleThrowable(throwable: Throwable?): Pair<Int, String?> {
-        LogUtils.d("handleThrowable:${throwable}")
-        return when (throwable) {
-            /**
-             * 网络异常
-             */
-            is ConnectException,
-            is SocketTimeoutException,
-            is UnknownHostException,
-            is SSLHandshakeException
-            -> {
-                Pair(TKErrorCode.ERRCODE_NETWORK, throwable.message)
-            }
-            /**
-             * Json异常
-             */
-            is JsonSyntaxException,
-            is JSONException,
-            is ParseException
-            -> {
-                Pair(TKErrorCode.ERRCODE_JSON_PARSE, throwable.message)
-            }
-            /**
-             * Retrofit返回的异常
-             */
-            is HttpException -> {
-                Pair(throwable.code(), throwable.message)
-            }
-
-            /**
-             * 服务端返回的异常
-             */
-            is ServerException -> {
-                Pair(throwable.code, throwable.msg)
-            }
-
-
-            /**
-             * 未知异常
-             */
-            else -> {
-                Pair(TKErrorCode.ERRCODE_UNKNOWN, "Unknown Exception")
-            }
-
-        }
-    }
 
 }

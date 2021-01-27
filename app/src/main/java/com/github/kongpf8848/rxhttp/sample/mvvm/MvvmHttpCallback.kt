@@ -4,16 +4,8 @@ import com.github.kongpf8848.rxhttp.util.TypeUtil
 import ikidou.reflect.TypeBuilder
 import java.lang.reflect.Type
 
-abstract class TKHttpCallback<T>() {
+abstract class MvvmHttpCallback<T>() {
 
-    companion object{
-        fun defaultType():Type{
-            return TypeBuilder
-                    .newInstance(TKResponse::class.java)
-                    .addTypeParam(TKEmpty::class.java)
-                    .build()
-        }
-    }
     private val type: Type
     init {
         val arg = TypeUtil.getType(javaClass)

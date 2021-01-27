@@ -20,4 +20,7 @@
     <string name="download_progress">下载进度:%d%%</string>
     <string name="download_failed">下载失败</string>
     <string name="download_success">下载完成</string>
+
+    <string name="log_tip">亲,可在Logcat查看输出日志,搜索关键字OkHttp即可\n响应数据为模拟数据,通过添加拦截器MockInterceptor模拟服务器返回数据\n
+        此处假设服务器返回的数据格式为{"code":200,"data":xxx,,"msg":""},data对应的数据类型为泛型,基本数据类型(char,String,boolean,int...),{ },[ ]都是支持的</string>
 </resources>

@@ -9,11 +9,12 @@ import com.kongpf.commonhelper.ToastHelper
 
 
 class MyApplication : Application() {
+
     override fun onCreate() {
         super.onCreate()
         Thread.setDefaultUncaughtExceptionHandler { t, e ->
             e.printStackTrace()
-            LogUtils.e("Exception", e.message)
+            LogUtils.e("Crash", e.message)
         }
         LogUtils.init(this, BuildConfig.DEBUG)
         ToastHelper.init(this)
@@ -28,7 +29,7 @@ class MyApplication : Application() {
                 .maxRetries(3)
                 .retryDelayMillis(200)
                 .getBuilder().apply {
-                    if(BuildConfig.DEBUG) {
+                    if (BuildConfig.DEBUG) {
                         addInterceptor(FixHttpLoggingInterceptor().apply {
                             level = FixHttpLoggingInterceptor.Level.BODY
                         })

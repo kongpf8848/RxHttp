@@ -6,11 +6,13 @@ import com.github.kongpf8848.rxhttp.RxHttp
 import com.github.kongpf8848.rxhttp.callback.DownloadCallback
 import com.github.kongpf8848.rxhttp.callback.HttpCallback
 import com.github.kongpf8848.rxhttp.request.*
-import com.github.kongpf8848.rxhttp.sample.http.TKState
-import com.jsy.tk.library.http.TKHttpCallback
+import com.jsy.tk.library.http.MvvmHttpCallback
 import com.jsy.tk.library.http.TKResponse
 
-
+/**
+ * MVVM架构网络仓库
+ * UI->ViewModel->Repository->LiveData(ViewModel)->UI
+ */
 class NetworkRepository private constructor() {
 
     companion object {
@@ -21,8 +23,8 @@ class NetworkRepository private constructor() {
         val holder = NetworkRepository()
     }
 
-    inline fun <reified T> wrapHttpCallback(): TKHttpCallback<T> {
-        return object : TKHttpCallback<T>() {
+    inline fun <reified T> wrapHttpCallback(): MvvmHttpCallback<T> {
+        return object : MvvmHttpCallback<T>() {
 
         }
     }
@@ -43,6 +45,11 @@ class NetworkRepository private constructor() {
             }
 
             override fun onComplete() {
+
+                /**
+                 * 亲,此处不要做任何操作,不要给LiveData赋值,防止onNext对应的LiveData数据被覆盖，
+                 * 在TKState类handle方法里会特别处理回调的，放心好了
+                 */
             }
 
             override fun onProgress(readBytes: Long, totalBytes: Long) {
@@ -174,11 +181,11 @@ class NetworkRepository private constructor() {
      * dir:本地目录路径
      * filename:保存文件名称
      * callback:下载进度回调
+     * md5:下载文件的MD5值
      * breakpoint:是否支持断点下载,默认为true
      */
     fun httpDownload(context: Context, url: String, dir: String, filename: String, callback: DownloadCallback, md5: String? = null, breakPoint: Boolean = true, tag: Any? = null) {
         RxHttp.getInstance().download(context).dir(dir).filename(filename).breakpoint(breakPoint).md5(md5).url(url).tag(tag).enqueue(callback)
-
     }
 
 }

@@ -4,9 +4,9 @@ import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import com.github.kongpf8848.rxhttp.sample.bean.Banner
 import com.github.kongpf8848.rxhttp.sample.bean.User
-import com.github.kongpf8848.rxhttp.sample.http.TKState
 import com.github.kongpf8848.rxhttp.sample.http.TKURL
 import com.github.kongpf8848.rxhttp.sample.mvvm.BaseViewModel
+import com.github.kongpf8848.rxhttp.sample.mvvm.TKState
 
 class MainViewModel(application: Application) : BaseViewModel(application) {
 

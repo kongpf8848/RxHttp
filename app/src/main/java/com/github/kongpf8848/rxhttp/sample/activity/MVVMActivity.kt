@@ -7,7 +7,7 @@ import android.os.Bundle
 import com.github.kongpf8848.rxhttp.sample.R
 import com.github.kongpf8848.rxhttp.sample.databinding.ActivityMainBinding
 import com.github.kongpf8848.rxhttp.sample.extension.getContent
-import com.github.kongpf8848.rxhttp.sample.extension.observeCallback
+import com.github.kongpf8848.rxhttp.sample.extension.observeState
 import com.github.kongpf8848.rxhttp.sample.http.TKURL
 import com.github.kongpf8848.rxhttp.sample.mvvm.BaseMvvmActivity
 import com.github.kongpf8848.rxhttp.sample.service.DownloadService
@@ -16,6 +16,9 @@ import com.github.kongpf8848.rxhttp.sample.viewmodel.MainViewModel
 import com.kongpf.commonhelper.ToastHelper
 import kotlinx.android.synthetic.main.activity_mvvm.*
 
+/**
+ * MVVM架构使用RxHttp示例
+ */
 class MVVMActivity : BaseMvvmActivity<MainViewModel, ActivityMainBinding>() {
 
     private var progressDialog: ProgressDialog? = null
@@ -57,7 +60,7 @@ class MVVMActivity : BaseMvvmActivity<MainViewModel, ActivityMainBinding>() {
      * GET请求
      */
     private fun onButtonGet() {
-        viewModel.testGet(null).observeCallback(this) {
+        viewModel.testGet(null).observeState(this) {
             onStart {
                 LogUtils.d(TAG, "onButtonGet() onStart called")
             }
@@ -79,7 +82,7 @@ class MVVMActivity : BaseMvvmActivity<MainViewModel, ActivityMainBinding>() {
      */
     private fun onButtonPost() {
 
-        viewModel.testPost(params).observeCallback(this) {
+        viewModel.testPost(params).observeState(this) {
             onStart {
                 LogUtils.d(TAG, "onButtonPost() onStart called")
             }
@@ -100,7 +103,7 @@ class MVVMActivity : BaseMvvmActivity<MainViewModel, ActivityMainBinding>() {
      */
     private fun onButtonPostForm() {
 
-        viewModel.testPostForm(params).observeCallback(this) {
+        viewModel.testPostForm(params).observeState(this) {
             onStart {
                 LogUtils.d(TAG, "onButtonPostForm() onStart called")
             }
@@ -121,7 +124,7 @@ class MVVMActivity : BaseMvvmActivity<MainViewModel, ActivityMainBinding>() {
      */
     private fun onButtonPut() {
 
-        viewModel.testPut(params).observeCallback(this) {
+        viewModel.testPut(params).observeState(this) {
             onStart {
                 LogUtils.d(TAG, "onButtonPut() onStart called")
             }
@@ -142,7 +145,7 @@ class MVVMActivity : BaseMvvmActivity<MainViewModel, ActivityMainBinding>() {
      */
     private fun onButtonDelete() {
 
-        viewModel.testDelete(params).observeCallback(this) {
+        viewModel.testDelete(params).observeState(this) {
             onStart {
                 LogUtils.d(TAG, "onButtonDelete() onStart called")
             }
@@ -159,7 +162,7 @@ class MVVMActivity : BaseMvvmActivity<MainViewModel, ActivityMainBinding>() {
     }
 
     /**
-     * 上传
+     * 上传,实在找不到如何很好的方法去模拟演示上传的过程,亲，要不咱搭建一个Tomcat服务器,然后再写一个上传接口，自己动手，丰衣足食
      */
     private fun onButtonUpload() {
         getContent("image/*") {
@@ -167,9 +170,9 @@ class MVVMActivity : BaseMvvmActivity<MainViewModel, ActivityMainBinding>() {
             map["model"] = Build.MODEL
             map["manufacturer"] = Build.MANUFACTURER
             map["os"] = Build.VERSION.SDK_INT
-            map["image.jpg"] = it
+            map["image"] = it
 
-            viewModel.testUpload(map).observeCallback(this){
+            viewModel.testUpload(map).observeState(this){
                 onStart{
                     LogUtils.d(TAG, "onButtonUpload() onStart called")
                     showProgressDialog("正在上传,请稍等...")

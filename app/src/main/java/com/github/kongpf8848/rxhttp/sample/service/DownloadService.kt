@@ -109,7 +109,7 @@ class DownloadService : Service() {
         }
 
         override fun onComplete() {
-            Log.d(TAG, "onComplete() called")
+            LogUtils.d(TAG, "onComplete() called")
             handler?.sendEmptyMessage(MSG_CANCEL_NOTIFICATION)
         }
 
