@@ -1,6 +1,6 @@
 # RxHttp
 
-基于RxJava2+Retrofit+OkHttp4.x封装的网络请求类库，小巧精致，高度解耦，网络请求就是这么简单:smile::smile::smile:
+轻量级的网络请求封装类库,基于RxJava2+Retrofit+OkHttp4.x实现，小巧精致，高度解耦，网络请求就是这么简单:smile::smile::smile:
 
 # 亮点
 
@@ -196,7 +196,7 @@ implementation 'com.github.kongpf8848:RxHttp:1.0.8'
             }
         });
 ```
-具体使用可参考Demo,Demo中有详细的示例，将MVVM和RxHttp结合起来使用
+具体使用可参考Demo,Demo中有详细的示例，有MVVM及MVC架构如何使用RxHttp
 
 # License
 ```
