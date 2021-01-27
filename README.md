@@ -21,9 +21,9 @@
 + 支持文件下载及进度监听，支持大文件下载，支持断点下载，支持文件MD5校验
 
 
-# 添加依赖
+# 使用
 ```
-implementation 'com.github.kongpf8848:RxHttp:1.0.8'
+implementation 'com.github.kongpf8848:RxHttp:1.0.9'
 ```
 # GET请求
 ```
