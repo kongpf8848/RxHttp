@@ -15,7 +15,9 @@ import com.github.kongpf8848.rxhttp.sample.mvc.MVCHttpCallback
 import com.github.kongpf8848.rxhttp.sample.service.DownloadService
 import com.github.kongpf8848.rxhttp.sample.utils.LogUtils
 import kotlinx.android.synthetic.main.activity_mvvm.*
-
+/**
+ * MVC架构使用RxHttp示例
+ */
 class MVCActivity : BaseActivity() {
 
     private val params: Map<String, Any?>? = hashMapOf("name" to "jack", "location" to "shanghai", "age" to 28)
