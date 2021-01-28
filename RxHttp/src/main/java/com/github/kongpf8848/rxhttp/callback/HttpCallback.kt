@@ -14,4 +14,13 @@ abstract class HttpCallback<T> : BaseCallback<T> {
         this.type = type
     }
 
+    override fun onStart() {
+    }
+
+    override fun onComplete() {
+    }
+
+    override fun onProgress(readBytes: Long, totalBytes: Long) {
+
+    }
 }

@@ -2,7 +2,7 @@ package com.github.kongpf8848.rxhttp.sample.mvc
 
 import android.content.Context
 import com.github.kongpf8848.rxhttp.RxHttp
-import com.github.kongpf8848.rxhttp.callback.SimpleHttpCallback
+import com.github.kongpf8848.rxhttp.callback.HttpCallback
 import com.github.kongpf8848.rxhttp.request.*
 import com.github.kongpf8848.rxhttp.sample.http.TKErrorCode
 import com.github.kongpf8848.rxhttp.sample.http.TKErrorCode.handleThrowable
@@ -121,15 +121,14 @@ object MVCApi {
     }
 
 
-    inline fun <reified T> simpleHttpCallback(callback: MVCHttpCallback<T>): SimpleHttpCallback<TKResponse<T>> {
-        return object : SimpleHttpCallback<TKResponse<T>>(callback.getType()) {
+    inline fun <reified T> simpleHttpCallback(callback: MVCHttpCallback<T>): HttpCallback<TKResponse<T>> {
+        return object : HttpCallback<TKResponse<T>>(callback.getType()) {
             override fun onStart() {
                 super.onStart()
                 callback.onStart()
             }
 
             override fun onNext(response: TKResponse<T>?) {
-                super.onNext(response)
                 if (response != null) {
                     if (response.isSuccess()) {
                         callback.onSuccess(response.data)
@@ -144,7 +143,6 @@ object MVCApi {
             }
 
             override fun onError(e: Throwable?) {
-                super.onError(e)
                 handleThrowable(e).run {
                     callback.onFailure(first, second)
                 }
