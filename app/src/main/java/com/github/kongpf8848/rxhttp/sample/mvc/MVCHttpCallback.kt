@@ -23,7 +23,6 @@ abstract class MVCHttpCallback<T> {
 
     abstract fun onSuccess(result: T?)
     abstract fun onFailure(code: Int, msg: String?)
-
     open fun onStart() {}
     open fun onProgress(readBytes: Long, totalBytes: Long) {}
     open fun onComplete() {}

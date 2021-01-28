@@ -3,10 +3,9 @@ package com.github.kongpf8848.rxhttp.request
 import android.app.Activity
 import android.content.Context
 import androidx.fragment.app.Fragment
-import com.github.kongpf8848.rxhttp.bean.DownloadInfo
 import okhttp3.RequestBody
 
-class DownloadRequest : AbsRequest<DownloadInfo> {
+class DownloadRequest : AbsRequest {
     var dir: String = ""
     var filename: String = ""
     var md5: String? = null

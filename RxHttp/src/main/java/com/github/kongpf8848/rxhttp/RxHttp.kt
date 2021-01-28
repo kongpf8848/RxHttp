@@ -38,7 +38,7 @@ class RxHttp private constructor() {
     private val httpService: HttpService
 
     init {
-        val config= RxHttpConfig.getInstance()
+        val config = RxHttpConfig.getInstance()
         val builder = config.getBuilder()
         okHttpClient = builder.build()
         retrofit = Retrofit.Builder()
@@ -52,88 +52,102 @@ class RxHttp private constructor() {
     }
 
     //GET请求
-    fun <T> get(context: Context): GetRequest<T> {
+    fun get(context: Context): GetRequest {
         return GetRequest(context)
     }
-    fun <T> get(activity: Activity): GetRequest<T> {
+
+    fun get(activity: Activity): GetRequest {
         return GetRequest(activity)
     }
-    fun <T> get(fragment: Fragment): GetRequest<T> {
+
+    fun get(fragment: Fragment): GetRequest {
         return GetRequest(fragment)
     }
 
     //POST请求
-    fun <T> post(context: Context): PostRequest<T> {
+    fun post(context: Context): PostRequest {
         return PostRequest(context)
     }
-    fun <T> post(activity: Activity): PostRequest<T> {
+
+    fun post(activity: Activity): PostRequest {
         return PostRequest(activity)
     }
-    fun <T> post(fragment: Fragment): PostRequest<T> {
+
+    fun post(fragment: Fragment): PostRequest {
         return PostRequest(fragment)
     }
 
     //POST FORM请求
-    fun <T> postForm(context: Context): PostFormRequest<T> {
+    fun postForm(context: Context): PostFormRequest {
         return PostFormRequest(context)
     }
-    fun <T> postForm(activity: Activity): PostFormRequest<T> {
+
+    fun postForm(activity: Activity): PostFormRequest {
         return PostFormRequest(activity)
     }
-    fun <T> postForm(fragment: Fragment): PostFormRequest<T> {
+
+    fun postForm(fragment: Fragment): PostFormRequest {
         return PostFormRequest(fragment)
     }
 
     //Upload请求
-    fun <T> upload(context: Context): UploadRequest<T> {
+    fun upload(context: Context): UploadRequest {
         return UploadRequest(context)
     }
-    fun <T> upload(activity: Activity): UploadRequest<T> {
+
+    fun upload(activity: Activity): UploadRequest {
         return UploadRequest(activity)
     }
-    fun <T> upload(fragment: Fragment): UploadRequest<T> {
+
+    fun upload(fragment: Fragment): UploadRequest {
         return UploadRequest(fragment)
     }
 
     //Download请求
-    fun  download(context: Context): DownloadRequest {
+    fun download(context: Context): DownloadRequest {
         return DownloadRequest(context)
     }
-    fun  download(activity: Activity): DownloadRequest {
+
+    fun download(activity: Activity): DownloadRequest {
         return DownloadRequest(activity)
     }
-    fun  download(fragment: Fragment): DownloadRequest {
+
+    fun download(fragment: Fragment): DownloadRequest {
         return DownloadRequest(fragment)
     }
 
     //PUT请求
-    fun <T> put(context: Context): PutRequest<T> {
+    fun put(context: Context): PutRequest {
         return PutRequest(context)
     }
-    fun <T> put(activity: Activity): PutRequest<T> {
+
+    fun put(activity: Activity): PutRequest {
         return PutRequest(activity)
     }
-    fun <T> put(fragment: Fragment): PutRequest<T> {
+
+    fun put(fragment: Fragment): PutRequest {
         return PutRequest(fragment)
     }
 
     //DELETE请求
-    fun <T> delete(context: Context): DeleteRequest<T> {
+    fun delete(context: Context): DeleteRequest {
         return DeleteRequest(context)
     }
-    fun <T> delete(activity: Activity): DeleteRequest<T> {
+
+    fun delete(activity: Activity): DeleteRequest {
         return DeleteRequest(activity)
     }
-    fun <T> delete(fragment: Fragment): DeleteRequest<T> {
+
+    fun delete(fragment: Fragment): DeleteRequest {
         return DeleteRequest(fragment)
     }
 
-    fun <T> enqueue(request: AbsRequest<T>, callback: HttpCallback<T>) {
+    fun <T> enqueue(request: AbsRequest, callback: HttpCallback<T>) {
         var observable: Observable<ResponseBody>? = null
         if (request is GetRequest) {
-            observable = if(request.getParams()!=null) {
+            observable = if (request.getParams() != null) {
                 httpService.get(request.url, request.getParams()!!)
-            } else{
+            } else {
                 httpService.get(request.url)
             }
         } else if (request is PutRequest) {
@@ -143,15 +157,15 @@ class RxHttp private constructor() {
         } else if (request is PostRequest) {
             observable = httpService.post(request.url, request.buildRequestBody()!!)
         } else if (request is PostFormRequest) {
-            observable = if(request.getParams()!=null){
+            observable = if (request.getParams() != null) {
                 httpService.postForm(request.url, request.getParams()!!)
-            } else{
+            } else {
                 httpService.postForm(request.url)
             }
         } else if (request is DeleteRequest) {
-            observable = if(request.getParams()!=null) {
+            observable = if (request.getParams() != null) {
                 httpService.delete(request.url, request.getParams()!!)
-            } else{
+            } else {
                 httpService.delete(request.url)
             }
         } else if (request is DownloadRequest) {
@@ -187,7 +201,7 @@ class RxHttp private constructor() {
             }
         }
         if (observable != null) {
-            val observableFinal= observable.map(Function<ResponseBody, T> { body ->
+            val observableFinal = observable.map(Function<ResponseBody, T> { body ->
                 if (request is DownloadRequest) {
                     val downloadConverter: DownloadConverter<T> = DownloadConverter(request, callback as DownloadCallback)
                     downloadConverter.convert(body, callback.type)
@@ -227,7 +241,7 @@ class RxHttp private constructor() {
     }
 
     companion object {
-        fun getInstance()= RxHttp.holder
+        fun getInstance() = RxHttp.holder
     }
 
 }

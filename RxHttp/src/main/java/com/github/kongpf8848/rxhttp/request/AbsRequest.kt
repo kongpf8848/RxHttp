@@ -8,14 +8,13 @@ import com.github.kongpf8848.rxhttp.RxHttpTagManager
 import com.github.kongpf8848.rxhttp.callback.HttpCallback
 import okhttp3.RequestBody
 
-abstract class AbsRequest<T> {
+abstract class AbsRequest {
 
     var context: Any? = null
     var url: String = ""
     private var ta: Any? = null
-    private var headers: HashMap<String, String> = HashMap()
     private var param: Map<String, Any?>? = null
-    protected var callback: HttpCallback<T>? = null
+    protected var callback:HttpCallback<*>?=null
 
     protected abstract fun buildRequestBody(): RequestBody?
 
@@ -31,28 +30,17 @@ abstract class AbsRequest<T> {
         context = activity
     }
 
-    fun url(url: String): AbsRequest<T> {
+    fun url(url: String): AbsRequest {
         this.url = url
         return this
     }
 
-    fun tag(tag: Any?): AbsRequest<T> {
+    fun tag(tag: Any?): AbsRequest {
         this.ta = tag
         return this
     }
 
-    fun header(key: String, value: String): AbsRequest<T> {
-        headers[key] = value
-        return this
-    }
-
-    fun headers(headers: HashMap<String, String>): AbsRequest<T> {
-        this.headers = headers
-        return this
-    }
-
-
-    fun params(params: Map<String, Any?>?): AbsRequest<T> {
+    fun params(params: Map<String, Any?>?): AbsRequest {
         this.param = params
         return this
     }
@@ -73,16 +61,13 @@ abstract class AbsRequest<T> {
         } else ta
     }
 
-    fun getHeaders(): Map<String, String> {
-        return headers
-    }
 
     fun getParams(): Map<String, Any?>? {
         return param?.filterValues { it!=null }
     }
 
-    fun enqueue(callback: HttpCallback<T>) {
-        this.callback = callback
+    fun <T> enqueue(callback: HttpCallback<T>) {
+        this.callback=callback
         RxHttp.getInstance().enqueue(this, callback)
     }
 }

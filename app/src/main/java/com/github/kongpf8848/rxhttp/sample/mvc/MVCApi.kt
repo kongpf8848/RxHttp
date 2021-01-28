@@ -3,7 +3,6 @@ package com.github.kongpf8848.rxhttp.sample.mvc
 import android.content.Context
 import com.github.kongpf8848.rxhttp.RxHttp
 import com.github.kongpf8848.rxhttp.callback.HttpCallback
-import com.github.kongpf8848.rxhttp.request.*
 import com.github.kongpf8848.rxhttp.sample.http.TKErrorCode
 import com.github.kongpf8848.rxhttp.sample.http.TKErrorCode.handleThrowable
 import com.github.kongpf8848.rxhttp.sample.http.exception.NullResponseException
@@ -19,13 +18,11 @@ object MVCApi {
             tag: Any? = null,
             callback: MVCHttpCallback<T>
     ) {
-        val request: GetRequest<TKResponse<T>> = RxHttp.getInstance().get(context)
-        request.run {
-            url(url)
-            params(params)
-            tag(tag)
-            enqueue(simpleHttpCallback(callback))
-        }
+        RxHttp.getInstance().get(context)
+                .url(url)
+                .params(params)
+                .tag(tag)
+                .enqueue(simpleHttpCallback(callback))
     }
 
     inline fun <reified T> httpPost(
@@ -35,13 +32,11 @@ object MVCApi {
             tag: Any? = null,
             callback: MVCHttpCallback<T>
     ) {
-        val request: PostRequest<TKResponse<T>> = RxHttp.getInstance().post(context)
-        request.run {
-            url(url)
-            params(params)
-            tag(tag)
-            enqueue(simpleHttpCallback(callback))
-        }
+        RxHttp.getInstance().post(context)
+                .url(url)
+                .params(params)
+                .tag(tag)
+                .enqueue(simpleHttpCallback(callback))
     }
 
     inline fun <reified T> httpPostForm(
@@ -52,13 +47,11 @@ object MVCApi {
             callback: MVCHttpCallback<T>
     ) {
 
-        val request: PostFormRequest<TKResponse<T>> = RxHttp.getInstance().postForm(context)
-        request.run {
-            url(url)
-            params(params)
-            tag(tag)
-            enqueue(simpleHttpCallback(callback))
-        }
+        RxHttp.getInstance().postForm(context)
+                .url(url)
+                .params(params)
+                .tag(tag)
+                .enqueue(simpleHttpCallback(callback))
     }
 
     inline fun <reified T> httpPut(
@@ -67,15 +60,13 @@ object MVCApi {
             params: Map<String, Any?>?,
             tag: Any? = null,
             callback: MVCHttpCallback<T>
-    ){
+    ) {
 
-        val request: PutRequest<TKResponse<T>> = RxHttp.getInstance().put(context)
-        request.run {
-            params(params)
-            url(url)
-            tag(tag)
-            enqueue(simpleHttpCallback(callback))
-        }
+        RxHttp.getInstance().put(context)
+                .url(url)
+                .params(params)
+                .tag(tag)
+                .enqueue(simpleHttpCallback(callback))
     }
 
     inline fun <reified T> httpDelete(
@@ -84,14 +75,12 @@ object MVCApi {
             params: Map<String, Any?>?,
             tag: Any? = null,
             callback: MVCHttpCallback<T>
-    ){
-        val request: DeleteRequest<TKResponse<T>> = RxHttp.getInstance().delete(context)
-        request.run {
-            params(params)
-            url(url)
-            tag(tag)
-            enqueue(simpleHttpCallback(callback))
-        }
+    ) {
+        RxHttp.getInstance().delete(context)
+                .url(url)
+                .params(params)
+                .tag(tag)
+                .enqueue(simpleHttpCallback(callback))
     }
 
     /**
@@ -110,14 +99,13 @@ object MVCApi {
             params: Map<String, Any?>?,
             tag: Any? = null,
             callback: MVCHttpCallback<T>
-    ){
-        val request: UploadRequest<TKResponse<T>> = RxHttp.getInstance().upload(context)
-        request.run {
-            url(url)
-            params(params)
-            tag(tag)
-            enqueue(simpleHttpCallback(callback))
-        }
+    ) {
+        RxHttp.getInstance().upload(context)
+                .url(url)
+                .params(params)
+                .tag(tag)
+                .enqueue(simpleHttpCallback(callback))
+
     }
 
 
@@ -137,7 +125,7 @@ object MVCApi {
                     }
 
                 } else {
-                    return onError(NullResponseException(TKErrorCode.ERRCODE_RESPONSE_NULL,TKErrorCode.ERRCODE_RESPONSE_NULL_DESC))
+                    return onError(NullResponseException(TKErrorCode.ERRCODE_RESPONSE_NULL, TKErrorCode.ERRCODE_RESPONSE_NULL_DESC))
                 }
 
             }
@@ -155,11 +143,10 @@ object MVCApi {
 
             override fun onProgress(readBytes: Long, totalBytes: Long) {
                 super.onProgress(readBytes, totalBytes)
-                callback.onComplete()
+                callback.onProgress(readBytes, totalBytes)
             }
         }
     }
-
 
 
 }

@@ -2,7 +2,7 @@ package com.github.kongpf8848.rxhttp.sample.http
 
 object TKURL {
 
-    const val BASE_URL_LOCAL = "http://192.168.0.105:8080/webtest/"
+    const val BASE_URL_LOCAL = "http://192.168.12.155:8080/webtest/"
     const val URL_GET = BASE_URL_LOCAL + "testGet"
     const val URL_POST = BASE_URL_LOCAL + "testPost"
     const val URL_POST_FORM = BASE_URL_LOCAL + "testPostForm"

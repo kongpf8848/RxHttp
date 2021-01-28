@@ -15,7 +15,7 @@ import okhttp3.RequestBody
 import java.io.File
 import java.io.IOException
 
-class UploadRequest<T> : PostRequest<T> {
+class UploadRequest : PostRequest {
 
     constructor(context: Context) : super(context)
     constructor(activity: Activity) : super(activity)

@@ -191,7 +191,7 @@ class MVCActivity : BaseActivity() {
                     url = TKURL.URL_UPLOAD,
                     params = map,
                     tag = null,
-                    callback = object : MVCHttpCallback<User>() {
+                    callback = object : MVCHttpCallback<String>() {
                         override fun onStart() {
                             super.onStart()
                             Log.d(TAG, "onButtonUpload onStart() called")
@@ -202,7 +202,7 @@ class MVCActivity : BaseActivity() {
                             Log.d(TAG, "onButtonUpload onProgress() called with: readBytes = $readBytes, totalBytes = $totalBytes")
                         }
 
-                        override fun onSuccess(result: User?) {
+                        override fun onSuccess(result: String?) {
                             Log.d(TAG, "onButtonUpload onSuccess() called with: result = $result")
                         }
 

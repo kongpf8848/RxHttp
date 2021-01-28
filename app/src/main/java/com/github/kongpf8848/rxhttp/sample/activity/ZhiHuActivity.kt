@@ -20,7 +20,7 @@ class ZhiHuActivity : BaseActivity() {
 
         button1.setOnClickListener {
 
-            RxHttp.getInstance().get<Feed>(this@ZhiHuActivity).url(TKURL.URL_ZHIHU).enqueue(object : HttpCallback<Feed>() {
+            RxHttp.getInstance().get(this@ZhiHuActivity).url(TKURL.URL_ZHIHU).enqueue(object : HttpCallback<Feed>() {
                 override fun onStart() {
                     Log.d(TAG, "onStart() called")
                 }

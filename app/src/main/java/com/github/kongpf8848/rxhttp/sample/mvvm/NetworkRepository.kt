@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import com.github.kongpf8848.rxhttp.RxHttp
 import com.github.kongpf8848.rxhttp.callback.DownloadCallback
 import com.github.kongpf8848.rxhttp.callback.HttpCallback
-import com.github.kongpf8848.rxhttp.request.*
 import com.jsy.tk.library.http.MvvmHttpCallback
 import com.jsy.tk.library.http.TKResponse
 
@@ -65,13 +64,12 @@ class NetworkRepository private constructor() {
             tag: Any? = null
     ): MutableLiveData<TKState<T>> {
         val liveData = MutableLiveData<TKState<T>>()
-        val request: GetRequest<TKResponse<T>> = RxHttp.getInstance().get(context)
-        request.apply {
-            url(url)
-            params(params)
-            tag(tag)
-            enqueue(newCallback(liveData))
-        }
+        RxHttp.getInstance()
+                .get(context)
+                .url(url)
+                .params(params)
+                .tag(tag)
+                .enqueue(newCallback(liveData))
         return liveData
     }
 
@@ -83,13 +81,11 @@ class NetworkRepository private constructor() {
             tag: Any? = null
     ): MutableLiveData<TKState<T>> {
         val liveData = MutableLiveData<TKState<T>>()
-        val request: PostRequest<TKResponse<T>> = RxHttp.getInstance().post(context)
-        request.apply {
-            params(params)
-            url(url)
-            tag(tag)
-            enqueue(newCallback(liveData))
-        }
+        RxHttp.getInstance().post(context)
+                .url(url)
+                .params(params)
+                .tag(tag)
+                .enqueue(newCallback(liveData))
         return liveData
     }
 
@@ -100,13 +96,11 @@ class NetworkRepository private constructor() {
             tag: Any? = null
     ): MutableLiveData<TKState<T>> {
         val liveData = MutableLiveData<TKState<T>>()
-        val request: PostFormRequest<TKResponse<T>> = RxHttp.getInstance().postForm(context)
-        request.apply {
-            params(params)
-            url(url)
-            tag(tag)
-            enqueue(newCallback(liveData))
-        }
+        RxHttp.getInstance().postForm(context)
+                .url(url)
+                .params(params)
+                .tag(tag)
+                .enqueue(newCallback(liveData))
         return liveData
     }
 
@@ -117,13 +111,11 @@ class NetworkRepository private constructor() {
             tag: Any? = null
     ): MutableLiveData<TKState<T>> {
         val liveData = MutableLiveData<TKState<T>>()
-        val request: PutRequest<TKResponse<T>> = RxHttp.getInstance().put(context)
-        request.apply {
-            params(params)
-            url(url)
-            tag(tag)
-            enqueue(newCallback(liveData))
-        }
+        RxHttp.getInstance().put(context)
+                .url(url)
+                .params(params)
+                .tag(tag)
+                .enqueue(newCallback(liveData))
         return liveData
     }
 
@@ -134,14 +126,11 @@ class NetworkRepository private constructor() {
             tag: Any? = null
     ): MutableLiveData<TKState<T>> {
         val liveData = MutableLiveData<TKState<T>>()
-        val request: DeleteRequest<TKResponse<T>> = RxHttp.getInstance().delete(context)
-        request.apply {
-            params(params)
-            url(url)
-            tag(tag)
-            enqueue(newCallback(liveData))
-        }
-
+        RxHttp.getInstance().delete(context)
+                .params(params)
+                .url(url)
+                .tag(tag)
+                .enqueue(newCallback(liveData))
         return liveData
     }
 
@@ -163,13 +152,11 @@ class NetworkRepository private constructor() {
             tag: Any? = null
     ): MutableLiveData<TKState<T>> {
         val liveData = MutableLiveData<TKState<T>>()
-        val request: UploadRequest<TKResponse<T>> = RxHttp.getInstance().upload(context)
-        request.apply {
-            url(url)
-            params(params)
-            tag(tag)
-            enqueue(newCallback(liveData))
-        }
+        RxHttp.getInstance().upload(context)
+                .url(url)
+                .params(params)
+                .tag(tag)
+                .enqueue(newCallback(liveData))
         return liveData
     }
 
