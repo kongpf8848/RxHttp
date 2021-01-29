@@ -29,6 +29,10 @@ class MainActivity : BaseMvvmActivity<MainViewModel, ActivityMainBinding>() {
             startActivity(Intent(this,ZhiHuActivity::class.java))
         }
 
+        button4.setOnClickListener {
+            startActivity(Intent(this,ZhiHuJavaActivity::class.java))
+        }
+
     }
 
 

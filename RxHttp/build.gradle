@@ -5,14 +5,14 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
-version = "1.0.9"
+version = "1.0.10"
 android {
     compileSdkVersion Config.compileSdkVersion
 
     defaultConfig {
         minSdkVersion Config.minSdkVersion
         targetSdkVersion Config.targetSdkVersion
-        versionCode 9
+        versionCode 10
         versionName version
     }
 

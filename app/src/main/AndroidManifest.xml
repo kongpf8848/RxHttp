@@ -42,7 +42,10 @@
             android:screenOrientation="portrait"
             android:label="@string/zhihu_demo"
             />
-
+        <activity android:name=".activity.ZhiHuJavaActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/zhihu_demo_java"
+            />
 
         <service android:name="com.github.kongpf8848.rxhttp.sample.service.DownloadService"
             android:exported="false"

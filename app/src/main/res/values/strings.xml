@@ -1,9 +1,10 @@
 <resources>
     <string name="app_name">RxHttp</string>
 
-    <string name="mvvm_demo">MVVM架构使用RxHttp示例</string>
-    <string name="mvc_demo">MVC架构使用RxHttp示例</string>
-    <string name="zhihu_demo">知乎日报API</string>
+    <string name="mvvm_demo">MVVM架构使用RxHttp示例(kotlin)</string>
+    <string name="mvc_demo">MVC架构使用RxHttp示例(kotlin)</string>
+    <string name="zhihu_demo">知乎日报API(kotlin)</string>
+    <string name="zhihu_demo_java">知乎日报API(java)</string>
 
     <string name="zhihu_api_latest">最新文章</string>
 
