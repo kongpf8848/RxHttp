@@ -40,178 +40,70 @@ allprojects {
 ```
 implementation 'com.github.kongpf8848:RxHttp:1.0.10'
 ```
-# GET请求
-```
-       RxHttp.getInstance()
-                .get(this)
-                .url(Constants.URL_GET)
-                .enqueue(new HttpCallback<xxx>() {
-                    @Override
-                    public void onStart() {
-                        Log.d(TAG, "onStart");
-                    }
-
-                    @Override
-                    public void onNext(xxx response) {
-                        Toast.makeText(MainActivity.this, response.getDate(), Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.d(TAG, "onError:" + e.getMessage());
-                        Toast.makeText(MainActivity.this, "error:" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        Log.d(TAG, "onComplete");
-                    }
-                });
-```
-# POST请求
-```
-        String content = "this is post content";
-        RxHttp.getInstance()
-                .post(this)
-                .content(content)
-                .url(Constants.URL_POST)
-                .enqueue(new HttpCallback<String>() {
-
-                    @Override
-                    public void onStart() {
-                        Log.d(TAG, "onStart");
-                    }
-
-                    @Override
-                    public void onNext(String response) {
-                        Toast.makeText(MainActivity.this, "response:" + response, Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.d(TAG, "onError:" + e.getMessage());
-                        Toast.makeText(MainActivity.this, "error:" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        Log.d(TAG, "onComplete");
-                    }
-                });
-```
-# POST FORM表单请求
-```
- Map<String, Object> map = new HashMap<>();
-        map.put("model", Build.MODEL);
-        map.put("manufacturer", Build.MANUFACTURER);
-        map.put("os", Build.VERSION.SDK_INT);
-        RxHttp.getInstance().postForm(this).url(Constants.URL_POST_FORM).params(map).enqueue(new HttpCallback<String>() {
-
-            @Override
-            public void onStart() {
-                Log.d(TAG, "onStart");
-            }
-
-            @Override
-            public void onNext(String response) {
-                Toast.makeText(MainActivity.this, "response:" + response, Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Log.d(TAG, "onError:" + e.getMessage());
-                Toast.makeText(MainActivity.this, "error:" + e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onComplete() {
-                Log.d(TAG, "onComplete");
-            }
-        });
-```
-# 下载请求
-```
-  RxHttp.getInstance().download(this).dir(PATH)
-                .url(Constants.URL_DOWNLOAD)
-                .enqueue(new DownloadCallback() {
-
-                    @Override
-                    public void onStart() {
-                        showProgressDialog("正在下载新版本,请稍等...");
-                    }
-
-                    @Override
-                    public void onProgress(DownloadInfo downloadInfo) {
-                        if (downloadInfo != null) {
-                            updateProgress(downloadInfo.getTotal(),downloadInfo.getProgress());
-                        }
-                    }
-
-                    @Override
-                    public void onNext(DownloadInfo downloadInfo) {
-                        Log.d(TAG, "onResponse");
-                        closeProgressDialog();
-                        MainActivity.this.downloadInfo = downloadInfo;
-                        install();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.d(TAG, "onError:"+e.getMessage());
-                        closeProgressDialog();
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        Log.d(TAG, "onComplete:");
-                    }
-
-                });
++ 基础使用
 
 ```
-# 上传请求
+   RxHttp.getInstance()
+    /**
+     * get:请求类型,可为get,post,put,delete,upload,分别对应GET/POST/PUT/DELETE/上传请求
+     * context:上下文,可为Context,Activity或Fragment类型,当context为Activity或Fragment时网络请求和生命周期绑定
+     */
+    .get(context)
+    /**
+     * 请求url,如https://www.baidu.com
+     */
+    .url("xxx")
+    /**
+     *请求参数键值对，类型为Map,可为null,如hashMapOf("name" to "jack")
+     */
+    .params(map)
+    /**
+     *每个网络请求对应的tag值,可为null,用于后续手动根据tag取消指定网络请求
+     */
+    .tag("xxx")
+    /**
+     * HttpCallback:网络回调,参数xxx为返回数据对应的数据模型,
+     * 类似RxJava中的Observer,onComplete只有在onNext回调之后执行,如发生错误则只会回调onError而不会执行onComplete
+     */
+    .enqueue(object : HttpCallback<xxx>() {
+        /**
+         * http请求开始时回调
+         */
+        override fun onStart() {
+
+        }
+
+        /**
+         * http请求成功时回调
+         */
+        override fun onNext(response: xxx?) {
+
+        }
+
+        /**
+         * http请求失败时回调
+         */
+        override fun onError(e: Throwable?) {
+
+        }
+
+        /**
+         * http请求成功完成时回调
+         */
+        override fun onComplete() {
+
+        }
+
+        /**
+         * 上传进度回调,请求方式为upload时才会回调
+         */
+        override fun onProgress(readBytes: Long, totalBytes: Long) {
+            super.onProgress(readBytes, totalBytes)
+        }
+    })
 ```
- Map<String, Object> map = new HashMap<>();
-        map.put("model", Build.MODEL);
-        map.put("manufacturer", Build.MANUFACTURER);
-        map.put("os", Build.VERSION.SDK_INT);
-        map.put("image", new File(path));
 
-        RxHttp.getInstance().upload(this).url(Constants.URL_UPLOAD).params(map).enqueue(new UploadCallback<String>() {
-            @Override
-            public void onStart() {
-                showProgressDialog("正在上传,请稍等...");
-            }
-
-            @Override
-            public void onProgress(final long totalBytes, final long readBytes) {
-                updateProgress(totalBytes,readBytes);
-            }
-
-            @Override
-            public void onNext(String response) {
-                Log.d(TAG, "response:" + response);
-                Toast.makeText(MainActivity.this, "response:" + response, Toast.LENGTH_SHORT).show();
-                closeProgressDialog();
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Log.d(TAG, "onError:" + e.getMessage());
-                Toast.makeText(MainActivity.this, "error:" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                closeProgressDialog();
-
-            }
-
-            @Override
-            public void onComplete() {
-                Log.d(TAG, "onComplete");
-                closeProgressDialog();
-            }
-        });
-```
-具体使用可参考Demo,Demo中有详细的示例，有MVVM及MVC架构如何使用RxHttp
+# 具体使用可参考Demo,Demo中有详细的示例，有MVVM及MVC架构如何使用RxHttp
 
 # License
 ```
