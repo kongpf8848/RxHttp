@@ -15,7 +15,7 @@ import java.lang.reflect.Type
 
 class DownloadConverter<T>(private val downloadRequest: DownloadRequest, private val callback: DownloadCallback) : IConverter<T> {
 
-    private val downloadInfo= DownloadInfo(downloadRequest.url, downloadRequest.dir, downloadRequest.filename)
+    private val downloadInfo= DownloadInfo(downloadRequest.getUrl(), downloadRequest.dir, downloadRequest.filename)
 
     @Throws(Exception::class)
     override fun convert(body: ResponseBody, type: Type): T {

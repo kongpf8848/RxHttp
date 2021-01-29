@@ -146,31 +146,31 @@ class RxHttp private constructor() {
         var observable: Observable<ResponseBody>? = null
         if (request is GetRequest) {
             observable = if (request.getParams() != null) {
-                httpService.get(request.url, request.getParams()!!)
+                httpService.get(request.getUrl(), request.getParams()!!)
             } else {
-                httpService.get(request.url)
+                httpService.get(request.getUrl())
             }
         } else if (request is PutRequest) {
-            observable = httpService.put(request.url, request.buildRequestBody()!!)
+            observable = httpService.put(request.getUrl(), request.buildRequestBody()!!)
         } else if (request is UploadRequest) {
-            observable = httpService.post(request.url, request.buildRequestBody()!!)
+            observable = httpService.post(request.getUrl(), request.buildRequestBody()!!)
         } else if (request is PostRequest) {
-            observable = httpService.post(request.url, request.buildRequestBody()!!)
+            observable = httpService.post(request.getUrl(), request.buildRequestBody()!!)
         } else if (request is PostFormRequest) {
             observable = if (request.getParams() != null) {
-                httpService.postForm(request.url, request.getParams()!!)
+                httpService.postForm(request.getUrl(), request.getParams()!!)
             } else {
-                httpService.postForm(request.url)
+                httpService.postForm(request.getUrl())
             }
         } else if (request is DeleteRequest) {
             observable = if (request.getParams() != null) {
-                httpService.delete(request.url, request.getParams()!!)
+                httpService.delete(request.getUrl(), request.getParams()!!)
             } else {
-                httpService.delete(request.url)
+                httpService.delete(request.getUrl())
             }
         } else if (request is DownloadRequest) {
             val file = File(request.dir, request.filename)
-            val downloadInfo = DownloadInfo(request.url, request.dir, request.filename)
+            val downloadInfo = DownloadInfo(request.getUrl(), request.dir, request.filename)
             if (!TextUtils.isEmpty(request.md5)) {
                 if (file.exists()) {
                     val fileMd5 = Md5Util.getMD5(file)
@@ -183,7 +183,7 @@ class RxHttp private constructor() {
                 }
             }
             if (request.isBreakpoint) {
-                observable = Observable.just(request.url)
+                observable = Observable.just(request.getUrl())
                         .flatMap { url ->
                             val contentLength = getContentLength(url)
                             var startPosition: Long = 0
@@ -195,9 +195,9 @@ class RxHttp private constructor() {
                                 }
                             }
                             Observable.just(startPosition)
-                        }.flatMap { position -> httpService.download(request.url, String.format("bytes=%d-", position)) }.subscribeOn(Schedulers.io())
+                        }.flatMap { position -> httpService.download(request.getUrl(), String.format("bytes=%d-", position)) }.subscribeOn(Schedulers.io())
             } else {
-                observable = httpService.download(request.url)
+                observable = httpService.download(request.getUrl())
             }
         }
         if (observable != null) {
@@ -211,8 +211,8 @@ class RxHttp private constructor() {
             }).retryWhen(RetryWithDelay(RxHttpConfig.getInstance().maxRetries, RxHttpConfig.getInstance().retryDelayMillis))
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-            if (request.context is LifecycleOwner) {
-                val lifecycleOwner = request.context as LifecycleOwner
+            if (request.getContext() is LifecycleOwner) {
+                val lifecycleOwner = request.getContext() as LifecycleOwner
                 observableFinal.`as`(AutoDispose.autoDisposable(AndroidLifecycleScopeProvider.from(lifecycleOwner, Lifecycle.Event.ON_DESTROY)))
                         .subscribe(HttpObserver(callback, request.getTag()))
             } else {

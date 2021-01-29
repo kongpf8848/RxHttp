@@ -10,9 +10,9 @@ import okhttp3.RequestBody
 
 abstract class AbsRequest {
 
-    var context: Any? = null
-    var url: String = ""
-    private var ta: Any? = null
+    private var context: Any? = null
+    private var url: String = ""
+    private var tag: Any? = null
     private var param: Map<String, Any?>? = null
     protected var callback:HttpCallback<*>?=null
 
@@ -36,7 +36,7 @@ abstract class AbsRequest {
     }
 
     fun tag(tag: Any?): AbsRequest {
-        this.ta = tag
+        this.tag = tag
         return this
     }
 
@@ -56,11 +56,14 @@ abstract class AbsRequest {
         }
 
     fun getTag(): Any? {
-        return if (ta == null) {
+        return if (tag == null) {
             RxHttpTagManager.generateRandomTag()
-        } else ta
+        } else tag
     }
 
+    fun getContext()=context
+
+    fun getUrl()=url
 
     fun getParams(): Map<String, Any?>? {
         return param?.filterValues { it!=null }
