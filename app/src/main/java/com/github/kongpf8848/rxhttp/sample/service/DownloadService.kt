@@ -28,7 +28,6 @@ import java.util.*
  */
 class DownloadService : Service() {
 
-    private var url: String? = null
     lateinit var dir: String
     lateinit var filename: String
 
@@ -36,6 +35,8 @@ class DownloadService : Service() {
     lateinit var notificationManager: NotificationManager
     private var handlerThread: HandlerThread? = null
     private var handler: DownloadHandler? = null
+
+    private var urlList= mutableListOf<String>()
 
     companion object {
         const val TAG = "DownloadService"
@@ -86,6 +87,8 @@ class DownloadService : Service() {
 
     private var downloadCallback = object : DownloadCallback() {
 
+        var url:String=""
+
         override fun onStart() {
             ToastHelper.toast("开始下载,可在通知栏查看进度")
             handler?.sendEmptyMessage(MSG_SHOW_NOTIFICATION)
@@ -106,11 +109,15 @@ class DownloadService : Service() {
         override fun onError(e: Throwable?) {
             LogUtils.d(TAG, "onError() called with: e = $e")
             handler?.sendEmptyMessage(MSG_CANCEL_NOTIFICATION)
+            urlList.remove(url)
+            LogUtils.d(TAG, "onError() called,urlList-size:${urlList.size}")
         }
 
         override fun onComplete() {
             LogUtils.d(TAG, "onComplete() called")
             handler?.sendEmptyMessage(MSG_CANCEL_NOTIFICATION)
+            urlList.remove(url)
+            LogUtils.d(TAG, "onComplete() called,urlList-size:${urlList.size}")
         }
 
     }
@@ -157,18 +164,26 @@ class DownloadService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        url = intent?.getStringExtra("url")
-        url?.run {
-            filename = substring(lastIndexOf(File.separator) + 1)
+        var urlLink = intent?.getStringExtra("url")
+        if(!TextUtils.isEmpty(urlLink)){
+            if(urlList.contains(urlLink)){
+                ToastHelper.toast("url:${urlLink} is exists in downloading!!!")
+                return super.onStartCommand(intent, flags, startId)
+            }
+            urlList.add(urlLink!!)
+            LogUtils.d(TAG, "onStartCommand called,urlList-size:${urlList.size}")
+            filename = urlLink.substring(urlLink.lastIndexOf(File.separator) + 1)
             if (TextUtils.isEmpty(filename)) {
                 filename = UUID.randomUUID().toString()
             }
             NetworkRepository.instance.httpDownload(
                     context = applicationContext,
-                    url = this,
+                    url = urlLink,
                     dir = dir,
                     filename = filename,
-                    callback = downloadCallback
+                    callback = downloadCallback.apply {
+                        url=urlLink
+                    }
             )
         }
         return super.onStartCommand(intent, flags, startId)
