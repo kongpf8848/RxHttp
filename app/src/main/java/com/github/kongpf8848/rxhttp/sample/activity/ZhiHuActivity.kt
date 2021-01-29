@@ -19,24 +19,25 @@ class ZhiHuActivity : BaseActivity() {
         setContentView(R.layout.activity_zhihu)
 
         button1.setOnClickListener {
+            RxHttp.getInstance().get(baseActivity).url(TKURL.URL_ZHIHU)
+                    .tag(null)
+                    .enqueue(object : HttpCallback<Feed>() {
+                        override fun onStart() {
+                            Log.d(TAG, "onStart() called")
+                        }
 
-            RxHttp.getInstance().get(this@ZhiHuActivity).url(TKURL.URL_ZHIHU).enqueue(object : HttpCallback<Feed>() {
-                override fun onStart() {
-                    Log.d(TAG, "onStart() called")
-                }
+                        override fun onNext(response: Feed?) {
+                            Log.d(TAG, "onNext() called with: response = $response")
+                        }
 
-                override fun onNext(response: Feed?) {
-                    Log.d(TAG, "onNext() called with: response = $response")
-                }
+                        override fun onError(e: Throwable?) {
+                            Log.d(TAG, "onError() called with: e = $e")
+                        }
 
-                override fun onError(e: Throwable?) {
-                    Log.d(TAG, "onError() called with: e = $e")
-                }
-
-                override fun onComplete() {
-                    Log.d(TAG, "onComplete() called")
-                }
-            })
+                        override fun onComplete() {
+                            Log.d(TAG, "onComplete() called")
+                        }
+                    })
         }
     }
 
