@@ -27,6 +27,16 @@
 
 + 添加依赖
 
+在项目的根目录build.gradle文件中添加
+```
+allprojects {
+    repositories {
+        jcenter()
+        maven { url "https://jitpack.io" }
+    }
+}
+```
+在项目的模块目录build.gradle文件中添加
 ```
 implementation 'com.github.kongpf8848:RxHttp:1.0.10'
 ```
