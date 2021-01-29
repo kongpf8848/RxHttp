@@ -98,7 +98,7 @@ implementation 'com.github.kongpf8848:RxHttp:1.0.10'
          * 上传进度回调,请求方式为upload时才会回调
          */
         override fun onProgress(readBytes: Long, totalBytes: Long) {
-            super.onProgress(readBytes, totalBytes)
+        
         }
     })
 ```
