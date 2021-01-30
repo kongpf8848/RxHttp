@@ -103,7 +103,7 @@ implementation 'com.github.kongpf8848:RxHttp:1.0.10'
     })
 ```
 
-# 具体使用可参考Demo,Demo中有详细的示例，有MVVM及MVC架构如何使用RxHttp
+# 具体使用可参考Demo,Demo中有详细的示例，演示MVVM及MVC架构如何使用RxHttp
 
 # License
 ```
