@@ -212,7 +212,6 @@
 
 ```
 
-
 # 强烈建议下载Demo代码，Demo中有详细的示例，演示MVVM及MVC架构如何使用RxHttp，如有问题可在可私信我，[简书](https://www.jianshu.com/u/1b18a5907317)
 
 # License
