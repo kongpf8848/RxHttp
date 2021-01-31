@@ -148,7 +148,7 @@
    * download:请求类型，下载请求
    * context:上下文，如不需要和生命周期绑定,应该传递applicationContext
    */
-  .download(applicationContext)
+  .download(context)
   /**
    * 保存路径
    */
@@ -170,32 +170,32 @@
    */
   .tag(null)
   /**
-   * 下载回调DownloadCallback
+   * 下载回调
    */
   .enqueue(object: DownloadCallback() {
       /**
-       * http请求开始时回调
+       * 下载开始时回调
        */
       override fun onStart() {
 
       }
 
       /**
-       * http请求成功时回调
+       * 下载完成时回调
        */
       override fun onNext(response: DownloadInfo?) {
 
       }
 
       /**
-       * http请求失败时回调
+       * 下载失败时回调
        */
       override fun onError(e: Throwable?) {
 
       }
 
       /**
-       * http请求成功完成时回调
+       * 下载完成之后回调
        */
       override fun onComplete() {
 
