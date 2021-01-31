@@ -30,7 +30,7 @@
 
 + 在项目的根目录build.gradle文件中添加：
 
-  ```
+  ```groovy
   allprojects {
       repositories {
           jcenter()
@@ -41,13 +41,13 @@
 
 + 在项目的模块目录build.gradle文件中添加：
 
-  ```
+  ```groovy
   implementation 'com.github.kongpf8848:RxHttp:1.0.10'
   ```
 
 # 配置(可选)
 
-```
+```java
   RxHttpConfig.getInstance()
     /**
      * 失败重试次数
@@ -80,7 +80,7 @@
 
 + GET/POST/PUT/DELETE/上传请求
 
-```
+```java
    RxHttp.getInstance()
     /**
      * get:请求类型，可为get,post,put,delete,upload，分别对应GET/POST/PUT/DELETE/上传请求
@@ -142,7 +142,7 @@
 ```
 + 下载请求
 
-```
+```java
  RxHttp.getInstance()
   /**
    * download:请求类型，下载请求
