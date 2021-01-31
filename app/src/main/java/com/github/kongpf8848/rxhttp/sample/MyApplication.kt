@@ -6,6 +6,8 @@ import com.github.kongpf8848.rxhttp.RxHttpConfig
 import com.github.kongpf8848.rxhttp.sample.http.interceptor.MockInterceptor
 import com.github.kongpf8848.rxhttp.sample.utils.LogUtils
 import com.kongpf.commonhelper.ToastHelper
+import okhttp3.OkHttpClient
+import java.util.concurrent.TimeUnit
 
 
 class MyApplication : Application() {
@@ -21,21 +23,34 @@ class MyApplication : Application() {
 
         /**
          * 对RxHttp进行配置，可选
-         * 失败重试3次，每次间隔200毫秒
-         * 添加日志打印拦截器HttpLoggingInterceptor
-         * 添加模拟网络请求拦截器MockInterceptor
          */
         RxHttpConfig.getInstance()
+                /**
+                 * 失败重试次数
+                 */
                 .maxRetries(3)
+                /**
+                 * 每次失败重试间隔时间
+                 */
                 .retryDelayMillis(200)
-                .getBuilder().apply {
+                /**
+                 * 自定义OkHttpClient.Builder(),RxHttp支持自定义OkHttpClient.Builder(),
+                 * 如不定义,则使用RxHttp默认的OkHttpClient.Builder()
+                 */
+                .builder(OkHttpClient.Builder().apply {
+                    connectTimeout(60, TimeUnit.SECONDS)
+                    readTimeout(60, TimeUnit.SECONDS)
+                    writeTimeout(60, TimeUnit.SECONDS)
+                    /**
+                     * DEBUG模式下,添加日志拦截器,建议使用RxHttp中的FixHttpLoggingInterceptor,使用OkHttp的HttpLoggingInterceptor在上传下载的时候会有问题
+                     */
                     if (BuildConfig.DEBUG) {
                         addInterceptor(FixHttpLoggingInterceptor().apply {
                             level = FixHttpLoggingInterceptor.Level.BODY
                         })
                         addInterceptor(MockInterceptor())
                     }
-                }
+                })
 
     }
 }
