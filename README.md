@@ -47,7 +47,7 @@
 
 # 配置(可选)
 
-```java
+```kotlin
   RxHttpConfig.getInstance()
     /**
      * 失败重试次数
@@ -80,7 +80,7 @@
 
 + GET/POST/PUT/DELETE/上传请求
 
-```java
+```kotlin
    RxHttp.getInstance()
     /**
      * get:请求类型，可为get,post,put,delete,upload，分别对应GET/POST/PUT/DELETE/上传请求
@@ -142,7 +142,7 @@
 ```
 + 下载请求
 
-```java
+```kotlin
  RxHttp.getInstance()
   /**
    * download:请求类型，下载请求
