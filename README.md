@@ -18,7 +18,7 @@
 
 + 支持GET,POST,PUT,DELETE等请求方式，支持文件上传及进度监听，支持同时上传多个文件，支持Uri上传，兼容Android 10&11系统
 
-+ 支持文件下载及进度监听，支持大文件下载，支持断点下载，支持文件MD5校验
++ 支持文件下载及进度监听，支持大文件下载，支持断点下载
 
 + 代码量极少，类库体积不足100kb，但足以胜任大部分APP的网络请求任务，浓缩的都是精华_^_
 
@@ -72,12 +72,13 @@
             addInterceptor(FixHttpLoggingInterceptor().apply {
                 level = FixHttpLoggingInterceptor.Level.BODY
             })
-            addInterceptor(MockInterceptor())
         }
     })
 ```
 
 # 基础使用
+
++ GET/POST/PUT/DELETE/上传请求
 
 ```
    RxHttp.getInstance()
@@ -139,6 +140,78 @@
         }
     })
 ```
++ 下载请求
+
+```
+ RxHttp.getInstance()
+  /**
+   * download:请求类型，下载请求
+   * context:上下文，如不需要和生命周期绑定,应该传递applicationContext
+   */
+  .download(applicationContext)
+  /**
+   * 保存路径
+   */
+  .dir(dir)
+  /**
+   *保存文件名称
+   */
+  .filename(filename)
+  /**
+   * 是否为断点下载，默认为false
+   */
+  .breakpoint(true)
+  /**
+   * 下载地址，如http://study.163.com/pub/ucmooc/ucmooc-android-official.apk
+   */
+  .url(url)
+  /**
+   * 请求Tag
+   */
+  .tag(null)
+  /**
+   * 下载回调DownloadCallback
+   */
+  .enqueue(object: DownloadCallback() {
+      /**
+       * http请求开始时回调
+       */
+      override fun onStart() {
+
+      }
+
+      /**
+       * http请求成功时回调
+       */
+      override fun onNext(response: DownloadInfo?) {
+
+      }
+
+      /**
+       * http请求失败时回调
+       */
+      override fun onError(e: Throwable?) {
+
+      }
+
+      /**
+       * http请求成功完成时回调
+       */
+      override fun onComplete() {
+
+      }
+
+      /**
+       * 下载进度回调
+       */
+      override fun onProgress(readBytes: Long, totalBytes: Long) {
+
+      }
+
+  })
+
+```
+
 
 # 强烈建议下载Demo代码，Demo中有详细的示例，演示MVVM及MVC架构如何使用RxHttp
 
