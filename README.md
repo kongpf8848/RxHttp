@@ -24,7 +24,7 @@
 
 # 使用要求
 
-  项目基于AndroidX,minSdkVersion>=21(Android 5.0)
+项目基于AndroidX,minSdkVersion>=21(Android 5.0)
 
 # Gradle
 
@@ -143,76 +143,75 @@
 + 下载请求
 
 ```kotlin
- RxHttp.getInstance()
-  /**
-   * download:请求类型，下载请求
-   * context:上下文，如不需要和生命周期绑定,应该传递applicationContext
-   */
-  .download(context)
-  /**
-   * 保存路径
-   */
-  .dir(dir)
-  /**
-   *保存文件名称
-   */
-  .filename(filename)
-  /**
-   * 是否为断点下载，默认为false
-   */
-  .breakpoint(true)
-  /**
-   * 下载地址，如http://study.163.com/pub/ucmooc/ucmooc-android-official.apk
-   */
-  .url(url)
-  /**
-   * 请求Tag
-   */
-  .tag(null)
-  /**
-   * 下载回调
-   */
-  .enqueue(object: DownloadCallback() {
+   RxHttp.getInstance()
       /**
-       * 下载开始时回调
+       * download:请求类型，下载请求
+       * context:上下文，如不需要和生命周期绑定,应该传递applicationContext
        */
-      override fun onStart() {
-
-      }
-
+      .download(context)
       /**
-       * 下载完成时回调
+       * 保存路径
        */
-      override fun onNext(response: DownloadInfo?) {
-
-      }
-
+      .dir(dir)
       /**
-       * 下载失败时回调
+       *保存文件名称
        */
-      override fun onError(e: Throwable?) {
-
-      }
-
+      .filename(filename)
       /**
-       * 下载完成之后回调
+       * 是否为断点下载，默认为false
        */
-      override fun onComplete() {
-
-      }
-
+      .breakpoint(true)
       /**
-       * 下载进度回调
+       * 下载地址，如http://study.163.com/pub/ucmooc/ucmooc-android-official.apk
        */
-      override fun onProgress(readBytes: Long, totalBytes: Long) {
-
-      }
-
-  })
+      .url(url)
+      /**
+       * 请求Tag
+       */
+      .tag(null)
+      /**
+       * 下载回调
+       */
+      .enqueue(object: DownloadCallback() {
+          /**
+           * 下载开始时回调
+           */
+          override fun onStart() {
+    
+          }
+    
+          /**
+           * 下载完成时回调
+           */
+          override fun onNext(response: DownloadInfo?) {
+    
+          }
+    
+          /**
+           * 下载失败时回调
+           */
+          override fun onError(e: Throwable?) {
+    
+          }
+    
+          /**
+           * 下载完成之后回调
+           */
+          override fun onComplete() {
+    
+          }
+    
+          /**
+           * 下载进度回调
+           */
+          override fun onProgress(readBytes: Long, totalBytes: Long) {
+    
+          }
+    
+      })
 
 ```
-
-# 强烈建议下载Demo代码，Demo中有详细的示例，演示MVVM及MVC架构如何使用RxHttp，如有问题可私信我，[简书](https://www.jianshu.com/u/1b18a5907317)
+# 强烈建议下载Demo代码，Demo中有详细的示例，演示MVVM及MVC架构如何使用RxHttp，如有问题可私信我，[简书](https://www.jianshu.com/u/1b18a5907317) 
 
 # License
 ```
