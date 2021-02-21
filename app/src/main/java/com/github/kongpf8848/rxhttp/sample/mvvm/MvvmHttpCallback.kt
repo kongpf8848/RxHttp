@@ -1,7 +1,7 @@
 package com.jsy.tk.library.http
 
+import com.github.kongpf8848.rxhttp.typebuilder.TypeBuilder
 import com.github.kongpf8848.rxhttp.util.TypeUtil
-import ikidou.reflect.TypeBuilder
 import java.lang.reflect.Type
 
 abstract class MvvmHttpCallback<T>() {

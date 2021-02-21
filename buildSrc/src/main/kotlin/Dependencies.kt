@@ -43,7 +43,6 @@ object Versions {
     const val RXANDROID_VERSION = "2.0.2"
     const val RETROFIT_VERSION = "2.9.0"
     const val OKHTTP_VERSION = "4.9.0"
-    const val TYPE_BUILDER_VERSION="1.0"
     const val AUTODISPOSE_VERSION="1.4.0"
     const val COMMON_HELPER_VERSION="1.0.20"
 
@@ -61,8 +60,6 @@ object BuildDependencies {
     val retrofitAdapterRxjava2 = "com.squareup.retrofit2:adapter-rxjava2:${Versions.RETROFIT_VERSION}"
     val retrofitConverterGson = "com.squareup.retrofit2:converter-gson:${Versions.RETROFIT_VERSION}"
     val autodispose= "com.uber.autodispose:autodispose-android-archcomponents:${Versions.AUTODISPOSE_VERSION}"
-    val loggingInterceptor = "com.squareup.okhttp3:logging-interceptor:${Versions.OKHTTP_VERSION}"
-    val typeBuilder="com.github.ikidou:TypeBuilder:${Versions.TYPE_BUILDER_VERSION}"
     val okhttp= "com.squareup.okhttp3:okhttp:${Versions.OKHTTP_VERSION}"
     val commonhelper= "com.kongpf.commonhelper:common-helper:${Versions.COMMON_HELPER_VERSION}"
 }

@@ -13,8 +13,8 @@ import com.github.kongpf8848.rxhttp.bean.DownloadInfo
 import com.github.kongpf8848.rxhttp.callback.DownloadCallback
 import com.github.kongpf8848.rxhttp.sample.R
 import com.github.kongpf8848.rxhttp.sample.mvvm.NetworkRepository
+import com.github.kongpf8848.rxhttp.sample.utils.ApkUtils
 import com.github.kongpf8848.rxhttp.sample.utils.LogUtils
-import com.kongpf.commonhelper.ApkHelper
 import com.kongpf.commonhelper.NotificationHelper
 import com.kongpf.commonhelper.StorageHelper
 import com.kongpf.commonhelper.ToastHelper
@@ -78,7 +78,7 @@ class DownloadService : Service() {
                     notificationManager.cancel(DOWNLOAD_NOTIFY_ID)
                 }
                 MSG_INSTALL_APK -> {
-                    ApkHelper.installApk(applicationContext, File(dir, filename), "$packageName.fileprovider")
+                    ApkUtils.installApk(applicationContext, File(dir, filename), "$packageName.fileprovider")
                 }
             }
         }

@@ -44,12 +44,10 @@ dependencies {
     api BuildDependencies.rxAndroid
     api BuildDependencies.retrofit
     api BuildDependencies.okhttp
-    api BuildDependencies.typeBuilder
     api BuildDependencies.retrofitConverterScalars
     api BuildDependencies.retrofitConverterGson
     api BuildDependencies.retrofitAdapterRxjava2
     api BuildDependencies.autodispose
-    api BuildDependencies.loggingInterceptor
 }
 
 def siteUrl = 'https://github.com/kongpf8848/RxHttp'

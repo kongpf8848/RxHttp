@@ -210,7 +210,7 @@ class MVVMActivity : BaseMvvmActivity<MainViewModel, ActivityMainBinding>() {
          * 启动Service进行下载
          */
         val intent= Intent(this, DownloadService::class.java)
-        intent.putExtra("url",TKURL.URL_DOWNLOAD_2)
+        intent.putExtra("url",TKURL.URL_DOWNLOAD)
         startService(intent)
     }
 
