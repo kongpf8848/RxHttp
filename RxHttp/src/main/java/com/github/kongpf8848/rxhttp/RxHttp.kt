@@ -51,6 +51,8 @@ class RxHttp private constructor() {
         httpService = retrofit.create(HttpService::class.java)
     }
 
+    fun getOkHttpClient()=okHttpClient
+
     //GET请求
     fun get(context: Context): GetRequest {
         return GetRequest(context)
