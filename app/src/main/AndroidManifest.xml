@@ -46,6 +46,10 @@
             android:screenOrientation="portrait"
             android:label="@string/zhihu_demo_java"
             />
+        <activity android:name=".activity.GlideActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/glide_demo"
+            />
 
         <service android:name="com.github.kongpf8848.rxhttp.sample.service.DownloadService"
             android:exported="false"

@@ -33,6 +33,10 @@ class MainActivity : BaseMvvmActivity<MainViewModel, ActivityMainBinding>() {
             startActivity(Intent(this,ZhiHuJavaActivity::class.java))
         }
 
+        button5.setOnClickListener {
+            startActivity(Intent(this,GlideActivity::class.java))
+        }
+
     }
 
 

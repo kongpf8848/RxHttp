@@ -64,7 +64,9 @@ dependencies {
     implementation BuildDependencies.kotlinStdlibJdk7
     implementation BuildDependencies.gson
     implementation BuildDependencies.commonhelper
-
+    implementation BuildDependencies.glide
+    kapt BuildDependencies.glideCompiler
+    implementation BuildDependencies.glideIntegration
 
 
 
