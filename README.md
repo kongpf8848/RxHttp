@@ -402,7 +402,7 @@ class TKResponse<T>(val code:Int,val msg: String?, val data: T?) : Serializable 
      })
      ```
    
-      **具体使用可以参考demo代码，demo中有详细的示例演示MVC项目如何使用RxHttp**
+     **具体使用可以参考demo代码，demo中有详细的示例演示MVC项目如何使用RxHttp**
    
  * MVVM项目
      * 定义Activity基类BaseMvvmActivity
