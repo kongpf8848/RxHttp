@@ -14,7 +14,7 @@
     <string name="http_post_form">POST FORM请求</string>
     <string name="http_put">PUT请求</string>
     <string name="http_delete">DELETE请求</string>
-    <string name="upload">上传</string>
+    <string name="upload">上传(需要和后台服务端协作)</string>
     <string name="download">下载</string>
 
     <string name="permission_dialog_title">权限申请</string>
