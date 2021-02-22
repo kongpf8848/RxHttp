@@ -7,14 +7,16 @@ object Config{
     val targetSdkVersion = 30
     val sourceCompatibilityVersion = JavaVersion.VERSION_1_8
     val targetCompatibilityVersion = JavaVersion.VERSION_1_8
-    val versionCode = 1
-    val versionName = "1.0.0"
+    val versionCode = 11
+    val versionName = "1.0.11"
 
 }
 
 object Versions {
 
     const val PLUGIN_GRADLE_VERSION="3.6.3"
+    const val PLUGIN_BINTRAY_VERSION="1.7.3"
+    const val PLUGIN_MAVEN_VERSION="2.1"
     const val KOTLIN_VERSION = "1.3.60"
 
     const val ANDROIDX_APP_COMPAT_VERSION = "1.2.0"

@@ -1,4 +1,4 @@
-package com.jsy.tk.library.image
+package com.github.kongpf8848.rxhttp.sample.image
 
 import android.app.Activity
 import android.content.Context

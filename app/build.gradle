@@ -9,8 +9,8 @@ android {
     defaultConfig {
         minSdkVersion Config.minSdkVersion
         targetSdkVersion Config.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode Config.versionCode
+        versionName Config.versionName
     }
     buildTypes {
         debug {

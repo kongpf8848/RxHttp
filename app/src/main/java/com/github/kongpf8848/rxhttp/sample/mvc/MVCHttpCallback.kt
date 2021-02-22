@@ -1,8 +1,8 @@
 package com.github.kongpf8848.rxhttp.sample.mvc
 
+import com.github.kongpf8848.rxhttp.sample.http.TKResponse
 import com.github.kongpf8848.rxhttp.typebuilder.TypeBuilder
 import com.github.kongpf8848.rxhttp.util.TypeUtil
-import com.jsy.tk.library.http.TKResponse
 import java.lang.reflect.Type
 
 abstract class MVCHttpCallback<T> {

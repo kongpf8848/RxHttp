@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.os.Looper
 import com.github.kongpf8848.rxhttp.sample.R
 import com.github.kongpf8848.rxhttp.sample.base.BaseActivity
-import com.jsy.tk.library.image.ImageLoader
+import com.github.kongpf8848.rxhttp.sample.image.ImageLoader
 import kotlinx.android.synthetic.main.activity_glide.*
 
 class GlideActivity : BaseActivity() {

@@ -2,8 +2,8 @@ package com.github.kongpf8848.rxhttp.sample.mvvm
 
 import com.github.kongpf8848.rxhttp.sample.http.TKErrorCode
 import com.github.kongpf8848.rxhttp.sample.http.TKErrorCode.handleThrowable
+import com.github.kongpf8848.rxhttp.sample.http.TKResponse
 import com.github.kongpf8848.rxhttp.sample.http.exception.NullResponseException
-import com.jsy.tk.library.http.TKResponse
 import com.jsy.tk.library.http.exception.ServerException
 
 /**

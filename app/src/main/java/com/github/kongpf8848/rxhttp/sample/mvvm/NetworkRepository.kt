@@ -5,8 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.github.kongpf8848.rxhttp.RxHttp
 import com.github.kongpf8848.rxhttp.callback.DownloadCallback
 import com.github.kongpf8848.rxhttp.callback.HttpCallback
-import com.jsy.tk.library.http.MvvmHttpCallback
-import com.jsy.tk.library.http.TKResponse
+import com.github.kongpf8848.rxhttp.sample.http.TKResponse
 
 /**
  * MVVM架构网络仓库

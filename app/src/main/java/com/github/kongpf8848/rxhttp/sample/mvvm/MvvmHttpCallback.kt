@@ -1,5 +1,6 @@
-package com.jsy.tk.library.http
+package com.github.kongpf8848.rxhttp.sample.mvvm
 
+import com.github.kongpf8848.rxhttp.sample.http.TKResponse
 import com.github.kongpf8848.rxhttp.typebuilder.TypeBuilder
 import com.github.kongpf8848.rxhttp.util.TypeUtil
 import java.lang.reflect.Type
