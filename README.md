@@ -18,7 +18,7 @@
 
 + 支持Glide等和网络请求公用一个OkHttpClient，充分利用OkHttpClient的线程池和连接池，大部分情况下一个App一个OkHttpClient就够了
 
-+ 支持GET，POST，PUT，DELETE等请求方式，支持文件上传及进度监听，支持同时上传多个文件，支持Uri上传，兼容Android 10&11系统
++ 支持GET，POST，PUT，DELETE等请求方式，支持文件上传及进度监听，支持同时上传多个文件，支持Uri上传
 
 + 支持文件下载及进度监听，支持大文件下载，支持断点下载
 
@@ -220,7 +220,7 @@
 	"msg": ""
 }
  ```
-对应的Repsonse类为
+对应的Response类为
 ```kotlin
 class TKResponse<T>(val code:Int,val msg: String?, val data: T?) : Serializable {
     companion object{
@@ -373,7 +373,7 @@ class TKResponse<T>(val code:Int,val msg: String?, val data: T?) : Serializable 
        }
    ```
    
-   * 在View层如Activity中调用网络接口
+     * 在View层如Activity中调用网络接口
    
    
      ```kotlin
