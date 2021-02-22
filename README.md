@@ -25,25 +25,12 @@
 
 # 使用要求
 
-项目基于AndroidX,minSdkVersion>=21(Android 5.0)
+项目基于AndroidX，JAVA8+，minSdkVersion>=21
 
-# Gradle
-
-+ 在项目的根目录build.gradle文件中添加：
+# 使用
 
   ```groovy
-  allprojects {
-      repositories {
-          jcenter()
-          maven { url "https://jitpack.io" }
-      }
-  }
-  ```
-
-+ 在项目的模块目录build.gradle文件中添加：
-
-  ```groovy
-  implementation 'com.github.kongpf8848:RxHttp:1.0.10'
+  implementation 'com.github.kongpf8848:RxHttp:1.0.11'
   ```
 
 # 配置(可选)
