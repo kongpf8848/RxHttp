@@ -211,7 +211,7 @@
 ```
 # 项目实战
 
-此处假设服务端返回数据格式为{"code":200,"data":T,"msg":""}，其中code为响应码，code等于200时为成功，其余为失败，data对应的数据类型为泛型(boolean，int，double，String，对象{ }，数组[ ]等类型)
+此处假设服务端返回的数据格式为{"code":xxx,"data":T,"msg":""}，其中code为响应码，整型,等于200时为成功，其余为失败，data对应的数据类型为泛型(boolean，int，double，String，对象{ }，数组[ ]等类型)
 
  ```xml
  {
@@ -234,6 +234,7 @@ class TKResponse<T>(val code:Int,val msg: String?, val data: T?) : Serializable 
 * MVC项目
 
     * 定义MVCHttpCallback,用于将网络请求结果回调给UI界面
+    
     
     ```kotlin
    abstract class MVCHttpCallback<T> {
@@ -260,27 +261,28 @@ class TKResponse<T>(val code:Int,val msg: String?, val data: T?) : Serializable 
         /**
          * 抽象方法，请求成功回调，返回内容为泛型，对应TKResponse的data
          */
-     abstract fun onSuccess(result: T?)
+        abstract fun onSuccess(result: T?)
    
         /**
          * 抽象方法，请求失败回调，返回内容为code(错误码)，msg(错误信息)
          */
-     abstract fun onFailure(code: Int, msg: String?)
+        abstract fun onFailure(code: Int, msg: String?)
    
         /**
          * 上传进度回调，默认为空实现
          */
-     open fun onProgress(readBytes: Long, totalBytes: Long) {}
+        open fun onProgress(readBytes: Long, totalBytes: Long) {}
    
         /**
          * 请求完成时回调，请求成功之后才会回调此方法，默认为空实现
          */
-     open fun onComplete() {}
+        open fun onComplete() {}
    
    }
    ```
    
    * 定义网络接口,封装GET/POST等网络请求
+   
    
    ```kotlin
    object MVCApi {
@@ -329,7 +331,7 @@ class TKResponse<T>(val code:Int,val msg: String?, val data: T?) : Serializable 
                    .enqueue(simpleHttpCallback(callback))
        }
        
-       .....
+       ......
        
         inline fun <reified T> simpleHttpCallback(callback: MVCHttpCallback<T>): HttpCallback<TKResponse<T>> {
            return object : HttpCallback<TKResponse<T>>(callback.getType()) {
@@ -373,6 +375,7 @@ class TKResponse<T>(val code:Int,val msg: String?, val data: T?) : Serializable 
    
    * 在View层如Activity中调用网络接口
    
+   
      ```kotlin
      MVCApi.httpGet(context = baseActivity,
                      url = TKURL.URL_GET,
@@ -401,7 +404,8 @@ class TKResponse<T>(val code:Int,val msg: String?, val data: T?) : Serializable 
       具体使用可以参考demo代码，demo中有详细的示例演示MVC项目使用RxHttp
    
  * MVVM项目
-     具体使用可以参考demo代码，demo中有详细的示例演示MVC项目使用RxHttp
+ 
+ 具体使用可以参考demo代码，demo中有详细的示例演示MVC项目使用RxHttp
    
 # 强烈建议下载Demo代码，Demo中有详细的示例，演示MVVM及MVC架构如何使用RxHttp，如有问题可私信我，[简书](https://www.jianshu.com/u/1b18a5907317) [掘金](https://juejin.cn/user/3808364011199591)
 
