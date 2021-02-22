@@ -11,6 +11,14 @@ import com.jsy.tk.library.http.exception.ServerException
 
 object MVCApi {
 
+    /**
+     * GET请求
+     * context:上下文
+     * url：请求url
+     * params:参数列表，可为null
+     * tag：标识一个网络请求
+     * callback：网络请求回调
+     */
     inline fun <reified T> httpGet(
             context: Context,
             url: String,
@@ -25,6 +33,14 @@ object MVCApi {
                 .enqueue(simpleHttpCallback(callback))
     }
 
+    /**
+     * POST请求
+     * context:上下文
+     * url：请求url
+     * params:参数列表，可为null
+     * tag：标识一个网络请求
+     * callback：网络请求回调
+     */
     inline fun <reified T> httpPost(
             context: Context,
             url: String,

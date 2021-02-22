@@ -209,6 +209,200 @@
      */
     RxHttp.getInstance().cancelRequest(tag)
 ```
+# 项目实战
+
+此处假设服务端返回数据格式为{"code":200,"data":T,"msg":""}，其中code为响应码，code等于200时为成功，其余为失败，data对应的数据类型为泛型(boolean，int，double，String，对象{ }，数组[ ]等类型)
+
+ ```xml
+ {
+	"code": 200,
+	"data":T,
+	"msg": ""
+}
+ ```
+对应的Repsonse类为
+```kotlin
+class TKResponse<T>(val code:Int,val msg: String?, val data: T?) : Serializable {
+    companion object{
+        const val STATUS_OK=200
+    }
+    fun isSuccess():Boolean{
+        return code== STATUS_OK
+    }
+}
+```
+* MVC项目
+
+    * 定义MVCHttpCallback,用于将网络请求结果回调给UI界面
+    
+    ```kotlin
+   abstract class MVCHttpCallback<T> {
+
+        private val type: Type
+
+        init {
+            val arg = TypeUtil.getType(javaClass)
+            type = TypeBuilder
+                    .newInstance(TKResponse::class.java)
+                    .addTypeParam(arg)
+                    .build()
+        }
+
+        fun getType(): Type {
+            return this.type
+        }
+
+        /**
+         * 请求开始时回调，可以在此加载loading对话框等,默认为空实现
+         */
+        open fun onStart() {}
+       
+        /**
+         * 抽象方法，请求成功回调，返回内容为泛型，对应TKResponse的data
+         */
+     abstract fun onSuccess(result: T?)
+   
+        /**
+         * 抽象方法，请求失败回调，返回内容为code(错误码)，msg(错误信息)
+         */
+     abstract fun onFailure(code: Int, msg: String?)
+   
+        /**
+         * 上传进度回调，默认为空实现
+         */
+     open fun onProgress(readBytes: Long, totalBytes: Long) {}
+   
+        /**
+         * 请求完成时回调，请求成功之后才会回调此方法，默认为空实现
+         */
+     open fun onComplete() {}
+   
+   }
+   ```
+   
+   * 定义网络接口,封装GET/POST等网络请求
+   
+   ```kotlin
+   object MVCApi {
+   
+       /**
+        * GET请求
+        * context:上下文
+        * url：请求url
+        * params:参数列表，可为null
+        * tag：标识一个网络请求
+        * callback：网络请求回调
+        */
+       inline fun <reified T> httpGet(
+               context: Context,
+               url: String,
+               params: Map<String, Any?>?,
+               tag: Any? = null,
+               callback: MVCHttpCallback<T>
+       ) {
+           RxHttp.getInstance().get(context)
+                   .url(url)
+                   .params(params)
+                   .tag(tag)
+                   .enqueue(simpleHttpCallback(callback))
+       }
+   
+       /**
+        * POST请求
+        * context:上下文
+        * url：请求url
+        * params:参数列表，可为null
+        * tag：标识一个网络请求
+        * callback：网络请求回调
+        */
+       inline fun <reified T> httpPost(
+               context: Context,
+               url: String,
+               params: Map<String, Any?>?,
+               tag: Any? = null,
+               callback: MVCHttpCallback<T>
+       ) {
+           RxHttp.getInstance().post(context)
+                   .url(url)
+                   .params(params)
+                   .tag(tag)
+                   .enqueue(simpleHttpCallback(callback))
+       }
+       
+       .....
+       
+        inline fun <reified T> simpleHttpCallback(callback: MVCHttpCallback<T>): HttpCallback<TKResponse<T>> {
+           return object : HttpCallback<TKResponse<T>>(callback.getType()) {
+               override fun onStart() {
+                   super.onStart()
+                   callback.onStart()
+               }
+   
+               override fun onNext(response: TKResponse<T>?) {
+                   if (response != null) {
+                       if (response.isSuccess()) {
+                           callback.onSuccess(response.data)
+                       } else {
+                           return onError(ServerException(response.code, response.msg))
+                       }
+   
+                   } else {
+                       return onError(NullResponseException(TKErrorCode.ERRCODE_RESPONSE_NULL, TKErrorCode.ERRCODE_RESPONSE_NULL_DESC))
+                   }
+   
+               }
+   
+               override fun onError(e: Throwable?) {
+                   handleThrowable(e).run {
+                       callback.onFailure(first, second)
+                   }
+               }
+   
+               override fun onComplete() {
+                   super.onComplete()
+                   callback.onComplete()
+               }
+   
+               override fun onProgress(readBytes: Long, totalBytes: Long) {
+                   super.onProgress(readBytes, totalBytes)
+                   callback.onProgress(readBytes, totalBytes)
+               }
+           }
+       }
+   ```
+   
+   * 在View层如Activity中调用网络接口
+   
+     ```kotlin
+     MVCApi.httpGet(context = baseActivity,
+                     url = TKURL.URL_GET,
+                     params = null,
+                     tag = null, callback = object : MVCHttpCallback<List<Banner>>() {
+                 override fun onStart() {
+                     LogUtils.d(TAG, "onButtonGet onStart() called")
+                 }
+     
+                 override fun onSuccess(result: List<Banner>?) {
+                     Log.d(TAG, "onButtonGet onSuccess() called with: result = $result")
+                 }
+     
+                 override fun onFailure(code: Int, msg: String?) {
+                     Log.d(TAG, "onButtonGet onFailure() called with: code = $code, msg = $msg")
+                 }
+     
+                 override fun onComplete() {
+                     Log.d(TAG, "onButtonGet onComplete() called")
+                 }
+     
+     
+             })
+     ```
+   
+      具体使用可以参考demo代码，demo中有详细的示例演示MVC项目使用RxHttp
+   
+ * MVVM项目
+     具体使用可以参考demo代码，demo中有详细的示例演示MVC项目使用RxHttp
+   
 # 强烈建议下载Demo代码，Demo中有详细的示例，演示MVVM及MVC架构如何使用RxHttp，如有问题可私信我，[简书](https://www.jianshu.com/u/1b18a5907317) [掘金](https://juejin.cn/user/3808364011199591)
 
 # License
