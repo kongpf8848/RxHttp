@@ -14,9 +14,9 @@
 
 + 天生支持多BaseUrl,支持动态传入Url
 
-+ 支持自定义OkHttpClient.Builder及OkHttpClient，可高度自定义网络请求参数
++ 支持自定义OkHttpClient.Builder，可高度自定义网络请求参数
 
-+ 支持Glide和网络请求公用一个OkHttpClient，一个App一个OkHttpClient就足够了
++ 支持Glide等和网络请求公用一个OkHttpClient，充分利用OkHttpClient的线程池和连接池，大部分情况下一个App一个OkHttpClient就够了
 
 + 支持GET,POST,PUT,DELETE等请求方式，支持文件上传及进度监听，支持同时上传多个文件，支持Uri上传，兼容Android 10&11系统
 
