@@ -1,6 +1,6 @@
 # RxHttp
 
-基于RxJava2+Retrofit 2.9.0+OkHttp 4.9.0实现的轻量级，完美兼容MVVM架构的网络请求封装类库，小巧精致，简单易用，网络请求原来如此简单:smile::smile::smile:
+基于RxJava2+Retrofit 2.9.0+OkHttp 4.9.0实现的轻量级，完美兼容MVVM架构的网络请求封装类库，小巧精致，简单易用，网络请求原来如此简单:smirk::smirk::smirk:
 
 # 亮点
 
@@ -25,7 +25,7 @@
 
 # 使用要求
 
-项目基于AndroidX，JAVA8+，minSdkVersion>=21
+项目基于AndroidX，Java8+，minSdkVersion>=21
 
 # 使用
 
