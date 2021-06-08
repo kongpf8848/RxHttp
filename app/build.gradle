@@ -68,6 +68,4 @@ dependencies {
     kapt BuildDependencies.glideCompiler
     implementation BuildDependencies.glideIntegration
 
-
-
 }

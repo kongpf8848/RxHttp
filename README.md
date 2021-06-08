@@ -16,7 +16,7 @@
 
 + 支持自定义OkHttpClient.Builder，可高度自定义网络请求参数
 
-+ 支持Glide等和网络请求公用一个OkHttpClient，充分利用OkHttpClient的线程池和连接池，大部分情况下一个App一个OkHttpClient就够了
++ 支持Glide等和http请求公用一个OkHttpClient，充分利用OkHttpClient的线程池和连接池，大部分情况下一个App一个OkHttpClient就够了
 
 + 支持GET，POST，PUT，DELETE等请求方式，支持文件上传及进度监听，支持同时上传多个文件，支持Uri上传
 
@@ -28,10 +28,18 @@
 项目基于AndroidX，Java8+，minSdkVersion>=21
 
 # 使用
-
-  ```groovy
-  implementation 'com.github.kongpf8848:RxHttp:1.0.11'
-  ```
+* 在项目根目录的build.gradle文件中添加：
+```
+allprojects {
+    repositories {
+        mavenCentral()
+    }
+}
+```
+* 在具体Module的build.gradle文件中添加:
+```
+implementation 'io.github.kongpf8848:RxHttp:1.0.11'
+```
 
 # 配置(可选)
 
