@@ -180,6 +180,7 @@ class RxHttp private constructor() {
                         downloadInfo.total = file.length()
                         downloadInfo.progress = file.length()
                         callback.onNext(downloadInfo as T)
+                        callback.onComplete()
                         return
                     }
                 }

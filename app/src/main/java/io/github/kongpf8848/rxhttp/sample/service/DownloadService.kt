@@ -164,7 +164,8 @@ class DownloadService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        var urlLink = intent?.getStringExtra("url")
+        val urlLink = intent?.getStringExtra("url")
+        val md5=intent?.getStringExtra("md5")
         if(!TextUtils.isEmpty(urlLink)){
             if(urlList.contains(urlLink)){
                 ToastHelper.toast("url:${urlLink} is exists in downloading!!!")
@@ -183,7 +184,8 @@ class DownloadService : Service() {
                     filename = filename,
                     callback = downloadCallback.apply {
                         url=urlLink
-                    }
+                    },
+                    md5 =md5
             )
         }
         return super.onStartCommand(intent, flags, startId)

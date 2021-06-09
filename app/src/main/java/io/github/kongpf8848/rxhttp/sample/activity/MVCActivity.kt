@@ -224,6 +224,7 @@ class MVCActivity : BaseActivity() {
          */
         val intent= Intent(this, DownloadService::class.java)
         intent.putExtra("url",TKURL.URL_DOWNLOAD)
+        intent.putExtra("md5","BBFDF5D996224C643402E7B1162ADC27")
         startService(intent)
     }
 }
