@@ -14,7 +14,7 @@
 
 + 天生支持多BaseUrl，支持动态传入Url
 
-+ 支持自定义OkHttpClient.Builder，可高度自定义网络请求参数
++ 支持自定义OkHttpClient.Builder，可高度自定义网络请求参数，支持Https证书单向校验(客户端校验服务端证书)
 
 + 支持Glide等和Http请求公用一个OkHttpClient，充分利用OkHttpClient的线程池和连接池，大部分情况下一个App一个OkHttpClient就够了
 
