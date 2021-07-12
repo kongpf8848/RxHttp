@@ -6,7 +6,6 @@ import io.github.kongpf8848.rxhttp.FixHttpLoggingInterceptor
 import io.github.kongpf8848.rxhttp.RxHttpConfig
 import io.github.kongpf8848.rxhttp.sample.http.interceptor.MockInterceptor
 import io.github.kongpf8848.rxhttp.sample.utils.LogUtils
-import okhttp3.OkHttpClient
 import java.util.concurrent.TimeUnit
 
 
@@ -34,10 +33,13 @@ class MyApplication : Application() {
                  */
                 .retryDelayMillis(200)
                 /**
-                 * 自定义OkHttpClient.Builder(),RxHttp支持自定义OkHttpClient.Builder(),
-                 * 如不定义,则使用RxHttp默认的OkHttpClient.Builder()
+                 * 证书校验，单向校验，即客户端校验服务端证书，null则为不校验
                  */
-                .builder(OkHttpClient.Builder().apply {
+                //.certificate(AssetUtils.openFile(applicationContext,"xxx.cer"))
+                /**
+                 * 设置OkHttpClient.Builder(),RxHttp支持自定义OkHttpClient.Builder()
+                 */
+                .getBuilder().apply {
                     connectTimeout(60, TimeUnit.SECONDS)
                     readTimeout(60, TimeUnit.SECONDS)
                     writeTimeout(60, TimeUnit.SECONDS)
@@ -50,7 +52,7 @@ class MyApplication : Application() {
                         })
                         addInterceptor(MockInterceptor())
                     }
-                })
+                }
 
     }
 }

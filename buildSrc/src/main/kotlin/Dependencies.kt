@@ -7,8 +7,8 @@ object Config{
     val targetSdkVersion = 30
     val sourceCompatibilityVersion = JavaVersion.VERSION_1_8
     val targetCompatibilityVersion = JavaVersion.VERSION_1_8
-    val versionCode = 11
-    val versionName = "1.0.11"
+    val versionCode = 12
+    val versionName = "1.0.12"
 
 }
 
