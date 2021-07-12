@@ -38,7 +38,7 @@ allprojects {
 ```
 * 在具体Module的build.gradle文件中添加：
 ```
-implementation 'io.github.kongpf8848:RxHttp:1.0.11'
+implementation 'io.github.kongpf8848:RxHttp:1.0.12'
 ```
 
 # 配置(可选)
@@ -54,10 +54,13 @@ implementation 'io.github.kongpf8848:RxHttp:1.0.11'
      */
     .retryDelayMillis(200)
     /**
-     * 自定义OkHttpClient.Builder()，RxHttp支持自定义OkHttpClient.Builder()，
-     * 如不定义，则使用RxHttp默认的OkHttpClient.Builder()
+     * Https证书校验，单向校验，即客户端校验服务端证书，null则为不校验
      */
-    .builder(OkHttpClient.Builder().apply {
+     //.certificate(AssetUtils.openFile(applicationContext,"xxx.cer"))
+    /**
+     * 设置OkHttpClient.Builder(),RxHttp支持自定义OkHttpClient.Builder()
+     */
+    .getBuilder().apply {
         connectTimeout(60, TimeUnit.SECONDS)
         readTimeout(60, TimeUnit.SECONDS)
         writeTimeout(60, TimeUnit.SECONDS)
@@ -69,7 +72,7 @@ implementation 'io.github.kongpf8848:RxHttp:1.0.11'
                 level = FixHttpLoggingInterceptor.Level.BODY
             })
         }
-    })
+    }
 ```
 
 # 基础使用
