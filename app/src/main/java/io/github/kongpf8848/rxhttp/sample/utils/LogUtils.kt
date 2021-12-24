@@ -1,4 +1,3 @@
-
 package io.github.kongpf8848.rxhttp.sample.utils
 
 import android.content.Context
@@ -120,20 +119,19 @@ object LogUtils {
         log(Log.ERROR, tag, msg)
     }
 
-    private fun log(level: Int, tag: String, msg: String?) {
+    //分段输出Log日志，单行最大输出约4000个字符
+    private fun log(priority: Int, tag: String, msg: String?) {
         if (TextUtils.isEmpty(msg)) {
             return
         }
-        if (level == Log.VERBOSE) {
-            Log.v(tag, msg!!)
-        } else if (level == Log.DEBUG) {
-            Log.d(tag, msg!!)
-        } else if (level == Log.INFO) {
-            Log.i(tag, msg!!)
-        } else if (level == Log.WARN) {
-            Log.w(tag, msg!!)
-        } else if (level == Log.ERROR) {
-            Log.e(tag, msg!!)
+        var startIndex = 0
+        var endIndex=0
+        val totalLen = msg!!.length
+        while (startIndex < totalLen) {
+            endIndex=Math.min(startIndex+4000,totalLen)
+            Log.println(priority,tag, msg.substring(startIndex, endIndex))
+            startIndex=endIndex
         }
     }
+
 }
