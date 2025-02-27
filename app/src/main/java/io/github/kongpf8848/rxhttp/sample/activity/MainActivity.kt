@@ -6,7 +6,7 @@ import io.github.kongpf8848.rxhttp.sample.R
 import io.github.kongpf8848.rxhttp.sample.databinding.ActivityMainBinding
 import io.github.kongpf8848.rxhttp.sample.mvvm.BaseMvvmActivity
 import io.github.kongpf8848.rxhttp.sample.viewmodel.MainViewModel
-import kotlinx.android.synthetic.main.activity_main.*
+
 
 class MainActivity : BaseMvvmActivity<MainViewModel, ActivityMainBinding>() {
 
@@ -18,22 +18,22 @@ class MainActivity : BaseMvvmActivity<MainViewModel, ActivityMainBinding>() {
     override fun onCreateEnd(savedInstanceState: Bundle?) {
         super.onCreateEnd(savedInstanceState)
 
-        button1.setOnClickListener {
+        binding.button1.setOnClickListener {
           startActivity(Intent(this,MVVMActivity::class.java))
         }
-        button2.setOnClickListener {
+        binding.button2.setOnClickListener {
             startActivity(Intent(this,MVCActivity::class.java))
         }
 
-        button3.setOnClickListener {
+        binding.button3.setOnClickListener {
             startActivity(Intent(this,ZhiHuActivity::class.java))
         }
 
-        button4.setOnClickListener {
+        binding.button4.setOnClickListener {
             startActivity(Intent(this,ZhiHuJavaActivity::class.java))
         }
 
-        button5.setOnClickListener {
+        binding.button5.setOnClickListener {
             startActivity(Intent(this,GlideActivity::class.java))
         }
 

@@ -4,9 +4,10 @@ import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import com.kongpf.commonhelper.ToastHelper
+import io.github.kongpf8848.commonhelper.ToastHelper
 import io.github.kongpf8848.rxhttp.sample.R
 import io.github.kongpf8848.rxhttp.sample.databinding.ActivityMainBinding
+import io.github.kongpf8848.rxhttp.sample.databinding.ActivityMvvmBinding
 import io.github.kongpf8848.rxhttp.sample.extension.getContent
 import io.github.kongpf8848.rxhttp.sample.extension.observeState
 import io.github.kongpf8848.rxhttp.sample.http.TKURL
@@ -14,17 +15,17 @@ import io.github.kongpf8848.rxhttp.sample.mvvm.BaseMvvmActivity
 import io.github.kongpf8848.rxhttp.sample.service.DownloadService
 import io.github.kongpf8848.rxhttp.sample.utils.LogUtils
 import io.github.kongpf8848.rxhttp.sample.viewmodel.MainViewModel
-import kotlinx.android.synthetic.main.activity_mvvm.*
+
 
 /**
  * MVVM架构使用RxHttp示例
  */
-class MVVMActivity : BaseMvvmActivity<MainViewModel, ActivityMainBinding>() {
+class MVVMActivity : BaseMvvmActivity<MainViewModel, ActivityMvvmBinding>() {
 
     private var progressDialog: ProgressDialog? = null
 
 
-    private val params:Map<String,Any?>?= hashMapOf("name" to  "jack", "location" to "shanghai", "age" to 28)
+    private val params: Map<String,Any?> = hashMapOf("name" to  "jack", "location" to "shanghai", "age" to 28)
 
     override fun getLayoutId(): Int {
         return R.layout.activity_mvvm
@@ -33,25 +34,25 @@ class MVVMActivity : BaseMvvmActivity<MainViewModel, ActivityMainBinding>() {
     override fun onCreateEnd(savedInstanceState: Bundle?) {
         super.onCreateEnd(savedInstanceState)
 
-        button1.setOnClickListener {
+        binding.button1.setOnClickListener {
             onButtonGet()
         }
-        button2.setOnClickListener {
+        binding.button2.setOnClickListener {
             onButtonPost()
         }
-        button3.setOnClickListener {
+        binding.button3.setOnClickListener {
             onButtonPostForm()
         }
-        button4.setOnClickListener {
+        binding.button4.setOnClickListener {
             onButtonPut()
         }
-        button5.setOnClickListener {
+        binding.button5.setOnClickListener {
             onButtonDelete()
         }
-        button6.setOnClickListener {
+        binding.button6.setOnClickListener {
             onButtonUpload()
         }
-        button7.setOnClickListener {
+        binding.button7.setOnClickListener {
             onButtonDownload()
         }
     }

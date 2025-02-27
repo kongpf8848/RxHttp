@@ -1,7 +1,7 @@
 package io.github.kongpf8848.rxhttp.sample
 
 import android.app.Application
-import com.kongpf.commonhelper.ToastHelper
+import io.github.kongpf8848.commonhelper.ToastHelper
 import io.github.kongpf8848.rxhttp.FixHttpLoggingInterceptor
 import io.github.kongpf8848.rxhttp.RxHttpConfig
 import io.github.kongpf8848.rxhttp.sample.http.interceptor.MockInterceptor

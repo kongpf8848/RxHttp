@@ -1,12 +1,12 @@
 import org.gradle.api.JavaVersion
 
 object Config{
-    val compileSdkVersion = 30
-    val buildToolsVersion = "30.0.2"
+    val compileSdkVersion = 34
+    val buildToolsVersion = "34.0.2"
     val minSdkVersion = 21
-    val targetSdkVersion = 30
-    val sourceCompatibilityVersion = JavaVersion.VERSION_1_8
-    val targetCompatibilityVersion = JavaVersion.VERSION_1_8
+    val targetSdkVersion = 34
+    val sourceCompatibilityVersion = JavaVersion.VERSION_17
+    val targetCompatibilityVersion = JavaVersion.VERSION_17
     val versionCode = 12
     val versionName = "1.0.12"
 
@@ -14,10 +14,10 @@ object Config{
 
 object Versions {
 
-    const val PLUGIN_GRADLE_VERSION="3.6.3"
+    const val PLUGIN_GRADLE_VERSION="8.7.2"
     const val PLUGIN_BINTRAY_VERSION="1.7.3"
     const val PLUGIN_MAVEN_VERSION="2.1"
-    const val KOTLIN_VERSION = "1.3.60"
+    const val KOTLIN_VERSION = "1.8.21"
 
     const val ANDROIDX_APP_COMPAT_VERSION = "1.2.0"
     const val ANDROIDX_LEGACY_V4_VERSION = "1.0.0"
@@ -46,7 +46,7 @@ object Versions {
     const val RETROFIT_VERSION = "2.9.0"
     const val OKHTTP_VERSION = "4.9.0"
     const val AUTODISPOSE_VERSION="1.4.0"
-    const val COMMON_HELPER_VERSION="1.0.20"
+    const val COMMON_HELPER_VERSION="1.0.21"
     const val GLIDE_VERSION = "4.9.0"
 }
 
@@ -63,7 +63,7 @@ object BuildDependencies {
     const val retrofitConverterGson = "com.squareup.retrofit2:converter-gson:${Versions.RETROFIT_VERSION}"
     const val autodispose= "com.uber.autodispose:autodispose-android-archcomponents:${Versions.AUTODISPOSE_VERSION}"
     const val okhttp= "com.squareup.okhttp3:okhttp:${Versions.OKHTTP_VERSION}"
-    const val commonhelper= "com.kongpf.commonhelper:common-helper:${Versions.COMMON_HELPER_VERSION}"
+    const val commonhelper= "io.github.kongpf8848:common-helper:${Versions.COMMON_HELPER_VERSION}"
     const val glide = "com.github.bumptech.glide:glide:${Versions.GLIDE_VERSION}"
     const val glideCompiler = "com.github.bumptech.glide:compiler:${Versions.GLIDE_VERSION}"
     const val glideIntegration="com.github.bumptech.glide:okhttp3-integration:${Versions.GLIDE_VERSION}"

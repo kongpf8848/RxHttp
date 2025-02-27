@@ -1,16 +1,15 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-parcelize'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion Config.compileSdkVersion
+    namespace 'io.github.kongpf8848.rxhttp'
+    compileSdk Config.compileSdkVersion
 
     defaultConfig {
-        minSdkVersion Config.minSdkVersion
-        targetSdkVersion Config.targetSdkVersion
-        versionCode Config.versionCode
-        versionName Config.versionName
+        minSdk Config.minSdkVersion
+        targetSdk Config.targetSdkVersion
     }
 
     buildTypes {
@@ -26,9 +25,14 @@ android {
         targetCompatibility Config.targetCompatibilityVersion
     }
 
-    lintOptions{
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+
+    lint {
         abortOnError false
     }
+
 
 }
 
@@ -47,4 +51,4 @@ dependencies {
     api BuildDependencies.autodispose
 }
 
-apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
+//apply from: rootProject.file('gradle/gradle-mvn-push.gradle')

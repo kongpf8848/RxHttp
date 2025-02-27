@@ -9,10 +9,10 @@ import android.os.*
 import android.text.TextUtils
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import com.kongpf.commonhelper.NotificationHelper
-import com.kongpf.commonhelper.StorageHelper
-import com.kongpf.commonhelper.ToastHelper
-import com.kongpf.commonhelper.bean.NotificationInfo
+import io.github.kongpf8848.commonhelper.NotificationHelper
+import io.github.kongpf8848.commonhelper.StorageHelper
+import io.github.kongpf8848.commonhelper.ToastHelper
+import io.github.kongpf8848.commonhelper.bean.NotificationInfo
 import io.github.kongpf8848.rxhttp.bean.DownloadInfo
 import io.github.kongpf8848.rxhttp.callback.DownloadCallback
 import io.github.kongpf8848.rxhttp.sample.R

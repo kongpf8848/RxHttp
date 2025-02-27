@@ -1,14 +1,16 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-parcelize'
 apply plugin: 'kotlin-kapt'
 
+
 android {
-    compileSdkVersion Config.compileSdkVersion
+    namespace 'io.github.kongpf8848.rxhttp.sample'
+    compileSdk Config.compileSdkVersion
 
     defaultConfig {
-        minSdkVersion Config.minSdkVersion
-        targetSdkVersion Config.targetSdkVersion
+        minSdk Config.minSdkVersion
+        targetSdk Config.targetSdkVersion
         versionCode Config.versionCode
         versionName Config.versionName
     }
@@ -23,12 +25,17 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility Config.sourceCompatibilityVersion
+        targetCompatibility Config.targetCompatibilityVersion
     }
 
-    dataBinding {
-        enabled = true
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+
+    buildFeatures {
+        dataBinding true
+        viewBinding true
     }
 }
 

@@ -4,17 +4,18 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import androidx.databinding.DataBindingUtil
 import io.github.kongpf8848.rxhttp.sample.R
 import io.github.kongpf8848.rxhttp.sample.base.BaseActivity
 import io.github.kongpf8848.rxhttp.sample.bean.Banner
 import io.github.kongpf8848.rxhttp.sample.bean.User
+import io.github.kongpf8848.rxhttp.sample.databinding.ActivityMvcBinding
 import io.github.kongpf8848.rxhttp.sample.extension.getContent
 import io.github.kongpf8848.rxhttp.sample.http.TKURL
 import io.github.kongpf8848.rxhttp.sample.mvc.MVCApi
 import io.github.kongpf8848.rxhttp.sample.mvc.MVCHttpCallback
 import io.github.kongpf8848.rxhttp.sample.service.DownloadService
 import io.github.kongpf8848.rxhttp.sample.utils.LogUtils
-import kotlinx.android.synthetic.main.activity_mvvm.*
 /**
  * MVC架构使用RxHttp示例
  */
@@ -24,27 +25,27 @@ class MVCActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_mvc)
-
-        button1.setOnClickListener {
+        val binding = DataBindingUtil.setContentView<ActivityMvcBinding>(this, R.layout.activity_mvc)
+        binding.lifecycleOwner = this
+        binding.button1.setOnClickListener {
             onButtonGet()
         }
-        button2.setOnClickListener {
+        binding.button2.setOnClickListener {
             onButtonPost()
         }
-        button3.setOnClickListener {
+        binding.button3.setOnClickListener {
             onButtonPostForm()
         }
-        button4.setOnClickListener {
+        binding.button4.setOnClickListener {
             onButtonPut()
         }
-        button5.setOnClickListener {
+        binding.button5.setOnClickListener {
             onButtonDelete()
         }
-        button6.setOnClickListener {
+        binding.button6.setOnClickListener {
             onButtonUpload()
         }
-        button7.setOnClickListener {
+        binding.button7.setOnClickListener {
             onButtonDownload()
         }
     }
