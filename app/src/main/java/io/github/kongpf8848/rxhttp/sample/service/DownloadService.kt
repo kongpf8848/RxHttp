@@ -36,7 +36,7 @@ class DownloadService : Service() {
     private var handlerThread: HandlerThread? = null
     private var handler: DownloadHandler? = null
 
-    private var urlList= mutableListOf<String>()
+    private var urlList = mutableListOf<String>()
 
     companion object {
         const val TAG = "DownloadService"
@@ -58,27 +58,40 @@ class DownloadService : Service() {
                 MSG_SHOW_NOTIFICATION -> {
                     notificationManager.notify(DOWNLOAD_NOTIFY_ID, notificationBuilder.build())
                 }
+
                 MSG_UPDATE_NOTIFICATION -> {
                     val pair = msg.obj as Pair<Long, Long>
                     val progress = pair.first
                     val total = pair.second
                     val percentFloat = DecimalFormat("0.00").format(progress * 1.0f / total)
                     val percentInt = (percentFloat.toDouble() * 100).toInt()
-                    Log.d(TAG, "handleMessage() called with: progress = ${progress}, total = ${total},percentFloat:${percentFloat},percentInt:${percentInt}")
+                    Log.d(
+                        TAG,
+                        "handleMessage() called with: progress = ${progress}, total = ${total},percentFloat:${percentFloat},percentInt:${percentInt}"
+                    )
                     var content = ""
                     content = if (percentInt < 100) {
-                        applicationContext.resources.getString(R.string.download_progress, percentInt)
+                        applicationContext.resources.getString(
+                            R.string.download_progress,
+                            percentInt
+                        )
                     } else {
                         applicationContext.resources.getString(R.string.download_success)
                     }
                     notificationBuilder.setContentText(content).setProgress(100, percentInt, false)
                     notificationManager.notify(DOWNLOAD_NOTIFY_ID, notificationBuilder.build())
                 }
+
                 MSG_CANCEL_NOTIFICATION -> {
                     notificationManager.cancel(DOWNLOAD_NOTIFY_ID)
                 }
+
                 MSG_INSTALL_APK -> {
-                    ApkUtils.installApk(applicationContext, File(dir, filename), "$packageName.fileprovider")
+                    ApkUtils.installApk(
+                        applicationContext,
+                        File(dir, filename),
+                        "$packageName.fileprovider"
+                    )
                 }
             }
         }
@@ -87,7 +100,7 @@ class DownloadService : Service() {
 
     private var downloadCallback = object : DownloadCallback() {
 
-        var url:String=""
+        var url: String = ""
 
         override fun onStart() {
             ToastHelper.toast("开始下载,可在通知栏查看进度")
@@ -96,8 +109,17 @@ class DownloadService : Service() {
 
 
         override fun onProgress(readBytes: Long, totalBytes: Long) {
-            LogUtils.d(TAG, "onProgress() called with: readBytes = $readBytes, totalBytes = $totalBytes")
-            handler?.sendMessage(Message.obtain(handler, MSG_UPDATE_NOTIFICATION, Pair(readBytes, totalBytes)))
+            LogUtils.d(
+                TAG,
+                "onProgress() called with: readBytes = $readBytes, totalBytes = $totalBytes"
+            )
+            handler?.sendMessage(
+                Message.obtain(
+                    handler,
+                    MSG_UPDATE_NOTIFICATION,
+                    Pair(readBytes, totalBytes)
+                )
+            )
 
         }
 
@@ -132,29 +154,29 @@ class DownloadService : Service() {
         super.onCreate()
 
         dir = StorageHelper.getExternalSandBoxPath(
-                applicationContext,
-                Environment.DIRECTORY_DOWNLOADS
+            applicationContext,
+            Environment.DIRECTORY_DOWNLOADS
         )
 
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationBuilder = NotificationHelper.getNotificationBuilder(
-                applicationContext,
-                NotificationInfo("001", "Category", "001", "Download")
+            applicationContext,
+            NotificationInfo("001", "Category", "001", "Download")
         )
-                .setOnlyAlertOnce(true)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentIntent(
-                        PendingIntent.getActivity(
-                                applicationContext,
-                                0,
-                                Intent(),
-                                PendingIntent.FLAG_UPDATE_CURRENT
-                        )
+            .setOnlyAlertOnce(true)
+            .setSmallIcon(R.mipmap.ic_launcher)
+            .setContentIntent(
+                PendingIntent.getActivity(
+                    applicationContext,
+                    0,
+                    Intent(),
+                    PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
                 )
-                .setContentTitle("正在下载新版本,请稍等...")
-                .setAutoCancel(true)
-                .setOngoing(true)
-                .setProgress(100, 0, false);
+            )
+            .setContentTitle("正在下载新版本，请稍等...")
+            .setAutoCancel(true)
+            .setOngoing(true)
+            .setProgress(100, 0, false);
 
 
         val handlerThread = HandlerThread("DownloadHandlerThread")
@@ -165,9 +187,9 @@ class DownloadService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val urlLink = intent?.getStringExtra("url")
-        val md5=intent?.getStringExtra("md5")
-        if(!TextUtils.isEmpty(urlLink)){
-            if(urlList.contains(urlLink)){
+        val md5 = intent?.getStringExtra("md5")
+        if (!TextUtils.isEmpty(urlLink)) {
+            if (urlList.contains(urlLink)) {
                 ToastHelper.toast("url:${urlLink} is exists in downloading!!!")
                 return super.onStartCommand(intent, flags, startId)
             }
@@ -178,14 +200,14 @@ class DownloadService : Service() {
                 filename = UUID.randomUUID().toString()
             }
             NetworkRepository.instance.httpDownload(
-                    context = applicationContext,
-                    url = urlLink,
-                    dir = dir,
-                    filename = filename,
-                    callback = downloadCallback.apply {
-                        url=urlLink
-                    },
-                    md5 =md5
+                context = applicationContext,
+                url = urlLink,
+                dir = dir,
+                filename = filename,
+                callback = downloadCallback.apply {
+                    url = urlLink
+                },
+                md5 = md5
             )
         }
         return super.onStartCommand(intent, flags, startId)
