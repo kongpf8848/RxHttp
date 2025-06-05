@@ -27,9 +27,6 @@ class MVVMActivity : BaseMvvmActivity<MainViewModel, ActivityMvvmBinding>() {
 
     private val params: Map<String,Any?> = hashMapOf("name" to  "jack", "location" to "shanghai", "age" to 28)
 
-    override fun getLayoutId(): Int {
-        return R.layout.activity_mvvm
-    }
 
     override fun onCreateEnd(savedInstanceState: Bundle?) {
         super.onCreateEnd(savedInstanceState)

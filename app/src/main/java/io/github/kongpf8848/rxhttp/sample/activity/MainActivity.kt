@@ -10,11 +10,6 @@ import io.github.kongpf8848.rxhttp.sample.viewmodel.MainViewModel
 
 class MainActivity : BaseMvvmActivity<MainViewModel, ActivityMainBinding>() {
 
-
-    override fun getLayoutId(): Int {
-        return R.layout.activity_main
-    }
-
     override fun onCreateEnd(savedInstanceState: Bundle?) {
         super.onCreateEnd(savedInstanceState)
 
