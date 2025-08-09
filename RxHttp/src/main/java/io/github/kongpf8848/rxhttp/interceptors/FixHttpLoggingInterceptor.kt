@@ -1,5 +1,7 @@
-package io.github.kongpf8848.rxhttp
+package io.github.kongpf8848.rxhttp.interceptors
 
+import io.github.kongpf8848.rxhttp.HttpConstants
+import io.github.kongpf8848.rxhttp.isProbablyUtf8
 import okhttp3.*
 import okhttp3.internal.http.promisesBody
 import okhttp3.internal.platform.Platform
@@ -151,7 +153,9 @@ class FixHttpLoggingInterceptor @JvmOverloads constructor(
         if (requestBody!=null) {
             if(requestBody.contentType()!=null){
                 val contentType=requestBody.contentType().toString()
-                if(contentType.contains(MultipartBody.FORM.toString()) || contentType.contains(HttpConstants.MIME_TYPE_BINARY)){
+                if(contentType.contains(MultipartBody.FORM.toString()) || contentType.contains(
+                        HttpConstants.MIME_TYPE_BINARY
+                    )){
                     return chain.proceed(request)
                 }
             }
@@ -292,7 +296,9 @@ class FixHttpLoggingInterceptor @JvmOverloads constructor(
             /**
              * 非text/json/xml类型不记录日志
              */
-            return !(contentType.contains(HttpConstants.TEXT_PLAIN) || contentType.contains(HttpConstants.APPLICATION_JSON) || contentType.contains(HttpConstants.APPLICATION_XML))
+            return !(contentType.contains(HttpConstants.TEXT_PLAIN) || contentType.contains(
+                HttpConstants.APPLICATION_JSON
+            ) || contentType.contains(HttpConstants.APPLICATION_XML))
         }
         //++++++++++++++++++++++++++++修改结束+++++++++++++++++++++++++++++++++++++++++++++
 

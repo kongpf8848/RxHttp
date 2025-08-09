@@ -1,4 +1,4 @@
-package io.github.kongpf8848.rxhttp
+package io.github.kongpf8848.rxhttp.interceptors
 
 import okhttp3.Interceptor
 import okhttp3.MediaType
