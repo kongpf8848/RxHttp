@@ -4,7 +4,7 @@ import android.app.Application
 import io.github.kongpf8848.commonhelper.ToastHelper
 import io.github.kongpf8848.rxhttp.interceptors.FixHttpLoggingInterceptor
 import io.github.kongpf8848.rxhttp.RxHttpConfig
-import io.github.kongpf8848.rxhttp.interceptors.CurlInterceptor
+import io.github.kongpf8848.rxhttp.interceptors.CurlLoggingInterceptor
 import io.github.kongpf8848.rxhttp.sample.http.interceptor.MockInterceptor
 import io.github.kongpf8848.rxhttp.sample.utils.LogUtils
 import java.util.concurrent.TimeUnit
@@ -51,7 +51,7 @@ class MyApplication : Application() {
                         addInterceptor(FixHttpLoggingInterceptor().apply {
                             level = FixHttpLoggingInterceptor.Level.BODY
                         })
-                        addInterceptor(CurlInterceptor())
+                        addInterceptor(CurlLoggingInterceptor())
                         addInterceptor(MockInterceptor())
                     }
                 }
