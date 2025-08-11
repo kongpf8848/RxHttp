@@ -3,6 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-parcelize'
     id 'kotlin-kapt'
+    id "com.vanniktech.maven.publish" version "0.34.0"
 }
 android {
     namespace 'io.github.kongpf8848.rxhttp'
@@ -52,4 +53,4 @@ dependencies {
     api BuildDependencies.autodispose
 }
 
-//apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
+apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
