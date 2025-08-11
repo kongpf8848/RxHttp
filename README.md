@@ -38,7 +38,7 @@ allprojects {
 ```
 * 在具体Module的build.gradle文件中添加：
 ```
-implementation 'io.github.kongpf8848:RxHttp:1.0.12'
+implementation 'io.github.kongpf8848:RxHttp:1.1.0'
 ```
 
 # 配置(可选)
