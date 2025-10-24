@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-parcelize'
-apply plugin: 'kotlin-kapt'
+//apply plugin: 'kotlin-kapt'
 
 
 android {
@@ -58,7 +58,7 @@ dependencies {
     api AndroidX.coreKtx
     api AndroidX.room
     api AndroidX.roomKtx
-    kapt AndroidX.roomCompiler
+    annotationProcessor(AndroidX.roomCompiler)
     api AndroidX.roomRxJava2
     api AndroidX.coordinatorlayout
     api AndroidX.databindingCommon
@@ -72,7 +72,7 @@ dependencies {
     implementation BuildDependencies.gson
     implementation BuildDependencies.commonhelper
     implementation BuildDependencies.glide
-    kapt BuildDependencies.glideCompiler
+    annotationProcessor(BuildDependencies.glideCompiler)
     implementation BuildDependencies.glideIntegration
 
 }
